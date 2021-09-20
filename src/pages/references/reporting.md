@@ -1,5 +1,5 @@
 ---
-title: Data Prep API
-description: Map, transform, and validate data to and from Experience Data Model (XDM).
-openAPISpec: https://raw.githubusercontent.com/AdobeDocs/experience-platform-apis/main/src/swagger-specs/data-prep.yaml
+title: Reporting API
+description: Reporting
+openAPISpec: https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/reporting.yaml
 --- 
