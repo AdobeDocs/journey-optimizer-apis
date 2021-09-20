@@ -1,0 +1,2409 @@
+openapi: 3.0.0
+info:
+  description: Message Authoring Service ( aka Content Service) API specification
+  version: 0.5.0 Draft
+  title: Message Authoring Service ( aka Content Service)
+  contact:
+    email: cjm-dev@adobe.com
+security:
+  - imsUserToken: []
+tags:
+  - name: message
+    description: APIs for Messages
+  - name: channel
+    description: API's for Channel Content
+  - name: variant
+    description: API's for Variant
+  - name: publish
+    description: API's for Publishing Message
+servers:
+  - url: https://platform.adobe.io/journey/authoring/message
+paths:
+  /messages:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: createMessage
+      description: >-
+        This API could be used for<br>
+           (1) Create a message - Use without any query parameter and full payload.<br>
+           (2) Duplicate a message with another name - Use query parameter source={id}<br>
+                  Pass simple payload containing name in request body.
+      tags:
+        - message
+      parameters:
+        - name: source
+          in: query
+          description: >-
+            This parameter can be specified to copy message with id=source.<br>
+            Pass simple payload containing name in request body.
+          schema:
+            type: string
+          example: c7f3da3a-b5ad-4633-98f2-89f5760ce9bc
+      requestBody:
+        description: new message
+        content:
+          'application/json':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/content-creation-request'
+                - $ref: '#/components/schemas/content-copy-request'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/201'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
+      operationId: getMessages
+      description: Query Messages Paginated
+      tags:
+        - message
+      responses:
+        200:
+          description: Get Messages response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-page-response'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+  /messages/{messageId}:
+    parameters:
+      - name: messageId
+        in: path
+        description: message id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    get:
+      operationId: getMessage
+      description: >-
+        Fetch message summary with given id. For full message use query parameter view=detailed
+      tags:
+        - message
+      parameters:
+        - name: view
+          in: query
+          description: >-
+            Client can use view parameter to request one of view of Message. Two views are
+            supported:<br>
+            (1) summary: This view doesn't include content of Variants. It is more performant
+            and has small payload size. It is recommended to use this unless client need
+            content of variants.
+            (2) detailed: This view include content of Variants also. It is more costly
+            for both client and server.
+          schema:
+            type: string
+            default: summary
+            enum:
+              - summary
+              - detailed
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/content-summary'
+                  - $ref: '#/components/schemas/content-fetch-response'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+    patch:
+      operationId: patchMessage
+      description: >-
+        Patch message with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
+        Path supported: "/name", "/description", "/brandingPresetId", "/subscriptionId", "/status",
+        "/trackingOptions/\*", "/context/\*"
+      tags:
+        - message
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        description: new message
+        content:
+          'application/json-patch+json':
+            schema:
+              $ref: "#/components/schemas/patch-request"
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-summary'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+  /messages/{messageId}/validation:
+    parameters:
+      - name: messageId
+        in: path
+        description: message id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    get:
+      operationId: validateMessage
+      description: Validate the entire message with given id.
+      tags:
+        - message
+      responses:
+        200:
+          description: Successful Validation of Message
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/validationErrorResponse'
+                minItems: 0
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+          
+  /messages/{messageId}/{channel}/variants/{variantId}:
+    parameters:
+      - name: messageId
+        in: path
+        description: message id
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/ChannelParam"
+      - name: variantId
+        in: path
+        description: variant id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    get:
+      operationId: getVariant
+      tags:
+        - variant
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/email-variant'
+                  - $ref: '#/components/schemas/push-variant'
+                  - $ref: '#/components/schemas/in-app-variant'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+    put:
+      operationId: updateVariant
+      tags:
+        - variant
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        description: new variant
+        content:
+          'application/json':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/email-variant'
+                - $ref: '#/components/schemas/push-variant'
+                - $ref: '#/components/schemas/in-app-variant'
+        required: true
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'          
+  /messages/{messageId}/{channel}:
+    parameters:
+      - name: messageId
+        in: path
+        description: message id
+        required: true
+        schema:
+          type: string
+      - $ref: "#/components/parameters/ChannelParam"
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    put:
+      operationId: upsertChannel
+      tags:
+        - channel
+      requestBody:
+        description: new channel content
+        content:
+          'application/json':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/email-channel-content'
+                - $ref: '#/components/schemas/push-channel-content'
+                - $ref: '#/components/schemas/in-app-channel-content'
+
+        required: true
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'
+    delete:
+      operationId: deleteChannel
+      tags:
+        - channel
+      responses:
+        204:
+          $ref: '#/components/responses/204DELETE'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+  /publications:
+    post:
+      operationId: publishMessage
+      security:
+        - imsUserToken: []
+      tags:
+        - publish
+      parameters:
+        - $ref: '#/components/parameters/APIKeyParam'
+        - $ref: '#/components/parameters/ImsOrgIdParam'
+        - $ref: '#/components/parameters/SandboxNameParam'
+        - $ref: '#/components/parameters/RequestIdParam'
+      requestBody:
+        description: publish request body
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/publish-content-request'
+        required: true
+      responses:
+        202:
+          $ref: '#/components/responses/202'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+  /publications/{id}:
+    get:
+      operationId: getPublishedMessage
+      security:
+        - imsUserToken: []
+        - imsServiceToken: []
+      tags:
+        - publish
+      parameters:
+        - $ref: '#/components/parameters/APIKeyParam'
+        - $ref: '#/components/parameters/ImsOrgIdParam'
+        - $ref: '#/components/parameters/SandboxNameParam'
+        - $ref: '#/components/parameters/SandboxIdParam'
+        - $ref: '#/components/parameters/RequestIdParam'
+        - name: id
+          in: path
+          description: Id of Publication
+          required: true
+          schema:
+            type: string
+      responses:
+        202:
+          description: Operation in progress
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/x-resource-id'
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publishing-job-result'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+  /publications/{id}/status:
+    get:
+      operationId: getPublishedMessageStatus
+      security:
+        - imsUserToken: []
+      tags:
+        - publish
+      parameters:
+        - $ref: '#/components/parameters/APIKeyParam'
+        - $ref: '#/components/parameters/ImsOrgIdParam'
+        - $ref: '#/components/parameters/SandboxNameParam'
+        - $ref: '#/components/parameters/RequestIdParam'
+        - name: id
+          in: path
+          description: Id of Publication
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publishing-job-status'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+components:
+  securitySchemes:
+    imsUserToken:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    imsServiceToken:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  parameters:
+    RequestIdParam:
+      in: header
+      name: x-request-id
+      description: A unique string to identify the request, MUST be unique for each request
+      required: false
+      schema:
+        type: string
+    APIKeyParam:
+      name: x-api-key
+      in: "header"
+      description: "API Key"
+      required: true
+      schema:
+        type: "string"
+        x-example: "cjm client"
+    ImsOrgIdParam:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization id
+      required: true
+      schema:
+        type: string
+    ImsUserTokenParam:
+      name: x-user-token
+      in: header
+      description: Your valid Identity Management Services (IMS) user token.
+      required: true
+      schema:
+        type: string
+    SandboxIdParam:
+      name: x-sandbox-id
+      in: header
+      description: Filter on platform sandbox id (required with service token)
+      required: false
+      schema:
+        type: string
+    SandboxNameParam:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name
+      required: true
+      schema:
+        type: string
+    IfMatchParam:
+      name: If-Match
+      in: header
+      required: true
+      description: etag of resource to match before update of resource.
+      schema:
+        type: string
+    OptionalIfMatchParam:
+      name: If-Match
+      in: header
+      required: false
+      description: etag to match before update of resource.
+      schema:
+        type: string
+    SandboxName:
+      name: sandboxName
+      in: query
+      required: false
+      schema:
+        type: string
+    ChannelParam:
+      name: channel
+      in: path
+      description: Name of channel
+      required: true
+      schema:
+        type: string
+        enum:
+          - email
+          - push
+          - inapp
+    orderBy:
+      name: orderBy
+      description: >-
+        Sort parameter and direction for sorting the response.
+        Add the prefix as -/+ for desc/asc. If unspecified, the response will be sorted in desc order.
+      in: query
+      schema:
+        type: string
+        default: -modifiedAt
+      required: false
+      example: orderBy=%2BmodifiedAt.
+    limit:
+      name: limit
+      description: >-
+        Limit response to a specified positive number of objects.
+        Ex. limit=10
+      in: query
+      schema:
+        type: integer
+        default: 20
+      required: false
+    start:
+      name: start
+      description: >-
+        Used for pagination. Specifies the criteria for next page
+        with respect to the property specified in orderBy.
+      in: query
+      schema:
+        type: string
+        format: byte
+      required: false
+      example: start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+    property:
+      name: property
+      description: >-
+        <p>Optional property filters. Please refer to <a href="https://git.corp.adobe.com/pages/experience-platform/api-guidelines/5-sorting_paging_and_filtering.html#533-filtering-by-property">api guidelines</a> for filtering support in APIs. Filtering is supported on following properties: id, name, status, description, type, modifiedAt, createdAt, createdBy and modifiedBy
+        Ex. property=id==31e62feb-69b7-4e7b-8065-a921455c2c15&property=name~^test</p>
+        <p>To check the property existence, you can just include the property name in filter clause.
+        Ex. property=description returns all those messages where description property exists</p>
+      in: query
+      schema:
+        items:
+          type: string
+        type: array
+      required: false
+      example: property=name~^test
+  schemas:
+    message-context-wrapped:
+      type: object
+      description: Message context wrapped inside value.
+      nullable: true
+      properties:
+        value:
+          $ref: "#/components/schemas/message-context"
+    message-context:
+      type: object
+      title: context
+      description: Message context which consist of source and metadata.
+      nullable: true
+      required:
+        - source
+        - metadata
+      properties:
+        source:
+          type: string
+          title: source
+          nullable: false
+          description: Contextual Source
+          enum:
+            - journey
+          example: journey
+        metadata:
+          type: object
+          nullable: false
+          description: Required Context Metadata to fetch Contextual XDM Schema
+          properties:
+            journeyVersionId:
+              type: string
+              title: journeyVersionId
+              nullable: false
+              description: Journey Version Id
+            stepId:
+              type: string
+              title: stepId
+              nullable: false
+              description: Journey Step Id
+          required:
+            - journeyVersionId
+            - stepId
+    language:
+      title: Language
+      type: string
+      pattern: '^(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
+      description: |-
+        The language or languages for this variant could be used .
+        Languages are specified in language code as defined in [IETF RFC 3066](https://www.ietf.org/rfc/rfc3066.txt), which is part of BCP 47, which is used elsewhere in XDM.
+      example:
+        pt-BR
+    variant:
+      type: object
+      properties:
+        variantId:
+          description: A unique id of variant. Auto generated by server on creation.
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          title: Name
+          type: string
+          description: Name of variant. It should be distinct among all variants
+        language:
+          $ref: "#/components/schemas/language"
+      required:
+        - name
+    published-variant:
+      type: object
+      properties:
+        variantId:
+          description: A unique id of variant.
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          title: Name
+          type: string
+          description: Name of variant. It should be distinct among all variants
+        language:
+          $ref: "#/components/schemas/language"
+      required:
+        - variantId
+        - name
+    email-body:
+      type: object
+      title: Email Body
+      description: Content of email for one mime type
+      properties:
+        body:
+          type: string
+          description: HTML/Text body string
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - body
+    published-email-body:
+      type: object
+      title: Published Email Body
+      description: Content of email for one mime type
+      properties:
+        body:
+          type: string
+          description: HTML/Text body string
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - body
+    email-text-body-attributes:
+      type: object
+      title: Email Text Body Attributes
+      properties:
+        syncFromHtml:
+          type: boolean
+          default: true
+          description: Whether to sync text from HTML body.
+    editor-context:
+      title: Editor Context
+      description: List containing custom properties(key-value pair) from ACRITE.
+      additionalProperties: true
+    email-text-body:
+      allOf:
+        - $ref: '#/components/schemas/email-body'
+        - $ref: '#/components/schemas/email-text-body-attributes'
+    email-variant-detail:
+      type: object
+      properties:
+        senderAddress:
+          type: string
+          format: email
+          title: Sender Address
+          description: 'Email address of sender. If not defined or empty string, it will be picked from channel preset'
+          example: marketing@adobetest.com
+        senderName:
+          type: string
+          title: Sender Name
+          description: 'Name of sender. If not defined or empty string, it will be picked from channel preset'
+          example: Adobe Marketing
+        subject:
+          type: string
+          title: Subject
+          description: Subject of Mail
+          example: "Your test score"
+          maxLength: 998
+        html:
+          $ref: '#/components/schemas/email-body'
+        x-amp-html:
+          $ref: '#/components/schemas/email-body'
+        text:
+          $ref: '#/components/schemas/email-text-body'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      required:
+        - subject
+        - html
+    published-email-variant-detail:
+      type: object
+      properties:
+        senderAddress:
+          type: string
+          format: email
+          title: Sender Address
+          description: 'Email address of sender. If not defined or empty string, it will be picked from channel preset'
+          example: marketing@adobetest.com
+        senderName:
+          type: string
+          title: Sender Name
+          description: 'Name of sender. If not defined or empty string, it will be picked from channel preset'
+          example: Adobe Marketing
+        subject:
+          type: string
+          title: Subject
+          description: Subject of Mail
+          example: "Your test score"
+          maxLength: 998
+        html:
+          $ref: '#/components/schemas/published-email-body'
+        x-amp-html:
+          $ref: '#/components/schemas/published-email-body'
+        text:
+          $ref: '#/components/schemas/published-email-body'
+      required:
+        - senderName
+        - senderAddress
+        - subject
+        - html
+    email-variant:
+      allOf:
+        - $ref: '#/components/schemas/variant'
+        - $ref: '#/components/schemas/email-variant-detail'
+    published-email-variant:
+      allOf:
+        - $ref: '#/components/schemas/published-variant'
+        - $ref: '#/components/schemas/published-email-variant-detail'
+    variant-summary:
+      type: array
+      items:
+        $ref: '#/components/schemas/variant'
+    push-link-uri:
+      type: string
+      description: External Link OR Deeplink
+      example: https://www.adobe.com/cis_en/products/special-offers.html
+      maxLength: 2000
+    published-push-link-uri:
+      type: string
+      description: External Link OR Deeplink
+      example: https://www.adobe.com/cis_en/products/special-offers.html
+      minLength: 5
+      maxLength: 2000
+    push-media-uri:
+      type: string
+      description: External Link OR Adobe Asset ID
+      example: medialib://urn:aaid:sc:US:aece0145-bf61-44e3-ae08-c1daa04d1396
+      minLength: 5
+      maxLength: 2000
+    published-push-media-uri:
+      type: string
+      description: External Link OR Adobe Asset ID
+      example: medialib://urn:aaid:sc:US:aece0145-bf61-44e3-ae08-c1daa04d1396
+      minLength: 5
+      maxLength: 2000
+    push-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: On Click Interaction of Push Notification
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+      default: OPENAPP
+      example: WEBURL
+    push-button-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: Button Type
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+        - DISMISS
+      example: WEBURL
+    push-button-common:
+      type: object
+      description: Exclusive button properties for open, deeplink, web and dismiss. For other actionable button usecase, use custom properties.
+      required:
+        - label
+        - type
+      properties:
+        label:
+          title: Label
+          description: Push Button Custom Label
+          type: string
+          example: Offer
+          minLength: 1
+          maxLength: 50
+        type:
+          $ref: "#/components/schemas/push-button-interaction-type"
+        uri:
+          $ref: "#/components/schemas/push-link-uri"
+    published-push-button-common:
+      type: object
+      description: Exclusive button properties for open, deeplink, web and dismiss. For other actionable button usecase, use custom properties.
+      required:
+        - label
+        - type
+      properties:
+        label:
+          title: Label
+          description: Push Button Custom Label
+          type: string
+          example: Offer
+          minLength: 1
+          maxLength: 50
+        type:
+          $ref: "#/components/schemas/push-button-interaction-type"
+        uri:
+          $ref: "#/components/schemas/published-push-link-uri"
+    push-button-ios:
+      type: object
+      required:
+        - customId
+      allOf:
+        - $ref: '#/components/schemas/push-button-common'
+      properties:
+        customId:
+          title: Custom ID
+          description: Push Button Custom ID
+          type: string
+          example: offers
+          minLength: 1
+          maxLength: 50
+    published-push-button-ios:
+      type: object
+      required:
+        - customId
+      allOf:
+        - $ref: '#/components/schemas/published-push-button-common'
+      properties:
+        customId:
+          title: Custom ID
+          description: Push Button Custom ID
+          type: string
+          example: offers
+          minLength: 1
+          maxLength: 50
+    push-os-properties:
+      type: object
+      description: common properties for both android and ios.
+      properties:
+        interaction:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              $ref: "#/components/schemas/push-interaction-type"
+            uri:
+              $ref: "#/components/schemas/push-link-uri"
+        collapsibleKey:
+          title: Collapsible
+          type: string
+          description: Custom String used to collapse push notifications.
+          example: live_scoreboard
+          minLength: 1
+          maxLength: 50
+        soundName:
+          title: Sound
+          type: string
+          example: birdchirp
+          description: Custom Sound Filename. This file is a resource inside app.
+          minLength: 1
+          maxLength: 50
+        badge:
+          title: Badge
+          type: string
+          description: An Integer value or expression which evaluates to Integer.
+          example: "1"
+          minLength: 1
+          maxLength: 50
+        customProperties:
+          title: Custom Push Payload
+          description: List containing custom properties (key-value pair)
+          example:
+            accept: Accept Invite
+            decline: Decline Invite
+          additionalProperties:
+            type: string
+    published-push-os-properties:
+      type: object
+      description: common properties for both android and ios.
+      required:
+        - interaction
+      properties:
+        interaction:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              $ref: "#/components/schemas/push-interaction-type"
+            uri:
+              $ref: "#/components/schemas/published-push-link-uri"
+        collapsibleKey:
+          title: Collapsible
+          type: string
+          description: Custom String used to collapse push notifications.
+          example: live_scoreboard
+          minLength: 1
+          maxLength: 50
+        soundName:
+          title: Sound
+          type: string
+          example: birdchirp
+          description: Custom Sound Filename. This file is a resource inside app.
+          minLength: 1
+          maxLength: 50
+        badge:
+          title: Badge
+          type: string
+          description: An Integer value or expression which evaluates to Integer.
+          example: "1"
+          minLength: 1
+          maxLength: 50
+        customProperties:
+          title: Custom Push Payload
+          description: List containing custom properties (key-value pair)
+          example:
+            accept: Accept Invite
+            decline: Decline Invite
+          additionalProperties:
+            type: string
+
+    push-android-visibility:
+      type: string
+      title: Lockscreen Visibility
+      description: Set visibility of push notifications on android screen.
+      enum:
+        - PUBLIC
+        - PRIVATE
+        - SECRET
+      default: PUBLIC
+    push-android-notification-priority:
+      type: string
+      title: Priority
+      description: |
+        Set the notification priority of push notifications, this priority is governed by app developer.
+        Read here - https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#NotificationPriority
+      enum:
+        - PRIORITY_MIN
+        - PRIORITY_LOW
+        - PRIORITY_DEFAULT
+        - PRIORITY_HIGH
+        - PRIORITY_MAX
+      default: PRIORITY_DEFAULT
+    push-android-delivery-priority:
+      type: string
+      title: Message Priority
+      description: |
+        Optimization done by FCM level for battery power optimization,
+        Read here https://firebase.google.com/docs/cloud-messaging/concept-options?authuser=0#setting-the-priority-of-a-message
+      enum:
+        - HIGH
+        - NORMAL
+      default: NORMAL
+    push-android-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+            iconUri:
+              $ref: "#/components/schemas/push-media-uri"
+        channelId:
+          type: string
+          title: Channel
+          description: Channel on which notification is sent.
+          minLength: 1
+          maxLength: 50
+        visibility:
+          $ref: "#/components/schemas/push-android-visibility"
+        notificationPriority:
+          $ref: "#/components/schemas/push-android-notification-priority"
+        deliveryPriority:
+          $ref: "#/components/schemas/push-android-delivery-priority"
+        actions:
+          type: object
+          required:
+            - buttons
+          properties:
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-common'
+              minItems: 1
+              maxItems: 3
+    published-push-android-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/published-push-media-uri"
+            iconUri:
+              $ref: "#/components/schemas/published-push-media-uri"
+        channelId:
+          type: string
+          title: Channel
+          description: Channel on which notification is sent.
+          minLength: 1
+          maxLength: 50
+        visibility:
+          $ref: "#/components/schemas/push-android-visibility"
+        notificationPriority:
+          $ref: "#/components/schemas/push-android-notification-priority"
+        deliveryPriority:
+          $ref: "#/components/schemas/push-android-delivery-priority"
+        actions:
+          type: object
+          required:
+            - buttons
+          properties:
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/published-push-button-common'
+              minItems: 1
+              maxItems: 3
+      required:
+        - deliveryPriority
+        - notificationPriority
+        - visibility
+    push-ios-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+        notificationGroup:
+          title: Notification Group
+          type: string
+          description: Custom String to group Notifications, In apns term this is thread-id.
+          example: electionResult
+          minLength: 1
+          maxLength: 50
+        mutableContent:
+          type: boolean
+          default: false
+          title: mutable-content flag
+          description: Modify the push content before delivering in ios.
+        contentAvailable:
+          type: boolean
+          default: false
+          title: content-available flag
+          description: Flag to do background processing, This flag can now be used with Alert as well.
+        actions:
+          type: object
+          required:
+            - category
+          properties:
+            category:
+              type: string
+              title: iOS Category
+              description: App Specific Category for creating Actionable push notification.
+              example: Offers
+              minLength: 1
+              maxLength: 50
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-ios'
+              minItems: 1
+              maxItems: 4
+    published-push-ios-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/published-push-media-uri"
+        notificationGroup:
+          title: Notification Group
+          type: string
+          description: Custom String to group Notifications, In apns term this is thread-id.
+          example: electionResult
+          minLength: 1
+          maxLength: 50
+        mutableContent:
+          type: boolean
+          default: false
+          title: mutable-content flag
+          description: Modify the push content before delivering in ios.
+        contentAvailable:
+          type: boolean
+          default: false
+          title: content-available flag
+          description: Flag to do background processing, This flag can now be used with Alert as well.
+        actions:
+          type: object
+          required:
+            - category
+          properties:
+            category:
+              type: string
+              title: iOS Category
+              description: App Specific Category for creating Actionable push notification.
+              example: Offers
+              minLength: 1
+              maxLength: 50
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/published-push-button-ios'
+              minItems: 1
+              maxItems: 4
+    push-variant-detail:
+      type: object
+      properties:
+        pushType:
+          type: string
+          enum:
+            - message
+            - silent
+          default: message
+        title:
+          type: string
+          description: push title
+          example: New Offers for you
+        message:
+          type: string
+          description: push message
+          example: Winter is here, Have you checked new offers on our latest collections.
+        appNames:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        ios:
+          description: Properties specific to ios devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-ios-specific-properties'
+        android:
+          description: Properties specific to Android devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-android-specific-properties'
+    published-push-variant-detail:
+      type: object
+      properties:
+        pushType:
+          type: string
+          enum:
+            - message
+            - silent
+          default: message
+        title:
+          type: string
+          description: push title
+          example: New Offers for you
+        message:
+          type: string
+          description: push message
+          example: Winter is here, Have you checked new offers on our latest collections.
+        appNames:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        ios:
+          description: Properties specific to ios devices only
+          allOf:
+            - $ref: '#/components/schemas/published-push-os-properties'
+            - $ref: '#/components/schemas/published-push-ios-specific-properties'
+        android:
+          description: Properties specific to Android devices only
+          allOf:
+            - $ref: '#/components/schemas/published-push-os-properties'
+            - $ref: '#/components/schemas/published-push-android-specific-properties'
+      required:
+        - appNames
+        - pushType
+        - title
+        - message
+    push-variant:
+      allOf:
+        - $ref: '#/components/schemas/variant'
+        - $ref: '#/components/schemas/push-variant-detail'
+    published-push-variant:
+      allOf:
+        - $ref: '#/components/schemas/published-variant'
+        - $ref: '#/components/schemas/published-push-variant-detail'
+    email-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/email-variant'
+          minItems: 1
+      required:
+        - variants
+    published-email-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/published-email-variant'
+          minItems: 1
+      required:
+        - variants
+    push-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/push-variant'
+          minItems: 1
+      required:
+        - variants
+    published-push-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/published-push-variant'
+          minItems: 1
+      required:
+        - variants
+    channel-content-links:
+      type: object
+      properties:
+        variants:
+          $ref: '#/components/schemas/variant-summary'
+    in-app-layout:
+      type: object
+      title: InApp Layout
+      description: Content of InApp message
+      properties:
+        html:
+          type: string
+          description: HTML string
+          example: '<html>Hello {{profile.name}} </html>'
+        type:
+          description: Layout Type
+          type: string
+          enum:
+            - fullscreen
+            - banner
+            - modal
+            - custom
+      required:
+        - html
+        - type
+    published-in-app-layout:
+      type: object
+      title: InApp Layout
+      description: Content of InApp message
+      properties:
+        html:
+          type: string
+          description: HTML string
+          example: '<html>Hello {{profile.name}} </html>'
+        type:
+          description: Layout Type
+          type: string
+          enum:
+            - fullscreen
+            - banner
+            - modal
+            - custom
+      required:
+        - html
+        - type
+    in-app-variant-detail:
+      type: object
+      properties:
+        layout:
+          $ref: '#/components/schemas/in-app-layout'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      required:
+        - layout
+    published-in-app-variant-detail:
+      type: object
+      properties:
+        layout:
+          $ref: '#/components/schemas/published-in-app-layout'
+      required:
+        - layout
+    in-app-variant:
+      allOf:
+        - $ref: '#/components/schemas/variant'
+        - $ref: '#/components/schemas/in-app-variant-detail'
+    published-in-app-variant:
+      allOf:
+        - $ref: '#/components/schemas/published-variant'
+        - $ref: '#/components/schemas/published-in-app-variant-detail'
+    published-in-app-message:
+      title: PublishedInAppMessage
+      type: object
+      required:
+        - channels
+      properties:
+        channels:
+          type: object
+          properties:
+            inapp:
+              $ref: '#/components/schemas/published-in-app-channel-content'
+          minProperties: 1
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        brandingPresetId:
+          $ref: '#/components/schemas/branding-preset-id'
+        subscriptionId:
+          $ref: '#/components/schemas/subscription-id'
+        apps:
+          $ref: '#/components/schemas/message-apps'
+        trackingOptions:
+          $ref: '#/components/schemas/published-tracking-options'
+        context:
+          $ref: '#/components/schemas/message-context'
+
+    in-app-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/in-app-variant'
+          minItems: 1
+      required:
+        - variants
+    published-in-app-channel-content:
+      type: object
+      properties:
+        variants:
+          type: array
+          title: Variants
+          description: List of variants.
+          items:
+            $ref: '#/components/schemas/published-in-app-variant'
+          minItems: 1
+      required:
+        - variants
+    app-metadata-properties:
+      type: object
+      required:
+        - name
+      description: App Metadata Properties
+      properties:
+        name:
+          type: string
+          title: New name of message
+        description:
+          type: string
+          title: Message Description
+          example: "This is some description"
+    content-operations:
+      type: array
+      description: Message operations
+      items:
+        anyOf:
+          - $ref: '#/components/schemas/add-channel-content-operation'
+          - $ref: '#/components/schemas/delete-channel-content-operation'
+          - $ref: '#/components/schemas/update-properties-operation'
+          - $ref: '#/components/schemas/update-app-metadata-operation'
+          - $ref: '#/components/schemas/modify-publish-operation'
+    base-content-operations:
+      required:
+        - operation
+        - operationId
+      properties:
+        operation:
+          title: Operation
+          description: Name of the Operation
+          type: string
+          enum:
+            - ADD_CHANNEL
+            - DELETE_CHANNEL
+            - UPDATE_PROPERTIES
+            - UPDATE_APP_METADATA
+            - MODIFY_PUBLISHED_MESSAGE
+        operationId:
+          title: Operation ID
+          description: Unique Id across operations for correlation
+          type: string
+          example: "1"
+      discriminator:
+        propertyName: operation
+        mapping:
+          ADD_CHANNEL: '#/components/schemas/add-channel-content-operation'
+          DELETE_CHANNEL: '#/components/schemas/delete-channel-content-operation'
+          UPDATE_PROPERTIES: '#/components/schemas/update-properties-operation'
+          UPDATE_APP_METADATA: '#/components/schemas/update-app-metadata-operation'
+          MODIFY_PUBLISHED_MESSAGE: '#/components/schemas/modify-publish-operation'
+    base-channel-content-operation:
+      required:
+        - channel
+      properties:
+        channel:
+          $ref: '#/components/schemas/channel-enum'
+    email-variant-list:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/base-channel-content-operation'
+      properties:
+        variants:
+          type: array
+          description: List of email variants.
+          items:
+            $ref: '#/components/schemas/email-variant'
+          minLength: 1
+    push-variant-list:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/base-channel-content-operation'
+      properties:
+        variants:
+          type: array
+          description: List of push variants.
+          items:
+            $ref: '#/components/schemas/push-variant'
+          minItems: 1
+    add-channel-content-operation:
+      allOf:
+        - $ref: '#/components/schemas/base-content-operations'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              description: Add Channel from Message Operation
+              oneOf:
+                - $ref: '#/components/schemas/push-variant-list'
+                - $ref: '#/components/schemas/email-variant-list'
+          discriminator:
+            propertyName: channel
+            mapping:
+              push: '#/components/schemas/push-variant-list'
+              email: '#/components/schemas/email-variant-list'
+    delete-channel-content-operation:
+      allOf:
+        - $ref: '#/components/schemas/base-content-operations'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              description: Delete Channel from Message Operation
+              allOf:
+                - $ref: '#/components/schemas/base-channel-content-operation'
+    update-properties-operation:
+      allOf:
+        - $ref: '#/components/schemas/base-content-operations'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              description: Update Properties Operation
+              properties:
+                brandingPresetId:
+                  $ref: '#/components/schemas/branding-preset-id'
+                subscriptionId:
+                  $ref: '#/components/schemas/subscription-id'
+                trackingOptions:
+                  $ref: '#/components/schemas/tracking-options'
+              required:
+                - brandingPresetId
+    update-app-metadata-operation:
+      allOf:
+        - $ref: '#/components/schemas/base-content-operations'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/app-metadata-properties'
+    modify-publish-operation:
+      allOf:
+        - $ref: '#/components/schemas/base-content-operations'
+    channels-detailed:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/email-channel-content'
+        push:
+          $ref: '#/components/schemas/push-channel-content'
+        inapp:
+          $ref: '#/components/schemas/in-app-channel-content'
+      minProperties: 1
+    published-channels-detailed:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/published-email-channel-content'
+        push:
+          $ref: '#/components/schemas/published-push-channel-content'
+        inapp:
+          $ref: '#/components/schemas/published-in-app-channel-content'
+      minProperties: 1
+    channels-summary:
+      type: object
+      properties:
+        channels:
+          type: object
+          description: List of channel specific contents
+          properties:
+            email:
+              $ref: '#/components/schemas/channel-content-links'
+            push:
+              $ref: '#/components/schemas/channel-content-links'
+            inapp:
+              $ref: '#/components/schemas/channel-content-links'
+          minProperties: 1
+      required:
+        - channels
+    content:
+      title: Message
+      type: object
+      required:
+        - channels
+      properties:
+        channels:
+          $ref: '#/components/schemas/channels-detailed'
+        brandingPresetId:
+          $ref: '#/components/schemas/branding-preset-id'
+        subscriptionId:
+          $ref: '#/components/schemas/subscription-id'
+        apps:
+          $ref: '#/components/schemas/message-apps'
+        trackingOptions:
+          $ref: '#/components/schemas/tracking-options'
+        context:
+          $ref: '#/components/schemas/message-context'
+    published-message-data:
+      title: PublishedMessage
+      type: object
+      required:
+        - channels
+        - trackingOptions
+      properties:
+        channels:
+          $ref: '#/components/schemas/published-channels-detailed'
+        description:
+          type: string
+          title: Description
+        brandingPresetId:
+          $ref: '#/components/schemas/branding-preset-id'
+        subscriptionId:
+          $ref: '#/components/schemas/subscription-id'
+        apps:
+          $ref: '#/components/schemas/message-apps'
+        trackingOptions:
+          $ref: '#/components/schemas/published-tracking-options'
+        context:
+          $ref: '#/components/schemas/message-context'
+
+    content-summary:
+      title: Message Structure
+      allOf:
+        - $ref: '#/components/schemas/content-repo-metadata'
+        - $ref: '#/components/schemas/channels-summary'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          required:
+            - id
+            - status
+          properties:
+            id:
+              type: string
+            brandingPresetId:
+              $ref: '#/components/schemas/branding-preset-id'
+            subscriptionId:
+              $ref: '#/components/schemas/subscription-id'
+            apps:
+              $ref: '#/components/schemas/message-apps'
+            trackingOptions:
+              $ref: '#/components/schemas/tracking-options'
+            status:
+              $ref: '#/components/schemas/content-status'
+            lastPublication:
+              $ref: '#/components/schemas/last-publication-details'
+            context:
+              $ref: '#/components/schemas/message-context'
+
+    content-creation-request:
+      allOf:
+        - $ref: '#/components/schemas/content'
+        - $ref: '#/components/schemas/content-repo-metadata'
+    content-copy-request:
+      type: object
+      title: Message Copy Request
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of Copied Message
+          example: "Copy of Summer-Campaign"
+    content-repo-metadata:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of Message
+          example: "Summer-Campaign"
+        description:
+          type: string
+          title: Description
+    entity-audit-fields:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        createdBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+        modifiedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        modifiedBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+    published-content-repo-metadata:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of Message
+          example: "Summer-Campaign"
+        description:
+          type: string
+          title: Description
+    content-fetch-response:
+      allOf:
+        - $ref: '#/components/schemas/content-repo-metadata'
+        - $ref: '#/components/schemas/content'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+            status:
+              $ref: '#/components/schemas/content-status'
+            lastPublication:
+              $ref: '#/components/schemas/last-publication-details'
+            context:
+              $ref: '#/components/schemas/message-context'
+
+    href-link:
+      type: object
+      required:
+        - href
+      properties:
+        href:
+          type: string
+    page:
+      type: object
+      properties:
+        orderBy:
+          type: string
+          enum:
+            - modifiedAt
+            - createdAt
+            - name
+          example: '-modifiedAt'
+        start:
+          type: string
+          format: byte
+          example: eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+        next:
+          type: string
+          format: byte
+          example: eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+        count:
+          type: integer
+          example: 10
+    content-page-response:
+      type: object
+      properties:
+        _page:
+          $ref: '#/components/schemas/page'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/content-list-item'
+        _links:
+          $ref: '#/components/schemas/content-list-link'
+    content-list-link:
+      type: object
+      required:
+        - self
+      properties:
+        next:
+          $ref: '#/components/schemas/href-link'
+        page:
+          $ref: '#/components/schemas/href-link'
+      example:
+        next:
+          href: '/messages?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
+        page:
+          href: '/messages?orderBy={orderBy}&start={start}&limit={limit}'
+    content-list-item:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        name:
+          type: string
+          example: "Message 1"
+        description:
+          type: string
+          example: "Some awesome description of the content"
+        type:
+          type: string
+          enum: [ "CONTENT", "FRAGMENT", "OTHERS" ]
+        details:
+          type: object
+          properties:
+            languages:
+              type: array
+              items:
+                $ref: '#/components/schemas/language'
+            channels:
+              type: array
+              items:
+                $ref: '#/components/schemas/channel-enum'
+              example: [ "push", "email" ]
+            status:
+              $ref: '#/components/schemas/content-status'
+            lastpublication:
+              $ref: '#/components/schemas/last-publication-details'
+        etag:
+          type: string
+          description: The etag associated with this message.
+          example: '"eab98d24-18af-48ae-90f9-e59d4f8cfb2b"'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        createdBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+        modifiedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        modifiedBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/href-link'
+    publish-content-request:
+      type: object
+      properties:
+        messageId:
+          type: string
+          maxLength: 50
+          title: Message ID
+          description: Id of the message being published
+        dryRun:
+          type: boolean
+          nullable: true
+          title: Dry Run
+          description: Dry Run for preview
+        options:
+          type: array
+          nullable: true
+          items:
+            type: string
+            enum: ["TRACKING","ASSET_PUBLISHING"]
+          description: Stages to execute while publishing only in case of dryRun true, in case of emtpy or missing no steps will be executed
+        variantFilter:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/variant-filter'
+          minItems: 1
+          description: Variants to publish only in case of dryRun true
+      required:
+        - messageId
+    variant-filter:
+      type: object
+      description: Optional filter to publish only one channel or some variant of one channel.
+      properties:
+        channel:
+          $ref: '#/components/schemas/channel-enum'
+        variants:
+          type: array
+          nullable: true
+          description: Array of variant ids.
+          items:
+            type: string
+          minItems: 1
+      required:
+        - channel
+    publishing-job-result:
+      properties:
+        id:
+          type: string
+        message:
+          $ref: '#/components/schemas/publishedContent'
+        status:
+          type: string
+          enum:
+            - error
+            - inProgress
+            - complete
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/publishedContentNotifications'
+      required:
+        - id
+        - status
+    publish-job-pipeline-response:
+      type: object
+      properties:
+        imsOrg:
+          type: string
+        sandboxName:
+          type: string
+        sandboxId:
+          type: string
+        version:
+          type: integer
+        value:
+          $ref: '#/components/schemas/publishedContentPipelineMessageValue'
+      required:
+        - imsOrg
+        - sandbox
+        - sandboxId
+        - version
+        - value
+    publishedContentPipelineMessageValue:
+      properties:
+        requestId:
+          type: string
+        messageId:
+          type: string
+        publicationId:
+          type: string
+        status:
+          type: string
+          enum:
+            - toMessageService
+        publishedContentLocation:
+          type: string
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/publishedContentNotifications'
+      required:
+        - requestId
+        - publicationId
+        - messageId
+        - status
+        - publishedContentLocation
+        - notifications
+
+    publishing-job-status:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - complete
+            - inProgress
+            - error
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/publishedContentNotifications'
+
+    publishedContent:
+      allOf:
+        - $ref: '#/components/schemas/published-message-data'
+        - $ref: '#/components/schemas/published-content-repo-metadata'
+      properties:
+        messageId:
+          type: string
+        etag:
+          type: string
+        version:
+          type: integer
+        globalPreset:
+          type: object
+        brandingPreset:
+          $ref: '#/components/schemas/contentBrandPresets'
+        apps:
+          $ref: '#/components/schemas/message-apps'
+      required:
+        - messageId
+        - name
+        - version
+    publishedContentNotifications:
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+        report:
+          type: object
+          properties:
+            additionalContext:
+              type: object
+              properties:
+                errorLevel:
+                  type: string
+                variantId:
+                  type: string
+                source:
+                  type: string
+                channel:
+                  type: string
+            tenantInfo:
+              type: object
+              properties:
+                sandBoxName:
+                  type: string
+                sandboxId:
+                  type: string
+                imsOrgId:
+                  type: string
+        error-chain:
+          type: array
+          items:
+            $ref: '#/components/schemas/error-chain'
+      required:
+        - status
+        - type
+        - title
+    error-chain:
+      properties:
+        serviceId:
+          type: string
+        errorCode:
+          type: string
+        invokingServiceId:
+          type: string
+        unixTimeStampMs:
+          type: integer
+          format: int64
+    globalPresets:
+      type: object
+    contentBrandPresets:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        general:
+          $ref: '#/components/schemas/contentBrandGeneralPresets'
+        email:
+          $ref: '#/components/schemas/contentBrandEmailPresets'
+        push:
+          $ref: '#/components/schemas/contentBrandPushPresets'
+      required:
+        - id
+    contentBrandGeneralPresets:
+      type: object
+      properties:
+        subDomain:
+          type: string
+          example: "adobe.com"
+        trackingDomain:
+          type: string
+        resourceDomain:
+          type: string
+
+    contentBrandEmailPresets:
+      type: object
+      properties:
+        sender:
+          $ref: '#/components/schemas/emailSenderPresets'
+        replyTo:
+          $ref: '#/components/schemas/emailReplyToPresets'
+        error:
+          $ref: '#/components/schemas/emailErrorPresets'
+    emailSenderPresets:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the sender
+        email:
+          type: string
+          format: email
+          description: Email addrress of the sender
+
+    emailReplyToPresets:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The reply to email address
+        name:
+          type: string
+          description: The reply to name
+        forwardEmail:
+          type: string
+          format: email
+          description: The reply to forward email address
+
+    emailErrorPresets:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The error email address
+
+    contentBrandPushPresets:
+      type: object
+      properties:
+        appSelection:
+          type: array
+          items:
+            $ref: '#/components/schemas/appSelectionPresets'
+
+    appSelectionPresets:
+      type: object
+      properties:
+        appId:
+          type: string
+          example: "com.adobe.photoshop"
+        appPlatform:
+          type: string
+          example: "apns/fcm"
+        name:
+          type: string
+          description: Optional name
+    errorResponse:
+      type: object
+      properties:
+        path:
+          type: string
+          title: Path
+          example: /messages
+          description: API path
+        request-id:
+          type: array
+          title: Request ID
+          items:
+            type: string
+            example: 9db4dd09-455f-44eb-a0e3-aca3342745d2
+          description: Request ID
+        type:
+          type: string
+          title: Type
+          example: https://ns.adobe.com/aep/errors/CJMMAS-*
+          description: Error type
+        title:
+          type: string
+          title: Title
+          example: Error Title
+          description: Title of Error
+        status:
+          type: integer
+          title: Status
+          description: HTTP status
+        report:
+          type: object
+          title: report
+          description: Error Report
+          properties:
+            tenantInfo:
+              type: object
+              example:
+                sandboxName: cjm-team
+                sandboxId: 70f58060-5d47-11ea-bdff-a5384333ff34
+                imsOrgId: 745F37C35E4B776E0A49421B@AdobeOrg
+            additionalContext:
+              type: object
+              example:
+                detailedMessage : message
+              description: Additional Context of Error
+        error-chain:
+          type: array
+          title: Error Chain
+          description: Error Chain
+          items:
+            type: object
+            example:
+              serviceId: contentservice
+              errorCode: CJMMAS-*
+              invokingServiceId: cjm-content-service
+              unixTimeStampMs: 1610446917396
+    validationErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          title: type
+          example: https://ns.adobe.com/aep/errors/CJMMAS-*
+          description: Error type
+        title:
+          type: string
+          title: Title
+          example: Error Title
+          description: Title of Error
+        status:
+          type: integer
+          title: Status
+          description: HTTP status
+          example: 200
+        report:
+          type: object
+          description: Validation Error Report
+          properties:
+            additionalContext:
+              type: object
+              properties:
+                errorLevel:
+                  type: string
+                  enum:
+                    - ERROR
+                    - WARNING
+                    - INFO
+                  example:
+                    ERROR
+                  description: Error level in decreasing order of severity - ERROR WARNING INFO
+                variantId:
+                  type: string
+                  example: c9e3f73b-c01d-4651-8099-25bb63021b5a
+                  description: Variant ID in which validation error found
+                source:
+                  type: string
+                  enum:
+                    - CONTENT
+                    - PRESET_INLINE
+                    - TRACKING
+                  example:
+                    CONTENT
+                channel:
+                  $ref: '#/components/schemas/channel-enum'
+    channel-enum:
+      title: Channel
+      description: Name of Channel
+      type: string
+      enum:
+        - email
+        - push
+        - inapp
+      example: email
+
+    content-status:
+      title: Status
+      description: Status
+      type: string
+      enum:
+        - draft
+        - publishing
+        - published
+
+    tracking-options:
+      title: Tracking Options
+      type: object
+      properties:
+        openTrackingEnabled:
+          type: boolean
+          default: false
+          description: Whether tracking on open of email is enabled.
+        clickTrackingEnabled:
+          type: boolean
+          default: false
+          description: Whether tracking on click of links is enabled.
+    published-tracking-options:
+      title: Published Tracking Options
+      type: object
+      properties:
+        openTrackingEnabled:
+          type: boolean
+          default: false
+          description: Whether tracking on open of email is enabled.
+        clickTrackingEnabled:
+          type: boolean
+          default: false
+          description: Whether tracking on click of links is enabled.
+      required:
+        - openTrackingEnabled
+        - clickTrackingEnabled
+    branding-preset-id:
+      type: string
+      minLength: 5
+      maxLength: 50
+      description: Preset should exist for message with 'email' and 'push' channels. Non exisiting preset will result in failure.
+      example: fa2e06b3-34a0-4029-806f-36f8fbaf2b7a
+    subscription-id:
+      type: string
+      minLength: 2
+      maxLength: 100
+      description: SubscriptionId will exist if the message is subscribed. It is an optional field and only valid for email channel.
+      example: daily-news
+    message-apps:
+      type: array
+      minLength: 1
+      maxLength: 100
+      items:
+        $ref: "#/components/schemas/message-app-detail"
+      description: List of apps. This field is required only for in-app channel
+    message-app-detail:
+      type: object
+      properties:
+        launchConfigId:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "AC8a01bcdd71b7479f88e28df8fb3817ed"
+    last-publication-details:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        draftMessageVersion:
+          description: The version of the draft message which was published
+          type: integer
+          example: 1
+        publishedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    patch-request:
+      type: array
+      items:
+        $ref: "#/components/schemas/patch-document"
+    patch-document:
+      description: A JSONPatch document as defined by RFC 6902
+      required:
+        - "op"
+        - "path"
+      properties:
+        op:
+          type: string
+          description: The operation to be performed
+          enum:
+            - "add"
+            - "remove"
+            - "replace"
+            - "move"
+            - "copy"
+            - "test"
+        path:
+          type: string
+          description: A JSON-Pointer
+        value:
+          type: object
+          description: The value to be used within the operations.
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+  headers:
+    x-resource-id:
+      schema:
+        type: string
+      description: id of resource
+    Location:
+      schema:
+        type: string
+      description: URL of resource
+    retry-after:
+      schema:
+        type: integer
+      description: polling retry interval
+    etag:
+      schema:
+        type: string
+      description: etag of resource
+  responses:
+    201:
+      description: Resource successfuly created
+      headers:
+        x-resource-id:
+          $ref: '#/components/headers/x-resource-id'
+        Location:
+          $ref: '#/components/headers/Location'
+        etag:
+          $ref: '#/components/headers/etag'
+    202:
+      description: Request successfuly accepted
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/retry-after'
+        Location:
+          $ref: '#/components/headers/Location'
+    204:
+      description: No content
+      headers:
+        etag:
+          $ref: '#/components/headers/etag'
+    204DELETE:
+      description: No content
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    404:
+      description: Resource Not found
+    409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    412:
+      description: Precondition failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'

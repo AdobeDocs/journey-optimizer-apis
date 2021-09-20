@@ -1,0 +1,1111 @@
+openapi: 3.0.0
+info:
+  description: Preview and Test Service API specification
+  version: 0.1.0 Draft
+  title: CJM Preview and Test Service
+  contact:
+    email: cjm-dev@adobe.com
+security:
+  - imsAuth: [ ]
+tags:
+  - name: preview
+    description: APIs for Preview
+  - name: variantsAttributesProjections
+    description: APIs for Variant Attributes
+  - name: proof
+    description: APIs for Proof
+servers:
+  - url: https://platform.adobe.io/journey/authoring/cs/preview-service
+paths:
+  /preview:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/ContentTypeParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: fetchPreviewContent.
+      description: Fetch preview content.
+      tags:
+        - preview
+      requestBody:
+        description: Preview request body.
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/PreviewRequestBody'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreviewResponseBody'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+  /variants/attributes/projections:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/ContentTypeParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    put:
+      operationId: fetchVariantAttributes.
+      description: Fetch Variant Attributes.
+      tags:
+        - variantsAttributesProjections
+      requestBody:
+        description: Variant attributes request body.
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/VariantAttributesRequestBody'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariantAttributesResponseBody'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
+  /proof-jobs:
+    post:
+      operationId: proofJob.
+      description: Send Proof Email/Push.
+      tags:
+        - proof
+      parameters:
+        - $ref: '#/components/parameters/APIKeyParam'
+        - $ref: '#/components/parameters/ImsOrgIdParam'
+        - $ref: '#/components/parameters/AuthorizationParam'
+        - $ref: '#/components/parameters/SandboxNameParam'
+        - $ref: '#/components/parameters/ContentTypeParam'
+        - $ref: '#/components/parameters/RequestIdParam'
+      requestBody:
+        description: Proof job request body.
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/proofJobRequestBody'
+        required: true
+      responses:
+        202:
+          description: Request successfuly accepted
+          headers:
+            x-resource-id:
+              $ref: '#/components/headers/x-resource-id'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+
+  /proof-jobs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+      - $ref: '#/components/parameters/proofJobIdParam'
+    get:
+      operationId: getProofJob
+      description: Get proof job info.
+      tags:
+        - proof
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proofJobResponseBody'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+
+  /proof-jobs/messages/{messageId}/{channel}/variants/{variantId}:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+      - $ref: '#/components/parameters/messageIdParam'
+      - $ref: '#/components/parameters/channelParam'
+      - $ref: '#/components/parameters/variantIdParam'
+    get:
+      operationId: viewProofs.
+      description: View proofs history corresponding to a variant.
+      tags:
+        - proof
+      responses:
+        200:
+          description: Successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/proofJobsResponseBody'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        500:
+          $ref: '#/components/responses/500'
+
+
+components:
+  securitySchemes:
+    imsAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+
+  parameters:
+    RequestIdParam:
+      in: header
+      name: x-request-id
+      description: A unique string to identify the request, MUST be unique for each request
+      required: false
+      schema:
+        type: string
+    ContentTypeParam:
+      name: Content-Type
+      in: header
+      description: Content-Type
+      required: true
+      schema:
+        type: string
+        x-example: application/json
+    APIKeyParam:
+      name: x-api-key
+      in: header
+      description: API Key
+      required: true
+      schema:
+        type: string
+        x-example: cjm client
+    ImsOrgIdParam:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization id
+      required: true
+      schema:
+        type: string
+    AuthorizationParam:
+      name: Authorization
+      in: header
+      description: Authorization token
+      required: true
+      schema:
+        type: string
+        x-example: Bearer {{token}}
+    SandboxNameParam:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name
+      required: true
+      schema:
+        type: string
+    inboxRenderJobIdParam:
+      name: id
+      in: path
+      description: inbox Rendering Job Id
+      required: true
+      schema:
+        type: string
+        x-example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+    proofJobIdParam:
+      name: id
+      in: path
+      description: Proof Job Id
+      required: true
+      schema:
+        type: string
+        x-example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+    messageIdParam:
+      name: messageId
+      in: path
+      description: Message Id
+      required: true
+      schema:
+        type: string
+        x-example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+    channelParam:
+      name: channel
+      in: path
+      description: Channel Name
+      required: true
+      schema:
+        type: string
+        x-example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+    variantIdParam:
+      name: variantId
+      in: path
+      description: Variant Id
+      required: true
+      schema:
+        type: string
+        x-example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+
+  headers:
+    x-resource-id:
+      schema:
+        type: string
+      description: Id of resource.
+    retry-after:
+      schema:
+        type: integer
+      description: polling retry interval
+
+  schemas:
+    PreviewRequestBody:
+      type: object
+      properties:
+        resourceId:
+          type: object
+          properties:
+            id:
+              title: Message Id
+              description: Id of the message to review.
+              type: string
+            type:
+              title: Type
+              description: Type of Id.
+              type: string
+              enum:
+                - publish
+                - message
+        contentId:
+          title: Content Id
+          description: Id of the message to render.
+          type: string
+        channel:
+          title: Channel
+          description: Name of the channel.
+          type: string
+          enum:
+            - email
+            - push
+        variantId:
+          title: Variant Id
+          description: Id of the variant to render.
+          type: string
+          format: uuid
+        profileId:
+          title: Profile Id
+          description: Profile Id for preview.
+          type: string
+      required: [ contentId, channel, variantId, profileId ]
+    PreviewResponseBody:
+      type: object
+      properties:
+        renderedContent:
+          $ref: '#/components/schemas/renderedContent'
+    VariantAttributesRequestBody:
+      type: object
+      properties:
+        contentId:
+          title: Content Id
+          description: Id of the content to render.
+          type: string
+        channel:
+          title: Channel
+          description: Name of the channel.
+          type: string
+          enum:
+            - email
+            - push
+        variantId:
+          title: Variant Id
+          description: Id of the variant to render.
+          type: string
+          format: uuid
+      required: [ contentId, channel, variantId ]
+    VariantAttributesResponseBody:
+      type: object
+      properties:
+        variantAttributesProjection:
+          type: object
+          properties:
+            profile:
+              type: object
+              properties:
+                attributes:
+                  type: array
+                  description: 'Profile attributes as referred in message template.'
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      usage:
+                        $ref: '#/components/schemas/attributeUsage'
+                  example:
+                    - name: "person.name.firstName"
+                      usage:
+                        content:
+                          personalization: true
+                    - name: "personalEmail.address"
+                      usage:
+                        content:
+                          personalization: true
+                        offers:
+                          rules: true
+                          personalization: true
+                        dispatch:
+                          channels:
+                            - "email"
+                    - name: "workEmail.address"
+                      usage:
+                        dispatch:
+                          channels:
+                            - "email"
+                    - name: "consentsAndPreferences"
+                      usage:
+                        consent:
+                          filter: true
+
+    attributeUsage:
+      type: object
+      properties:
+        content:
+          type: object
+          description: 'Attribute usage in content'
+          properties:
+            personalization:
+              description: 'True if used for personalization in content.'
+              type: boolean
+              example: true
+        offer:
+          type: object
+          description: 'Attribute usage in offers.'
+          properties:
+            personalization:
+              description: 'True if used for personalization in offers.'
+              type: boolean
+              example: true
+            rules:
+              description: 'True if used inside eligibility rules in offers.'
+              type: boolean
+              example: true
+        dispatch:
+          type: object
+          properties:
+            channels:
+              type: array
+              items:
+                description: 'Contains list of channels where this attribute is being used.'
+                $ref: '#/components/schemas/channel'
+        consent:
+          type: object
+          description: 'Attribute usage in consent'
+          properties:
+            filter:
+              description: 'True if used for filtering.'
+              type: boolean
+              example: true
+
+    channel:
+      type: string
+      description: 'Delivery Channel.'
+      enum:
+        - email
+        - push
+
+
+    renderedContent:
+      title: Rendered Variant
+      oneOf:
+        - $ref: '#/components/schemas/email-variant'
+        - $ref: '#/components/schemas/push-variant'
+      description: rendered variant.
+    language:
+      title: Language
+      type: string
+      pattern: '^(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
+      description: |-
+        The language or languages for this variant could be used .
+        Languages are specified in language code as defined in [IETF RFC 3066](https://www.ietf.org/rfc/rfc3066.txt), which is part of BCP 47, which is used elsewhere in XDM.
+      example:
+        pt-BR
+    variant:
+      type: object
+      properties:
+        variantId:
+          description: A unique id of variant. Auto generated by server on creation.
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          title: Name
+          type: string
+          description: Name of variant. It should be distinct among all variants
+        language:
+          $ref: "#/components/schemas/language"
+      required:
+        - name
+    email-body:
+      type: object
+      title: Email Body
+      description: Content of email for one mime type
+      properties:
+        body:
+          type: string
+          description: HTML/Text body string
+          example: '<html>Hello John </html>'
+      required:
+        - body
+    email-text-body-attributes:
+      type: object
+      title: Email Text Body Attributes
+      properties:
+        syncFromHtml:
+          type: boolean
+          default: true
+          description: Whether to sync text from HTML body.
+    editor-context:
+      title: Editor Context
+      description: List containing custom properties(key-value pair) from ACRITE.
+      additionalProperties: true
+    email-text-body:
+      allOf:
+        - $ref: '#/components/schemas/email-body'
+        - $ref: '#/components/schemas/email-text-body-attributes'
+    email-variant-detail:
+      type: object
+      properties:
+        senderAddress:
+          type: string
+          format: email
+          title: Sender Address
+          description: 'Email address of sender. If not defined or empty string, it will be picked from channel preset'
+          example: marketing@adobetest.com
+        senderName:
+          type: string
+          title: Sender Name
+          description: 'Name of sender. If not defined or empty string, it will be picked from channel preset'
+          example: Adobe Marketing
+        subject:
+          type: string
+          title: Subject
+          description: Subject of Mail
+          example: "Your test score"
+        html:
+          $ref: '#/components/schemas/email-body'
+        x-amp-html:
+          $ref: '#/components/schemas/email-body'
+        text:
+          $ref: '#/components/schemas/email-text-body'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      required:
+        - subject
+        - html
+    email-variant:
+      allOf:
+        - $ref: '#/components/schemas/variant'
+        - $ref: '#/components/schemas/email-variant-detail'
+    push-link-uri:
+      type: string
+      description: External Link OR Deeplink
+      example: https://www.adobe.com/cis_en/products/special-offers.html
+      minLength: 5
+      maxLength: 2000
+      pattern: '^[a-zA-Z]{1,}://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]'
+    push-media-uri:
+      type: string
+      description: External Link OR Adobe Asset ID
+      example: medialib://urn:aaid:sc:US:aece0145-bf61-44e3-ae08-c1daa04d1396
+      minLength: 5
+      maxLength: 2000
+      pattern: '^(https?|medialib)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]'
+    push-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: On Click Interaction of Push Notification
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+      default: OPENAPP
+      example: WEBURL
+    push-button-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: Button Type
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+        - DISMISS
+      example: WEBURL
+    push-button-common:
+      type: object
+      description: Exclusive button properties for open, deeplink, web and dismiss. For other actionable button usecase, use custom properties.
+      required:
+        - label
+        - type
+      properties:
+        label:
+          title: Label
+          description: Push Button Custom Label
+          type: string
+          example: Offer
+          minLength: 1
+          maxLength: 50
+        type:
+          $ref: "#/components/schemas/push-button-interaction-type"
+        uri:
+          $ref: "#/components/schemas/push-link-uri"
+    push-button-ios:
+      type: object
+      required:
+        - customId
+      allOf:
+        - $ref: '#/components/schemas/push-button-common'
+      properties:
+        customId:
+          title: Custom ID
+          description: Push Button Custom ID
+          type: string
+          example: offers
+          minLength: 1
+          maxLength: 50
+    push-os-properties:
+      type: object
+      description: common properties for both android and ios.
+      properties:
+        interaction:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              $ref: "#/components/schemas/push-interaction-type"
+            uri:
+              $ref: "#/components/schemas/push-link-uri"
+        collapsibleKey:
+          title: Collapsible
+          type: string
+          description: Custom String used to collapse push notifications.
+          example: live_scoreboard
+          minLength: 1
+          maxLength: 50
+        soundName:
+          title: Sound
+          type: string
+          example: birdchirp
+          description: Custom Sound Filename. This file is a resource inside app.
+          minLength: 1
+          maxLength: 50
+        badge:
+          title: Badge
+          type: string
+          description: An Integer value or expression which evaluates to Integer.
+          example: "1"
+          minLength: 1
+          maxLength: 50
+        customProperties:
+          title: Custom Push Payload
+          description: List containing custom properties (key-value pair)
+          example:
+            accept: Accept Invite
+            decline: Decline Invite
+          additionalProperties:
+            type: string
+    push-android-visibility:
+      type: string
+      title: Lockscreen Visibility
+      description: Set visibility of push notifications on android screen.
+      enum:
+        - PUBLIC
+        - PRIVATE
+        - SECRET
+      default: PUBLIC
+    push-android-notification-priority:
+      type: string
+      title: Priority
+      description: |
+        Set the notification priority of push notifications, this priority is governed by app developer.
+        Read here - https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#NotificationPriority
+      enum:
+        - PRIORITY_MIN
+        - PRIORITY_LOW
+        - PRIORITY_DEFAULT
+        - PRIORITY_HIGH
+        - PRIORITY_MAX
+      default: PRIORITY_DEFAULT
+    push-android-delivery-priority:
+      type: string
+      title: Message Priority
+      description: |
+        Optimization done by FCM level for battery power optimization,
+        Read here https://firebase.google.com/docs/cloud-messaging/concept-options?authuser=0#setting-the-priority-of-a-message
+      enum:
+        - HIGH
+        - NORMAL
+      default: NORMAL
+    push-android-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+            iconUri:
+              $ref: "#/components/schemas/push-media-uri"
+        channelId:
+          type: string
+          title: Channel
+          description: Channel on which notification is sent.
+          minLength: 1
+          maxLength: 50
+        visibility:
+          $ref: "#/components/schemas/push-android-visibility"
+        notificationPriority:
+          $ref: "#/components/schemas/push-android-notification-priority"
+        deliveryPriority:
+          $ref: "#/components/schemas/push-android-delivery-priority"
+        actions:
+          type: object
+          required:
+            - buttons
+          properties:
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-common'
+              minItems: 1
+              maxItems: 3
+    push-ios-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+        notificationGroup:
+          title: Notification Group
+          type: string
+          description: Custom String to group Notifications, In apns term this is thread-id.
+          example: electionResult
+          minLength: 1
+          maxLength: 50
+        mutableContent:
+          type: boolean
+          default: false
+          title: mutable-content flag
+          description: Modify the push content before delivering in ios.
+        contentAvailable:
+          type: boolean
+          default: false
+          title: content-available flag
+          description: Flag to do background processing, This flag can now be used with Alert as well.
+        actions:
+          type: object
+          required:
+            - category
+          properties:
+            category:
+              type: string
+              title: iOS Category
+              description: App Specific Category for creating Actionable push notification.
+              example: Offers
+              minLength: 1
+              maxLength: 50
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-ios'
+              minItems: 1
+              maxItems: 4
+    push-variant-detail:
+      type: object
+      properties:
+        pushType:
+          type: string
+          enum:
+            - message
+            - silent
+          default: message
+        title:
+          type: string
+          description: push title
+          example: New Offers for you
+        message:
+          type: string
+          description: push message
+          example: Winter is here, Have you checked new offers on our latest collections.
+        appNames:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        ios:
+          description: Properties specific to ios devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-ios-specific-properties'
+        android:
+          description: Properties specific to Android devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-android-specific-properties'
+    push-variant:
+      allOf:
+        - $ref: '#/components/schemas/variant'
+        - $ref: '#/components/schemas/push-variant-detail'
+    inboxRenderingRequestBody:
+      type: object
+      required:
+        - messageId
+        - channel
+        - variantId
+        - profiles
+      properties:
+        messageId:
+          title: Message Id
+          description: Id of message.
+          type: string
+        variantId:
+          title: Variant Id
+          description: Id of the variant to render.
+          type: string
+          format: uuid
+        channel:
+          title: Channel
+          description: Channel type.
+          type: string
+          enum:
+            - email
+            - push
+        profileId:
+          title: Profile Id
+          description: Profile Id for Inbox Rendering.
+          type: string
+
+    inboxRenderingResponseBody:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          title: Status
+          type: string
+          description: Status of the inbox render job.
+          example: processing
+          enum:
+            - processing
+            - completed
+            - failed
+        failureReasons:
+          title: Failure Reasons
+          type: array
+          items:
+            $ref: '#/components/schemas/asyncErrorResponse'
+          description: Reasons for failure if the job fails
+        renderedVariant:
+          $ref: '#/components/schemas/renderedContent'
+
+    proofJobRequestBody:
+      type: object
+      required:
+        - messageId
+        - channel
+        - variantId
+        - profiles
+        - recipientEmails
+      properties:
+        messageId:
+          title: Message Id
+          description: Id of the message.
+          type: string
+        channel:
+          title: Channel
+          description: Name of the channel.
+          type: string
+          enum:
+            - email
+            - push
+        variantId:
+          title: Variant Id
+          description: Id of the variant.
+          type: string
+          format: uuid
+        profiles:
+          title: Profiles
+          type: array
+          description: List of profiles.
+          items:
+            $ref: '#/components/schemas/profile'
+          minItems: 1
+        recipientEmails:
+          title: Recipient Emails
+          type: array
+          description: List of substitution email Ids.
+          items:
+            description: Email address to send proof to.
+            type: string
+            example: "sausharm@adobe.com"
+          minItems: 1
+
+    profile:
+      type: object
+      description: Profile id and subject prefix.
+      properties:
+        profileId:
+          title: Profile Id
+          type: string
+          description: Id of the profile.
+          example: "Gkk1nW_UXjGm13N4WqNEYShCq0hJ"
+        subjectPrefix:
+          title: Subject line prefix
+          description: Subject line prefix.
+          type: string
+          example: Gold Member
+
+    proofJobsResponseBody:
+      title: Proof Responses
+      type: array
+      description: List of proof responses.
+      items:
+        $ref: '#/components/schemas/proofJobResponseBody'
+
+    proofJobResponseBody:
+      type: object
+      required:
+        - proofJobId
+        - startDate
+        - targeted
+        - submitted
+        - status
+        - profiles
+        - recipientEmails
+      properties:
+        proofJobId:
+          title: proof Job Id
+          type: string
+          description: Id of the proof job created for a send proof.
+          format: UUID
+        startDate:
+          title: Proof Start Date
+          type: string
+          format: date-time
+          description: Proof start date time.
+        targeted:
+          title: Proof Total Targeted
+          type: integer
+          description: Total number of messages targeted in a proof.
+        submitted:
+          title: Proof Total Submitted
+          type: integer
+          description: Total number of messages submitted to message execution service in a proof.
+        status:
+          title: Status
+          type: string
+          description: Status of the proof job.
+          enum:
+            - preparing
+            - submitted
+            - inProgress
+            - partialFailure
+            - failed
+        executionId:
+          title: Message Execution Id
+          type: string
+          description: Message execution id corresponding to a proof.
+        proofFailureReasons:
+          title: Proof Failure Reasons
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfilesFailureReasons'
+          description: Reasons for proof faiure.
+        profiles:
+          title: Profiles
+          type: array
+          description: List of profiles.
+          items:
+            $ref: '#/components/schemas/profile'
+          minItems: 1
+        recipientEmails:
+          title: Recipient Emails
+          type: array
+          description: List of substitution email Ids.
+          items:
+            description: Email address to send proof to.
+            type: string
+            example: "sausharm@adobe.com"
+          minItems: 1
+
+    ProfilesFailureReasons:
+      type: object
+      properties:
+        profileIds:
+          title: Profile Ids
+          type: array
+          description: List of profile ids
+          items:
+            type: string
+            example: "Gkk1nW_UXjGm13N4WqNEYShCq0hJ"
+          minItems: 1
+        failureReasons:
+          title: Failure Reasons
+          type: array
+          description: List of failure reason
+          items:
+            $ref: '#/components/schemas/asyncErrorResponse'
+          minItems: 1
+
+    errorResponse:
+      type: object
+      properties:
+        path:
+          type: string
+          title: Path
+          description: API path
+        request-id:
+          type: array
+          title: Request ID
+          items:
+            type: string
+            example: "4b485f56-9a06-4c00-ae03-e4a27468b113"
+          description: Request ID
+        type:
+          type: string
+          example: "https://ns.adobe.com/aep/errors/CJMPTS-1000-400"
+        title:
+          type: string
+          example: "A concise error message"
+        status:
+          type: string
+          example: 400
+        report:
+          $ref: '#/components/schemas/reportInError'
+        error-chain:
+          $ref: '#/components/schemas/error-chain'
+
+    asyncErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "https://ns.adobe.com/aep/errors/CJMPTS-1000-400"
+        title:
+          type: string
+          example: "A concise error message"
+        status:
+          type: string
+          example: 400
+        report:
+          $ref: '#/components/schemas/reportInError'
+        error-chain:
+          $ref: '#/components/schemas/error-chain'
+
+    reportInError:
+      type: object
+      properties:
+        tenantInfo:
+          $ref: '#/components/schemas/tenantInfoInError'
+        additionalContext:
+          type: object
+          example:
+            detailedMessage: message
+          description: Additional Context of Error
+
+    tenantInfoInError:
+      type: object
+      properties:
+        sandboxName:
+          type: string
+          example: "cjm-team"
+        sandboxId:
+          type: string
+          example: "missing"
+        imsOrgId:
+          type: string
+          example: "fajbfabfhbahbfhbahb@AdobeOrg"
+
+    error-chain:
+      type: array
+      title: Error Chain
+      description: Error Chain
+      items:
+        type: object
+        example:
+          serviceId: ptservice
+          errorCode: CJMPTS-*
+          invokingServiceId: cjm-ptservice
+          unixTimeStampMs: 1610446917396
+
+  responses:
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'

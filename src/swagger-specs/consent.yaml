@@ -1,0 +1,347 @@
+openapi: 3.0.0
+security:
+  - imsUserToken: []
+info:
+  description: Consent API Service
+  title: Consent Service
+  termsOfService: https://www.adobe.com/legal/terms.html
+  contact:
+    email: cjm-consent-team@adobe.com
+  license:
+    name: Adobe All rights reserved
+    url: https://www.adobe.com/legal/terms.html
+  version: ""
+tags:
+  - name: opt-in-controller
+    description: Opt In Controller
+  - name: preferences-controller
+    description: Preferences Controller
+paths:
+  /opt-in:
+    post:
+      tags:
+        - opt-in-controller
+      summary: Opts in a user.
+      operationId: optInUsingPOST
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization token
+          required: true
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          description: Organization ID
+          required: true
+          schema:
+            type: string
+            default: 745F37C35E4B776E0A49421B@AdobeOrg
+        - name: x-request-id
+          in: header
+          description: Request ID
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-id
+          in: header
+          description: Sandbox Id
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          description: Sandbox Name
+          required: true
+          schema:
+            type: string
+            default: cjm-team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OptInPreferences"
+        description: "A json array of preference objects.  If no payload/body is provided
+          or it is an empty array, this will default to a preferences of only
+          'email-out'. "
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        "400":
+          description: No preferences was given.
+        "406":
+          description: Problems parsing preferences.  See body for details.
+  /preferences:
+    post:
+      tags:
+        - preferences-controller
+      summary: Unsubscribes a user based on a given encrypted policy id.
+      operationId: unsubscribeUsingPOST
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization token
+          required: true
+          schema:
+            type: string
+        - name: params
+          in: query
+          description: 'Base64 encoded string of contextual
+            parameters:
+{
+   "m":"messageExecutionId",
+   "jv":"journeyVersionId",
+   "ji":"journeyVersionInstanceId",
+   "ja":"journeyActionId",
+   "s":"sandboxId",
+}
+
+'
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: query
+          description: Encrypted string of profile id.
+          required: true
+          schema:
+            type: string
+        - name: sig
+          in: query
+          description: Signature string to verify the given parameters
+          required: true
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          description: Organization ID
+          required: true
+          schema:
+            type: string
+            default: 745F37C35E4B776E0A49421B@AdobeOrg
+        - name: x-request-id
+          in: header
+          description: Request ID
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-id
+          in: header
+          description: Sandbox Id
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          description: Sandbox Name
+          required: true
+          schema:
+            type: string
+            default: cjm-team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Preferences"
+        description: "A json array of preference objects.  If no payload/body is provided
+          or it is an empty array, this will default to a preferences of only
+          'email-out'. "
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        "400":
+          description: No pid was given.  Or 'x-gw-ims-org-id' or 'x-sandbox-id' was
+            included in the header.
+        "401":
+          description: The parameters were not verified for the given signature and imsOrg.
+        "406":
+          description: Problems parsing the pid or params.  See body for details.
+servers:
+  - url: https://platform.adobe.io/journey/imp/consent/
+components:
+  requestBodies:
+    signUsingPOSTMessagetosign:
+      content:
+        application/json:
+          schema:
+            type: string
+            example: '{"messageExecutionId":"xxx","journeyVersionId":"yyy","journeyVersionInstanceId":"aaa","journeyVersionNodeId":"bbb","journeyActionId":"ccc","messageId":"ddd","messageProfileId":"zzz","variant":"eee","substitutionValues":{"lang":"en","color":"red","prodId":"aaa"}}'
+      description: Params to be signed
+      required: true
+  securitySchemes:
+    imsUserToken:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    imsServiceToken:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    MarketingPreferenceItem:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+            - no
+            - pending
+            - unknown
+            - yes
+        scope:
+          type: string
+          enum:
+            - channel
+            - global
+            - identity
+        timestamp:
+          type: string
+        type:
+          type: string
+          enum:
+            - any_marketing
+            - email
+            - in_app_messages
+            - in_home_messages
+            - in_vehicle_messages
+            - iot_messages
+            - phone_calls
+            - physical_mail
+            - push_notifications
+            - sms
+            - social_media
+      title: MarketingPreferenceItem
+    OptInPreferences:
+      type: object
+      required:
+        - consentIdentity
+        - consentIdentityNamespace
+        - profileId
+        - profileNamespace
+      properties:
+        consentIdentity:
+          type: string
+        consentIdentityNamespace:
+          type: string
+        marketing:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarketingPreferenceItem"
+        personalization:
+          type: array
+          items:
+            $ref: "#/components/schemas/PersonalizationPreferenceItem"
+        privacy:
+          type: array
+          items:
+            $ref: "#/components/schemas/PrivacyPreferenceItem"
+        profileId:
+          type: string
+        profileNamespace:
+          type: string
+      title: OptInPreferences
+    PersonalizationPreferenceItem:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+            - no
+            - pending
+            - unknown
+            - yes
+        scope:
+          type: string
+          enum:
+            - channel
+            - global
+            - identity
+        timestamp:
+          type: string
+        type:
+          type: string
+          enum:
+            - advertising
+            - any_personalization
+            - content
+            - customer_support
+            - email
+            - in_app_messages
+            - in_home
+            - in_store
+            - in_vehicle
+            - iot_devices
+            - offers
+            - phone_calls
+            - physical_mail
+            - push_notifications
+            - sms
+            - social_media
+            - third_party_content
+            - third_party_offers
+      title: PersonalizationPreferenceItem
+    Preferences:
+      type: object
+      properties:
+        marketing:
+          type: array
+          items:
+            $ref: "#/components/schemas/MarketingPreferenceItem"
+        personalization:
+          type: array
+          items:
+            $ref: "#/components/schemas/PersonalizationPreferenceItem"
+        privacy:
+          type: array
+          items:
+            $ref: "#/components/schemas/PrivacyPreferenceItem"
+      title: Preferences
+    PrivacyPreferenceItem:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+            - no
+            - pending
+            - unknown
+            - yes
+        scope:
+          type: string
+          enum:
+            - channel
+            - global
+            - identity
+        timestamp:
+          type: string
+        type:
+          type: string
+          enum:
+            - anonymous_analysis
+            - data_collection
+            - device_linking
+            - pseudonymous_analysis
+            - sell_data
+            - share_data
+      title: PrivacyPreferenceItem
