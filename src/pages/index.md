@@ -1,7 +1,6 @@
 ---
 title: Adobe Journey Optimizer APIs
 description: A collection of high-level references for all endpoints provided by Adobe Journey Optimizer APIs.
-contributors:
 ---
 
 <Hero slots="heading, text"/> 
