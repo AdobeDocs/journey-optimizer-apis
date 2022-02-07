@@ -35,46 +35,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 ### API References
 
-[Consent API](references/consent.md) 
-
-Consent API Desc.
-
-<DiscoverBlock slots="link, text"/>
-
-[Content API](references/content.md) 
-
-Content API Desc
-
-<DiscoverBlock slots="link, text"/>
-
-[ESS Configuration API](references/essconfig.md) 
-
-ESSConfi API Desc.
-
-<DiscoverBlock slots="link, text"/>
-
-[Presets API](references/presets.md) 
-
-Presets API Desc
-
-<DiscoverBlock slots="link, text"/>
-
-[Preview API](references/preview.md) 
-
-Preview API Desc
-
-<DiscoverBlock slots="link, text"/>
-
-[Reporting API](references/reporting.md) 
-
-Reporting API Desc
-
-<DiscoverBlock slots="link, text"/>
-
-[SubDomain API](references/subdomain.md) 
-
-SubDomain API Desc.
-
 <DiscoverBlock slots="link, text"/>
 
 [Suppression API](references/suppression.md) 

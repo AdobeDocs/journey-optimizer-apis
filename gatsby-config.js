@@ -30,34 +30,6 @@ module.exports = {
       {
         title: 'API References',
         menu: [{
-          title: 'Consent API',
-          description: 'TBC',
-          path: '/references/consent.md'
-        }, {
-          title: 'Content API',
-          description: 'TBC',
-          path: '/references/content.md'
-        }, {
-          title: 'ESS Configuration API',
-          description: 'TBC',
-          path: '/references/essconfig.md'
-        }, {
-          title: 'Presets API',
-          description: 'TBC',
-          path: '/references/presets.md'
-        }, {
-          title: 'Preview API',
-          description: 'TBC',
-          path: '/references/preview.md'
-        }, {
-          title: 'Reporting API',
-          description: 'TBC',
-          path: '/references/reporting.md'
-        }, {
-          title: 'SubDomain API',
-          description: 'TBC',
-          path: '/references/subdomain.md'
-        }, {
           title: 'Suppression API',
           description: 'TBC',
           path: '/references/suppression.md'

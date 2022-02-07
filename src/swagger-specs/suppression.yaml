@@ -1,887 +1,868 @@
-swagger: '2.0'
+---
+openapi: 3.0.0
+
 info:
-  description: CJM Suppression Service
+  description: Adobe Journey Optimizer Developer API
   version: "1.0.0"
-  title: CJM Suppression Service
-  termsOfService: https://www.adobe.com/legal/terms.html
+  title: AJO Developer API
   contact:
     email: rearley@adobe.com
   license:
-    name: Adobe All rights reserved
-    url: https://www.adobe.com/legal/terms.html
-host: platform.adobe.io
-basePath: /
-tags:
-  - name: Suppression Service Controller
-    description: Suppression Controller
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+security:
+  - BearerAuth: []
+
 servers:
-  - url: https://platform.adobe.io/journey/imp/suppression
+  - url: https://platform-stage.adobe.io/ajo
+    description: Stage Environment
+  - url: https://platform.adobe.io/ajo
+    description: Production Environment
+
 paths:
-  /addresses:
+  /config/suppression/addresses:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
     get:
+      summary: Query suppressed or allowed emails addresses
       tags:
-        - Suppression Service Controller
-      summary: Get suppressed email addresses
-      operationId: getSuppressedAddressesUsingGET
-      produces:
-        - '*/*'
+        - Suppression
+      operationId: getAddressesId
       parameters:
-        - name: Accept
-          in: header
-          description: Accept
-          required: false
-          type: string
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: limit
-          in: query
-          description: limit
-          required: false
-          type: integer
-          default: 0
-          format: int64
-        - name: modified_since
-          in: query
-          description: Modified Since
-          required: false
-          type: integer
-          default: 0
-          format: int64
-        - name: orderby
-          in: query
-          description: orderby
-          required: false
-          type: string
-        - name: property
-          in: query
-          description: property
-          required: false
-          type: string
-        - name: start
-          in: query
-          description: start
-          required: false
-          type: string
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - $ref: '#/components/parameters/type'
+        - $ref: '#/components/parameters/orderby'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
       responses:
         '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/SuppressionDocResource'
+          description: A list of suppressed or allowed entities 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _page:
+                    $ref: '#/components/schemas/page'
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/suppressionListResponse'
+                  _links:
+                    $ref: '#/components/schemas/suppressionListLink'
     post:
-      tags:
-        - Suppression Service Controller
-      summary: Add email address/addresses to suppression list
-      operationId: addressAddUsingPOST
-      consumes:
-        - application/json
-      produces:
-        - application/json
       parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - in: body
-          name: requestBody
-          description: List of Email address/addresses to be added to Suppression List or Allowed list
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/SuppressionCreateBody'
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - $ref: '#/components/parameters/type'
+      
+      summary: Add a suppressed or allowed email address
+      tags:
+        - Suppression
+      operationId: addAddressId
+      requestBody:
+        description: The JSON for the entity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/addEmailAddress'
       responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/SuppressionDocItem'
-  /addresses/{addressId}:
+        '201':
+          description: The newly added entity 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/suppressionListAddResponse'
+
+  /config/suppression/addresses/{email}:
+    parameters:
+      - in: path
+        description: email address sought
+        name: email
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/type'
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
     get:
+      summary: Query a specific suppressed or allowed email address
       tags:
-        - Suppression Service Controller
-      summary: Get a single email address from suppression list
-      operationId: getSuppressedAddressUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: addressId
-          in: path
-          description: Email address to get
-          required: true
-          type: string
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: regulation
-          in: query
-          description: regulation
-          required: false
-          type: string
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - Suppression
+      operationId: getEmailAddressId
       responses:
         '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/SuppressionDocItem'
+          description: Returning a specific suppression or allowed entity 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/suppressionListResponse'
     delete:
+      summary: Delete a specific suppressed or allowed email address
       tags:
-        - Suppression Service Controller
-      summary: Delete email address from suppression list
-      operationId: addressDeleteUsingDELETE
-      produces:
-        - '*/*'
-      parameters:
-        - name: addressId
-          in: path
-          description: Email address to delete
-          required: true
-          type: string
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - Suppression
+      operationId: deleteEmailAddressId
       responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-  /admin:
+        '204':
+          description: Entity deleted 
+
+  /config/suppression/domains:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
     get:
+      summary: Query suppressed or allowed domains
       tags:
-        - Suppression Service Controller
-      summary: Internal API to get all email addresses and domains from suppression list
-      operationId: getAllSuppressionsUsingGET
-      produces:
-        - '*/*'
+        - Suppression
+      operationId: getDomainsId
       parameters:
-        - name: Accept
-          in: header
-          description: Accept
-          required: false
-          type: string
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: imsOrgId
-          in: query
-          description: imsOrgId
-          required: false
-          type: string
-        - name: include_deleted
-          in: query
-          description: include_deleted
-          required: false
-          type: boolean
-          default: false
-        - name: limit
-          in: query
-          description: limit
-          required: false
-          type: integer
-          default: 0
-          format: int64
-        - name: modified_since
-          in: query
-          description: modified_since
-          required: false
-          type: integer
-          default: 0
-          format: int64
-        - name: orderby
-          in: query
-          description: orderby
-          required: false
-          type: string
-        - name: property
-          in: query
-          description: property
-          required: false
-          type: string
-        - name: sandboxId
-          in: query
-          description: sandboxId
-          required: false
-          type: string
-        - name: start
-          in: query
-          description: start
-          required: false
-          type: string
-          default: '0'
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
+        - $ref: '#/components/parameters/type'  
+        - $ref: '#/components/parameters/orderby'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property' 
       responses:
         '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/SuppressionDocResource'
-  /admin/orgs:
-    get:
-      tags:
-        - Suppression Service Controller
-      summary: Internal API to get all unique ims-org-ids + sandbox-ids
-      operationId: getOrgsAndSandboxesUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: false
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/ClientEntity'
-  /domains:
-    get:
-      tags:
-        - Suppression Service Controller
-      summary: Get suppressed domains
-      operationId: getSuppressedDomainsUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: Accept
-          in: header
-          description: Accept
-          required: false
-          type: string
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: limit
-          in: query
-          description: limit
-          required: false
-          type: integer
-          default: 0
-          format: int64
-        - name: modified_since
-          in: query
-          description: Modified Since
-          required: false
-          type: integer
-          default: 8649997394
-          format: int64
-        - name: orderby
-          in: query
-          description: orderby
-          required: false
-          type: string
-        - name: property
-          in: query
-          description: property
-          required: false
-          type: string
-        - name: start
-          in: query
-          description: start
-          required: false
-          type: string
-          default: '0'
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/SuppressionDocResource'
+          description: A list of suppressed or allowed entities 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _page:
+                    $ref: '#/components/schemas/page'
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/domainSuppressionListResponse'
+                  _links:
+                    $ref: '#/components/schemas/suppressionListLink'
     post:
-      tags:
-        - Suppression Service Controller
-      summary: Add domain(s) to suppression list
-      operationId: addDomainsUsingPOST
-      consumes:
-        - application/json
-      produces:
-        - '*/*'
       parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - in: body
-          name: requestBody
-          description: List of domain(s) to be added to Global Suppression List
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/SuppressionCreateBody'
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - $ref: '#/components/parameters/type'
+      
+      summary: Add a suppressed or allowed domain 
+      tags:
+        - Suppression
+      operationId: addDomainId
+      requestBody:
+        description: The JSON for the entity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/addDomain'
       responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/SuppressionDocItem'
-  /domains/{domainId}:
+        '201':
+          description: The newly added entity 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/suppressionListAddResponse'
+
+  /config/suppression/domains/{domain}:
+    parameters:
+      - in: path
+        description: domain sought
+        name: domain
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
     get:
+      summary: Query a specific suppressed or allowed domain
       tags:
-        - Suppression Service Controller
-      summary: Get a single domain from suppression list
-      operationId: getSuppressedDomainUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
-          type: string
-        - name: domainId
-          in: path
-          description: Domain to get
-          required: true
-          type: string
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
-          in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+        - Suppression
+      operationId: getDomainId
       responses:
         '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/SuppressionDocItem'
+          description: A list of suppressed or allowed entities 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domainSuppressionListResponse'
     delete:
+      summary: Delete a specific suppressed or allowed domain
       tags:
-        - Suppression Service Controller
-      summary: Delete domain from suppression list
-      operationId: domainDeleteUsingDELETE
-      produces:
-        - '*/*'
+        - Suppression
+      operationId: deleteDomainId
+      responses:
+        '204':
+          description: Entity deleted 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/domainSuppressionListResponse'
+
+  /config/suppression/uploads:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+    post:
       parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
+        - name: Content-Type
+          description: The content type of the request body.  Should be 'multipart/form-data'.
           required: true
-          type: string
-        - name: domainId
-          in: path
-          description: Domain to delete
-          required: true
-          type: string
-        - name: type
-          in: query
-          description: type
-          required: false
-          type: string
-          default: client
-          enum:
-            - CLIENT
-            - GLOBAL
-            - ALLOWED
-        - name: x-api-key
           in: header
-          description: API KEY
-          required: true
-          type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
-          type: string
-        - name: x-request-id
-          in: header
-          description: Request Id
-          required: false
-          type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
-          type: string
+          schema:
+            type: string
+            example: multipart/form-data     
+      summary: Upload a CSV file of suppressed entities 
+      tags:
+        - Suppression
+      operationId: uploadId
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: The full path of the file that is to be uploaded.
+                  type: string
+                  example: mysuppressions.csv
+      responses:
+        '201':
+          description: The CSV file has been accepted.  This is an asynchronous call and will finish sometime in the future.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uploadPost'
+    get:
+      summary: Fetch upload jobs
+      tags:
+        - Suppression
+      operationId: getUploadsId
+      parameters:
+        - $ref: '#/components/parameters/orderby'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
       responses:
         '200':
-          description: OK
-          schema:
-            type: object
-  /suppressed:
-    post:
-      tags:
-        - Suppression Service Controller
-      summary: suppressed
-      operationId: suppressedUsingPOST
-      consumes:
-        - application/json
-      produces:
-        - '*/*'
-      parameters:
-        - name: Authorization
-          in: header
-          description: Authorization token
-          required: true
+          description: A list of suppressed or allowed entities 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _page:
+                    $ref: '#/components/schemas/uploadPage'
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/uploadListResponse'
+                  _links:
+                    $ref: '#/components/schemas/uploadListLink'
+  
+  /config/suppression/uploads/{jobId}:
+    parameters:
+      - in: path
+        description: Upload job to fetch
+        name: jobId
+        required: true
+        schema:
           type: string
-        - in: body
-          name: payload
-          description: List of emails to check for suppression
-          required: true
-          schema:
-            type: array
-            items:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+    get:
+      summary: Query a specific upload job
+      tags:
+        - Suppression
+      operationId: getUploadJobId
+      responses:
+        '200':
+          description: Returns a specific upload job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uploadJob'
+    delete:
+      summary: Delete a specific upload job.
+      tags:
+        - Suppression
+      operationId: deleteUploadJobId
+      responses:
+        '204':
+          description: Job deleted 
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: The authentication token to access the service.
+
+  parameters:
+    type:
+      name: type
+      description: For suppressed entities use 'client', for allowed entities use 'allowed'.  Default is 'client'
+      in: query
+      schema:
+        type: string
+        enum: [client, allowed]
+    x-api-key:
+      name: x-api-key
+      description: The API key belonging to the calling client.
+      required: true
+      in: header
+      schema:
+        type: string
+    x-request-id:
+      name: x-request-id
+      description: A unique id generated by Adobe.io.
+      required: false
+      in: header
+      schema:
+        type: string
+    x-gw-ims-org-id:
+      name: x-gw-ims-org-id
+      description: The ims org id for which the action is being taken.
+      required: true
+      in: header
+      schema:
+        type: string
+    x-sandbox-name:
+      name: x-sandbox-name
+      description: >-
+        Provides the platform Sandbox Name
+      required: true
+      in: header
+      schema:
+        type: string
+    orderby:
+      name: orderby
+      description: >-
+        Sort parameter and direction for sorting the response.
+        Add the prefix as -/+ for desc/asc. If unspecified, the response will be sorted in desc order.
+        Ex. orderby=+creationdate.
+      in: query
+      schema:
+        type: string
+        default: -creationdate
+      required: false
+    limit:
+      name: limit
+      description: >-
+        Limit response to a specified positive number of objects.
+        Ex. limit=10
+      in: query
+      schema:
+        type: integer
+        default: 20
+      required: false
+    start:
+      name: start
+      description: >-
+        Used for pagination. Specifies the criteria for next page
+        with respect to the property specified in orderby.
+        Ex. start=1631739725150.
+      in: query
+      schema:
+        type: string
+      required: false
+    property:
+      name: property
+      description: >-
+        <p>Optional property filters. Please refer to <a href="https://git.corp.adobe.com/pages/experience-platform/api-guidelines/5-sorting_paging_and_filtering.html#533-filtering-by-property">api guidelines</a> for filtering support in APIs.
+        Filtering is supported on the following properties: creationdate, channel
+        Ex. property=creationdate<1631739725150</p>
+      in: query
+      schema:
+        items:
+          type: string
+        type: array
+      required: false
+  schemas:  
+    uploadPost:
+      type: object
+      properties:
+        success:
+          type: object
+          properties:
+            jobId:
               type: string
-        - name: x-gw-ims-org-id
-          in: header
-          description: x-gw-ims-org-id
-          required: false
+              example: 6caaed1b-d7bd-4065-a745-185e9af3b63a
+              description: Unique job identifier.
+
+    addEmailAddress:
+      type: object
+      required:
+        - entity
+      properties:
+        entity:
+          properties:
+            type: 
+              type: string
+              example: email
+            entityValue:
+              type: string
+              description: An email address
+              example: bademailaddress@domain.com
+        comment:
           type: string
-        - name: x-sandbox-name
-          in: header
-          description: x-sandbox-name
-          required: false
+          example: Known bad email address
+        user:
           type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            uniqueItems: true
-            items:
-              $ref: '#/definitions/Suppressed'
-definitions:
-  BounceEvent:
-    type: object
-    properties:
-      bounceType:
-        type: string
-        example: HARD
-        enum:
-          - HARD
-          - IGNORED
-          - SOFT
-          - SUCCEEDED
-      date:
-        type: string
-        example: '2020-10-16T21:08:44.000Z'
-      message:
-        type: string
-        example: 550-5.1.1 The email account that you tried to reach does not exist
-      messageId:
-        type: string
-        example: UMA-65448960
-    title: BounceEvent
-    description: Model for bounce event
-  BounceState:
-    type: object
-    properties:
-      bounceEvents:
-        type: array
-        description: List of bounce events.
-        uniqueItems: true
-        items:
-          $ref: '#/definitions/BounceEvent'
-      softCount:
-        type: integer
-        format: int32
-        example: 2
-        description: Count of soft bounces.
-    title: BounceState
-    description: The model of bounce state
-  ClientEntity:
-    type: object
-    properties:
-      imsOrgId:
-        type: string
-        example: xxxxxx@adobe.com
-      sandboxId:
-        type: string
-        example: 13123143443
-    title: ClientEntity
-    description: The model of client entity
-  ClientSuppressionDocItem:
-    type: object
-    properties:
-      bounceState:
-        description: Bounce state.
-        $ref: '#/definitions/BounceState'
-      client:
-        description: Client entity.
-        $ref: '#/definitions/ClientEntity'
-      creationDate:
-        type: integer
-        format: int64
-        example: 1602880454476
-      entity:
-        $ref: '#/definitions/SuppressionEntity'
-      id:
-        type: string
-        example: 789-24ae-4854-8a08-32740bf35538
-      lastModifiedDate:
-        type: integer
-        format: int64
-        example: 1602880454476
-      status:
-        type: string
-        example: active
-      suppressed:
-        $ref: '#/definitions/SuppressionAttributes'
-    title: ClientSuppressionDocItem
-    description: The model of client suppression
-  Links:
-    type: object
-    properties:
-      empty:
-        type: boolean
-    title: Links
-  Page:
-    type: object
-    properties:
-      count:
-        type: integer
-        format: int32
-        example: 10
-        description: count
-      next:
-        type: string
-        example: fa@gmail.com
-        description: next
-      orderBy:
-        type: string
-        example: entityvalue
-        description: Order by
-      start:
-        type: string
-        example: ab@gmail.com
-        description: start
-    title: Page
-    description: Model for page
-  Suppressed:
-    type: object
-    properties:
-      entity:
-        type: string
-        example: ab@gmail.com
-        description: Email or domain
-      suppressedReason:
-        type: string
-        enum:
-          - NOT_ALLOWED
-          - SUPPRESSED
-    title: Suppressed
-  SuppressionAttributes:
-    type: object
-    properties:
-      comment:
-        type: string
-        example: no MX or A for domain
-      date:
-        type: integer
-        format: int64
-        example: 1603152733779
-      type:
-        type: string
-        example: HARD
-        enum:
-          - HARD
-          - MANUAL
-          - SOFT
-      user:
-        type: string
-        example: suppression
-    title: SuppressionAttributes
-    description: Suppression attributes.
-  SuppressionCreateBody:
-    type: object
-    properties:
-      comment:
-        type: string
-      entity:
-        $ref: '#/definitions/SuppressionEntity'
-      user:
-        type: string
-    title: SuppressionCreateBody
-  SuppressionDocItem:
-    type: object
-    properties:
-      creationDate:
-        type: integer
-        format: int64
-        example: 1602880454476
-      entity:
-        $ref: '#/definitions/SuppressionEntity'
-      id:
-        type: string
-        example: 789-24ae-4854-8a08-32740bf35538
-      lastModifiedDate:
-        type: integer
-        format: int64
-        example: 1602880454476
-      status:
-        type: string
-        example: active
-      suppressed:
-        $ref: '#/definitions/SuppressionAttributes'
-    title: SuppressionDocItem
-    description: The model of the suppression entities.
-  SuppressionDocResource:
-    type: object
-    properties:
-      _links:
-        $ref: '#/definitions/Links'
-      _page:
-        description: Page.
-        $ref: '#/definitions/Page'
-      items:
-        type: array
-        description: List of items.
-        items:
-          $ref: '#/definitions/SuppressionDocItem'
-    title: SuppressionDocResource
-    description: Model for suppression doc resource
-  SuppressionEntity:
-    type: object
-    required:
-      - entityValue
-      - type
-    properties:
-      entityValue:
-        type: string
-        example: smith@gmail.com
-        minLength: 1
-        maxLength: 320
-      type:
-        type: string
-        example: EMAIL
-        enum:
-          - DOMAIN
-          - EMAIL
-    title: SuppressionEntity
-    description: The model of the suppression entity.
+          example: myusername@corp.com
+          
+    addDomain:
+      type: object
+      required:
+        - entity
+      properties:
+        entity:
+          properties:
+            type: 
+              type: string
+              example: domain
+            entityValue:
+              type: string
+              description: A domain
+              example: baddomain.com
+        comment:
+          type: string
+          example: Known bad domain
+        user:
+          type: string
+          example: myusername@corp.com
+
+    uploadJob:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/uploads'
+      properties:
+        imsOrgId:
+          type: string
+          example: 225F37C35E4B776E0A49421B@AdobeOrg
+        sandboxId:
+          type: string
+          example: 70f22060-5d47-11ea-bdff-a5384333ff34
+        failedRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/failedRecord'
+
+    failedRecord:
+      type: object
+      properties:
+        type:
+          description: The entity type.  This is value provided in the user's data
+          type: string  
+          example: Email
+        value:
+          description: The value of the entity. This is value provided in the user's data
+          type: string
+          example: examplegmail@com
+        comments: 
+          description: The comments associated with the failed record. This is value provided in the user's data.
+          type: string
+          example: This is a known bad email address
+        failureReason:
+          description: This is the reason the recdord could not be ingested.  This is provided buy the service itself
+          type: string
+          example: "Invalid format for the entry: examplegmail@com"
+
+    uploads:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          example: 6caaed1b-d7bd-4065-a745-185e9af3b63a
+        user:
+          type: string
+          example: username@mydomain.com
+        filename:
+          type: string
+          example: mysuppressions.csv
+        createTime:
+          description: Number of seconds since the epoc since the job was started
+          type: number
+          example: 1643768895
+        endTime:
+          description: Number of seconds since the epoc when the job finished
+          type: number
+          example: 1643768895
+        status:
+          $ref: '#/components/schemas/uploadStatus'
+        responseCode: 
+          description: the HTTP response code upon accepting the file and the creation of an upload job
+          type: number
+          example: 200
+        responseText:
+          description: in the case of a non-200 responseCode, this field provides more insight as to any failues.  May be null in the case of no error.
+          type: string
+          example: The file is malformed, only CSV files are allowed.
+        recordCount:
+          description: The number of entity records found in the provided upload file.
+          type: number
+          example: 14502
+        handledCount:
+          type: number
+          description: The number of records handled
+          example: 12342
+        failedCount:
+          description: Numebr of records that failed to be imported.  These records are provided for an individual jobId when requesting a single jobId using /upload/{jobId}
+          type: number
+          example: 17
+
+    uploadStatus:
+      description: "The current state of the upload.  Can be one of the following:\n\n_Accepted: The file has been accepted and a jobId has ben created.\n\n"
+      type: string
+      enum:
+        - ACCEPTED
+        - PENDING,
+        - COMPLETE
+        - CANCELED
+        - ERROR
+
+    entityObject:
+      type: object
+      required:
+        - id
+        - entity
+        - suppressed
+        - creationDate
+        - lastModifiedDate
+        - status
+        - listType
+        - client
+        - bounceState
+
+      properties:
+        id:
+          type: string
+          description: The identifier of entity.
+          format: uuid
+          example: 91acd0b4-753b-4366-8893-d5440c4d9b15
+        entity:
+          properties:
+            type: 
+              type: string
+              example: email
+            entityValue:
+              type: string
+              description: An email address
+              example: bademailaddress@domain.com
+        suppressed:
+          $ref: '#/components/schemas/suppressed'
+        creationDate:
+          type: number
+          example: '1631739725150'
+        lastModifiedDate:
+          type: number
+          example: '1631739725150'
+        status:
+          $ref: '#/components/schemas/status'
+        listType:
+          $ref: '#/components/schemas/listType'
+        client:
+          $ref: '#/components/schemas/client'
+        bounceState:
+          $ref: '#/components/schemas/bounceState'
+
+    addEntityObject:
+      type: object
+      required:
+        - id
+        - entity
+        - suppressed
+        - creationDate
+        - lastModifiedDate
+        - status
+        - listType
+        - client
+
+      properties:
+        id:
+          type: string
+          description: The identifier of entity.
+          format: uuid
+          example: 91acd0b4-753b-4366-8893-d5440c4d9b15
+        entity:
+          properties:
+            type: 
+              type: string
+              example: email
+            entityValue:
+              type: string
+              description: An email address
+              example: bademailaddress@domain.com
+        suppressed:
+          $ref: '#/components/schemas/suppressed'
+        creationDate:
+          type: number
+          example: '1631739725150'
+        lastModifiedDate:
+          type: number
+          example: '1631739725150'
+        status:
+          $ref: '#/components/schemas/status'
+        listType:
+          $ref: '#/components/schemas/listType'
+        client:
+          $ref: '#/components/schemas/client'
+
+    domainEntityObject:
+      type: object
+      required:
+        - id
+        - entity
+        - suppressed
+        - creationDate
+        - lastModifiedDate
+        - status
+        - listType
+        - client
+
+      properties:
+        id:
+          type: string
+          description: The identifier of entity.
+          format: uuid
+          example: 91acd0b4-753b-4366-8893-d5440c4d9b15
+        entity:
+          properties:
+            type: 
+              type: string
+              example: "domain"
+            entityValue:
+              type: string
+              description: An email domain
+              example: baddomain.com
+        suppressed:
+          $ref: '#/components/schemas/suppressed'
+        creationDate:
+          type: number
+          example: '1631739725150'
+        lastModifiedDate:
+          type: number
+          example: '1631739725150'
+        status:
+          $ref: '#/components/schemas/status'
+        listType:
+          $ref: '#/components/schemas/listType'
+        client:
+          $ref: '#/components/schemas/client'
+
+    client:
+      type: object
+      properties:
+        imsOrgId:
+          type: string
+          description: The IMS Org id of the calling client
+        sandboxId:
+          type: string
+          description: The sandbox name of the calling client
+
+    listType:
+      type: string
+      enum:
+        - client
+        - allowed
+
+    status:
+      type: string
+      enum:
+        - active
+        - deleted
+
+    suppressed:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/type'
+        user:
+          type: string
+          description: The name or email address of the user that created the suppression
+          example: myemail@myemail.com
+        comment:
+          type: string
+          description: An optional comment about the suppression
+          example: deemed to be a fake
+        date:
+          type: number
+          example: '1631739725150'
+    
+    type:
+      type: string
+      enum:
+        - MANUAL
+        - HARD
+        - SOFT
+
+    # entityType:
+    #   type: string
+    #   enum:
+    #     - email
+    #     - domain
+
+    bounceType:
+      type: string
+      enum:
+        - HARD
+        - SOFT
+        - SUCCEEDED
+        - IGNORED
+
+    bounceState:
+      type: object
+      properties:
+        softCount:
+          type: integer
+          description: The current soft bounce count
+          example: 1
+        bounceEvents:
+          type: array
+          items:
+            $ref: '#/components/schemas/bounceEvents'
+
+    bounceEvents:
+      properties:
+        messageId:
+          type: string
+          description: The message Id associated with the message execution send attempt.
+        date:
+          type: string
+          format: date-time
+          example: '2016-08-29T19:12:33.001Z'
+        message:
+          type: string
+          example: Mailbox is full
+        bounceType:
+          type: string
+          example: SOFT
+
+    hRefLink:
+      type: object
+      required:
+        - href
+      properties:
+        href:
+          type: string
+
+    suppressionListLink:
+      type: object
+      required:
+        - self
+      properties:
+        self:
+          $ref: '#/components/schemas/hRefLink'
+        next:
+          $ref: '#/components/schemas/hRefLink'
+      example:
+        self:
+          href: '/config/suppression/addresses?type=CLIENT&limit=20&orderby=entityvalue'
+        next:
+          href: '/config/suppression/addresses?type=CLIENT&limit=20&start=bademailtest10013@bademail.com&orderby=entityvalue'
+
+    page:
+      type: object
+      properties:
+        orderby:
+          type: string
+          enum:
+            - entityvalue
+            - entitytype
+            - creationdate
+            - lastmodifieddate
+            - suppresseddate
+            - suppresseduser
+            - suppressedcomment
+          example: '-entityvalue'
+        next:
+          type: string
+          example: bademailtest10013@bademail.com
+        count:
+          type: integer
+          example: 1
+    
+    suppressionListResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/entityObject'
+
+    suppressionListAddResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/addEntityObject'
+
+    domainSuppressionListResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/domainEntityObject'
+
+
+    uploadListLink:
+      type: object
+      required:
+        - self
+      properties:
+        self:
+          $ref: '#/components/schemas/hRefLink'
+        next:
+          $ref: '#/components/schemas/hRefLink'
+      example:
+        self:
+          href: '/upload/jobs?limit=1&orderby=-createtime'
+        next:
+          href: '/upload/jobs?limit=1&start=1639983247&orderby=-createtime'
+
+    uploadPage:
+      type: object
+      properties:
+        orderby:
+          type: string
+          enum:
+            - jobid
+            - user
+            - filename
+            - createtime
+            - endtime
+            - status
+            - responsecode
+            - recordcount
+            - handledcount
+            - failedcount
+            - id
+          example: '-createtime'
+        next:
+          type: string
+          example: "1639983247"
+        count:
+          type: integer
+          example: 1
+    
+    uploadListResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/uploads'
+
+    uploadJobResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/uploadJob'
