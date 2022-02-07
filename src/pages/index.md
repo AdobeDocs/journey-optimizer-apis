@@ -17,7 +17,7 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 ## Overview
 
-Adobe Experience Platform is developed with an "API first" philosophy. Using Platform APIs, you can programmatically perform basic CRUD (Create, Read, Update, Delete) operations against data, such as configuring computed attributes, accessing data/entities, exporting data, deleting unneeded data or batches, and more. 
+with an "API first" philosophy. Using Platform APIs, you can programmatically perform basic CRUD (Create, Read, Update, Delete) operations against data, such as configuring computed attributes, accessing data/entities, exporting data, deleting unneeded data or batches, and more. 
 
 The API references listed below serve as high-level overviews of the available endpoints provided by each Platform API. For more detailed information on the use of these APIs, please refer to the documentation linked from within each reference.
 
