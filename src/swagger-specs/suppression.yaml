@@ -6,11 +6,12 @@ info:
   description: "
   <h3>Journey Optimizer APIs are currently in beta, which may be subject to frequent updates without notice.</h3><br/>
   
-  With this API, you can control your **outgoing messages** using suppression and allow lists.<br/><br/>
+  With this API, you can control your <b>outgoing messages</b> using suppression and allow lists.<br/><br/>
   
-   The **suppression list** helps you with honoring the ISPs’ feedback to preserve sending IP reputation while allow list helps you ensure that you send only to those email addresses which are in the **allowed list**, typically to ensure that you don't send mails to customers from your development sandbox."
+   The <b>suppression list</b> helps you with honoring the ISPs’ feedback to preserve sending IP reputation while allow list helps you ensure that you send only to those email addresses which are in the <b>allowed list
+</b>, typically to ensure that you don't send mails to customers from your development sandbox."
   
-  version: "1.0.0 BETA"
+  version: "1.0.0 - Beta Version"
   
   license:
     name: Apache 2.0

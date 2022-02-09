@@ -31,7 +31,7 @@ module.exports = {
         title: 'API References',
         menu: [{
           title: 'Suppression API',
-          description: 'TBC',
+          description: '',
           path: '/references/suppression.md'
         }]
       }
