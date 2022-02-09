@@ -3,12 +3,8 @@ openapi: 3.0.0
 
 info:
   title: AJO Developer - Suppression API
-  description: 
-  # Adobe Journey Optimizer Developer API
+  description:  Adobe Journey Optimizer Developer API
 
-  Control your outgoing messages using suppression and allow lists. 
-  The suppression list helps you with honoring the ISPs’ feedback to preserve sending IP reputation while allow list helps you ensure that you send only to those email addresses which are in the allowed list, typically to ensure that you don't send mails to customers from your development sandbox.
-  
   version: "1.0.0"
   
   license:
