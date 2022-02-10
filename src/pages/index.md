@@ -15,6 +15,8 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Suppression list documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
+* [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
+
 ## Overview
 
 Journey Optimizer comes with an "API first" philosophy. Using Journey Optimizer APIs, you can programmatically perform basic CRUD (Create, Read, Update, Delete) operations against data, such as configuring computed attributes, accessing data/entities, exporting data, deleting unneeded data or batches, and more. 
@@ -27,7 +29,7 @@ The API references listed below serve as high-level overviews of the available e
 
 ### Get Started
 
-[Authenticate and access to APIs](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html)
+[Authenticate and access to APIs](https://developer.adobe.com/developer-console/docs/guides/authentication/  )
     
 Follow this tutorial to gather the required authentication credentials for all Journey Optimizer APIs.
 
@@ -37,6 +39,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 <DiscoverBlock slots="link, text"/>
 
-[Suppression API](references/suppression.md) BETA Version
+[Suppression API](references/suppression.md) - Beta Version
 
 Suppression List Management via Rest API.
