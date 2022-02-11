@@ -19,9 +19,9 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 ## Overview
 
-Journey Optimizer comes with an "API first" philosophy. Using Journey Optimizer APIs, you can programmatically perform basic CRUD (Create, Read, Update, Delete) operations against data, such as configuring computed attributes, accessing data/entities, exporting data, deleting unneeded data or batches, and more. 
+The Adobe Journey Optimizer API allows you to deliver personalized, connected, and timely customer experiences across any app, device, or channel and in turn, effectively managing the end-to-end customer journey. The customer journey is the entire process of a customer’s interactions with a brand, from the first moment of contact until the customer leaves. It starts with the awareness phase, where the customer learns about the brand and starts engaging. The customer will then further interact with the brand, visit online and physical sites, make purchases, send messages, or post reviews.
 
-The API references listed below serve as high-level overviews of the available endpoints provided by each Journey Optimizer API. For more detailed information on the use of these APIs, please refer to the documentation linked from within each reference.
+Adobe Journey Optimizer is built natively on the Adobe Experience Platform and combines a unified, real-time customer profile, an API-first open framework, centralized offer decisioning, and artificial intelligence (AI) and machine learning (ML) for personalization and optimization. By integrating with the Adobe Journey Optimizer API, brands can intelligently determine the next best interaction with scale, speed, and flexibility across the entire customer journey. 
 
 ## Discover 
 

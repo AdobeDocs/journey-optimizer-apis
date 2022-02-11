@@ -393,7 +393,7 @@ components:
     property:
       name: property
       description: >-
-        <p>Optional property filters. Please refer to <a href="https://git.corp.adobe.com/pages/experience-platform/api-guidelines/5-sorting_paging_and_filtering.html#533-filtering-by-property">api guidelines</a> for filtering support in APIs.
+        <p>Optional property filters.
         Filtering is supported on the following properties: creationdate, channel
         Ex. property=creationdate<1631739725150</p>
       in: query
