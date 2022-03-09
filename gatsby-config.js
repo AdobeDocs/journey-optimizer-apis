@@ -29,7 +29,13 @@ module.exports = {
       },
       {
         title: 'API References',
-        menu: [{
+        menu: [
+        {  
+          title: 'Authentication',
+          description: '',
+          path: '/references/authentication.md'
+        },
+        {
           title: 'Suppression API',
           description: '',
           path: '/references/suppression.md'
