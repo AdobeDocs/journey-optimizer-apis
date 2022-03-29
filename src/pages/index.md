@@ -42,3 +42,10 @@ Follow this tutorial to gather the required authentication credentials for all J
 [Suppression API](references/suppression.md) - Beta Version
 
 Suppression List Management via Rest API.
+
+<DiscoverBlock slots="link, text"/>
+
+[Interactive Message Execution API](references/messaging.md) - Beta Version
+
+Interactive Message Execution API via Rest API.
+
