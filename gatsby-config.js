@@ -39,6 +39,11 @@ module.exports = {
           title: 'Suppression API',
           description: '',
           path: '/references/suppression.md'
+        },
+        {
+          title: 'Message Execution API',
+          description: '',
+          path: '/references/messaging.md'
         }]
       }
     ]
