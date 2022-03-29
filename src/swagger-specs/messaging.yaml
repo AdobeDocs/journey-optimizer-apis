@@ -2,13 +2,20 @@
 openapi: 3.0.0
 
 info:
-  description: Interactive Message Execution API
+  description: >-
+  Journey Optimizer Messaging API provides you to send messages to your users.
+    You can provide message contents, recipients, and configuration in API requests with /ajo/executions endpoints.
+    User will need to create Campaign using the Journey Optimizer UI.  Once the campaign is activated, the /ajo/executions api can be used to send the message to recipients in the API request.
+
+  [Prerequisite steps](../prereqmessaging.md)  
+  
+ 
   version: "1.0.0 - Beta Version"
   title: Interactive Message Execution API
 
 
 externalDocs:
-  description: API Documentation
+  description: test
   url: https://wiki.corp.adobe.com/display/CJM/Headless+Messaging+API+Specifications
 
 security:

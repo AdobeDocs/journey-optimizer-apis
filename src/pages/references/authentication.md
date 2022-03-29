@@ -36,7 +36,7 @@ To establish a secure service-to-service Adobe Developer API session, every requ
 
 **IMS_ORG**: This is your personal ORGANIZATION ID, one ORGANIZATION ID is provided by Adobe for each of your instances :
 
-To obtain your ORGANIZATION ID value, refer to your administrator or your Adobe technical contact. You can also retrieve it into Adobe Developer when creating a new integration, in the licenses list (see the Adobe Developer documentation).
+To obtain your ORGANIZATION ID value, refer to your administrator or your Adobe technical contact. You can also retrieve it into Adobe Developer when creating a new integration, in the licenses list.
 
 **ACCESS_TOKEN**: Your personal access token, that was retrieved when exchanging your JSON Web Token through a POST request.
 
