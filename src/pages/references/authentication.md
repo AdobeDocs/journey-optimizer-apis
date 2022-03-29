@@ -11,7 +11,7 @@ Adobe Journey Optimizer API access is set up through the steps below. Each of th
 
 <InlineAlert slots="text"/>
 
-To manage certificates in Adobe Developer, make sure you have <b>System administrator</b> rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html)</a> in the Admin Console.
+To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
 
 1. **Check you have a digital certificate**, or create one if necessary. The public and private keys provided with the certificate are needed in the following steps.
 
