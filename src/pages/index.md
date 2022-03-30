@@ -43,4 +43,4 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 <DiscoverBlock slots="link, text"/>
 
-[Interactive Message Execution API](references/messaging.md) - Beta Version
+[Interactive Messaging API](references/messaging.md) - Beta Version

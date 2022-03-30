@@ -3,20 +3,21 @@ openapi: 3.0.0
 
 info:
   description: "
-  Journey Optimizer Messaging API provides you to send messages to your users.
-    You can provide message contents, recipients, and configuration in API requests with /ajo/executions endpoints.
-    User will need to create Campaign using the Journey Optimizer UI.  Once the campaign is activated, the /ajo/executions api can be used to send the message to recipients in the API request."
+  Journey Optimizer Messaging API provides you to <b>send messages</b> to your users.
 
+  You can provide message contents, recipients, and configuration in API requests with /ajo/executions endpoints.
 
+  <b>Before using the API, user needs to create a campaign by using the Journey Optimizer UI.</b>
   
- 
+  Once the campaign is activated, the /ajo/executions API can be used to send the message to recipients in the API request."
+
   version: "1.0.0 - Beta Version"
-  title: Interactive Message Execution API
+  title: Interactive Messaging API
 
 
 externalDocs:
-  description: Prerequiste steps
-  url: https://developer-stage.adobe.com/journey-optimizer-apis/references/authentication/
+  description: Prerequisite steps
+  url: https://developer-stage.adobe.com/journey-optimizer-apis/references/prereqmessaging/
 
 security:
   - imsUserToken: []
