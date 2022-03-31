@@ -41,6 +41,3 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Suppression API](references/suppression.md) - Beta Version
 
-<DiscoverBlock slots="link, text"/>
-
-[Interactive Messaging API](references/messaging.md) - Beta Version
