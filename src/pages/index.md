@@ -15,6 +15,8 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Suppression list documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
+* [Sandboxes management documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
+
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
 
 ## Overview

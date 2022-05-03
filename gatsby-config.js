@@ -39,11 +39,11 @@ module.exports = {
           title: 'Suppression API',
           description: '',
           path: '/references/suppression.md'
+        },
+        {
+          title: 'Sandbox Export/Import Service API',
+          path: '/references/sandbox.md'
         }]
-      },
-      {
-        title: 'Sandbox Export/Import Service API',
-        path: '/references/sandbox.md'
       }
     ]
   },
