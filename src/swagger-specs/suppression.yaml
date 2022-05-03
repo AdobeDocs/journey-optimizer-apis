@@ -4,15 +4,12 @@ openapi: 3.0.0
 info:
   title: AJO Developer - Suppression API
   description: "
-  <h3>Journey Optimizer APIs are currently in beta, which may be subject to frequent updates without notice.</h3><br/>
   
   With this API, you can control your <b>outgoing messages</b> using suppression and allow lists.<br/><br/>
   
    The <b>suppression list</b> helps you with honoring the ISPs’ feedback to preserve sending IP reputation while allow list helps you ensure that you send only to those email addresses which are in the <b>allowed list
 </b>, typically to ensure that you don't send mails to customers from your development sandbox."
-  
-  version: "1.0.0 - Beta Version"
-  
+  version: "1.0.1"
 
 security:
   - BearerAuth: []
@@ -304,13 +301,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/uploadJob'
     delete:
-      summary: Delete a specific upload job
+      summary: Delete a specific upload job.
       tags:
         - Suppression
       operationId: deleteUploadJobId
       responses:
         '204':
           description: Job deleted 
+
+  /config/suppression/admin/{imsOrgId}/{sandboxId}:
+    parameters:
+      - in: path
+        description: IMS Organization Id
+        name: imsOrgId
+        required: true
+        schema:
+          type: string
+      - in: path
+        description: Sandbox Id
+        name: sandboxId
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+    delete:
+      summary: Delete all suppressions from a given sandbox-Id and IMS-Org-Id
+      tags:
+        - Suppression
+      operationId: deleteAllSuppressions
+      responses:
+        '202':
+          description: The request has been accepted and will be completed asynchronously
 
 components:
   securitySchemes:
@@ -390,7 +414,7 @@ components:
     property:
       name: property
       description: >-
-        <p>Optional property filters.
+        <p>Optional property filters. Please refer to <a href="https://git.corp.adobe.com/pages/experience-platform/api-guidelines/5-sorting_paging_and_filtering.html#533-filtering-by-property">api guidelines</a> for filtering support in APIs.
         Filtering is supported on the following properties: creationdate, channel
         Ex. property=creationdate<1631739725150</p>
       in: query

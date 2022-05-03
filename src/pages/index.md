@@ -39,5 +39,7 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 <DiscoverBlock slots="link, text"/>
 
-[Suppression API](references/suppression.md) - Beta Version
+[Suppression API](references/suppression.md)
+
+[Sandbox Export/Import Service API](references/sandbox.md)
 
