@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  title: Sandbox Export/Import Service API
+  title: Object Copy API
   description: |
-    The Export/Import Service, or "Exim", is a AEP micro-service.  It's purpose is to
+    The Object Copy Service, or "Exim", is an AEP micro-service.  It's purpose is to
     * Take a **snapshot** of artifacts in a sandbox. This is referred to as **Export**, and it provides a mechanism for someone to share their AEP definitions and data.
     * Furnish a sandbox with one or more snapshots.  This is referred to as **Import**, and it allows for the fast and easy duplication of AEP artifacts.
   version: 1.1.6

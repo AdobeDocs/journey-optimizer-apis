@@ -15,7 +15,7 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Suppression list documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
-* [Sandboxes management documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
+* [Object Copy documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
 
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
 
@@ -43,5 +43,5 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Suppression API](references/suppression.md)
 
-[Sandbox Export/Import Service API](references/sandbox.md)
+[Object Copy API](references/sandbox.md)
 

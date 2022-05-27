@@ -41,7 +41,7 @@ module.exports = {
           path: '/references/suppression.md'
         },
         {
-          title: 'Sandbox Export/Import Service API',
+          title: 'Object Copy API',
           path: '/references/sandbox.md'
         }]
       }
