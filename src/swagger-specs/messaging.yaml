@@ -2,7 +2,10 @@
 openapi: 3.0.0
 
 info:
-  description: Journey Optimizer Campaign Documentation
+  description: "This API is currently in beta, which may be subject to frequent updates without notice.<br/><br/>
+  Interactive Message Execution API helps you with messaging capabilities. Using this REST API, you can send transactional messages using a Campaign Id using Email, SMS and Push channels.<br/><br/>
+  <b>Related documentation:</b>
+  To learn more about the API Triggered Campaign creation flow and supported channels, refer to product documentation <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html">here</a>" 
   
   version: "1.0.1 - BETA"
   title: Interactive Message Execution API
