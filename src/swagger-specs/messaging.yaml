@@ -2,17 +2,25 @@
 openapi: 3.0.0
 
 info:
-  description: "This API is currently in beta, which may be subject to frequent updates without notice."
-  version: "1.0.0 - BETA"
+  description: "This API is currently in beta, which may be subject to frequent updates without notice.<br/><br/>
+  Interactive Message Execution API helps you with messaging capabilities. Using this REST API, you can send transactional messages using a Campaign Id using Email, SMS and Push channels.<br/><br/>
+  <b>Related documentation:</b>
+To learn more about the API Triggered Campaign creation flow and supported channels, refer to product documentation <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html">here</a>" 
+  version: "1.0.1 - BETA"
   title: Interactive Message Execution API
+  
+
+externalDocs:
+  description: Journey Optimizer Campaign Documentation
+  url: https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html
 
 security:
   - imsUserToken: []
 
 servers:
-  - url: https://cjm-stage.adobe.io/imp/message
+  - url: https://platform-stage.adobe.io/ajo
     description: Stage Environment
-  - url: https://cjm.adobe.io/imp/message
+  - url: https://platform.adobe.io/ajo
     description: Production Environment
 
 paths:
@@ -112,10 +120,7 @@ components:
           example: "campaign-12345"
         recipients:
           $ref: '#/components/schemas/recipients'
-      #  content:
-      #    $ref: '#/components/schemas/content'
-
-
+       
     imExecutionResponse:
       description: "the execution response"
       type: object
@@ -213,7 +218,7 @@ components:
         namespace:
           type: string
           description: "the AEP Profile namespace"
-          example: "ecid"
+          example: "email"
         channelData:
           $ref: "#/components/schemas/recipientChannelData"
         profile:
@@ -257,11 +262,6 @@ components:
           type: string
           description: "the email address for emailing which also doubles up as the external userId"
           example: "customer123@example.com"
-        mobilePhoneNumber:
-          type: string
-          description: "the mobile phone number for sms"
-          example: "+1 999-999-9999"
-
     profile:
       type: object
       description: "the profile data used for dynamic variable substitution in message content"
@@ -297,59 +297,3 @@ components:
         #   "productName": "LED TV",
         #   "productCategory": "Electronics"
       # }
-
- #   content:
- #     type: object
- #     description: 'the channel based message contents'
- #     properties:
- #       email:
- #         $ref: '#/components/schemas/emailContent'
-  #      sms:
-  #        $ref: '#/components/schemas/smsContent'
-
- #   emailContent:
- #     type: object
- #     description: "the email content"
-  #    required:
-  #      - presetId
-  #      - subject
-  #      - body
-  #    properties:
-  #      presetId:
- #         type: string
-  #        description: "the email preset identifier"
- #         example: "preset-1234"
-  #      messageType:
- #         type: string
- #         description: "the message type identifier - 'marketing' or 'transactional'"
- #         default: "transactional"
- #         example: "transactional"
- #       subject:
-  #        type: string
- #         description: "the email subject which can have variables in this format: {{context.variable}}"
-  #        example: "Welcome to AJO Interactive Messaging {{context.person.name.lastName}}"
-  #      body:
-  #        type: string
-  #        description: "the email body which can have variables in this format: {{context.variable}}"
-  #        example: "Hi {{context.person.name.lastName}}, Greetings..."
-
-  #  smsContent:
-  #    type: object
-  #    description: "the SMS content"
-  #    required:
-  #      - presetId
-  #      - body
-  #    properties:
-  #      presetId:
-  #        type: string
-  #        description: "the SMS preset identifier"
-   #       example: "preset-3456"
-  #      messageType:
-  #        type: string
-  #        description: "the message type identifier - 'marketing' or 'transactional'"
-  #        default: "transactional"
-  #        example: "transactional"
-  #      body:
-  #        type: string
-  #        description: "the SMS body which can have variables in this format: {{context.variable}}"
-  #        example: "Hi {{context.person.name.lastName}}, Greetings..."
