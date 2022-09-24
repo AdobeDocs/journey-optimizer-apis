@@ -1,21 +1,21 @@
 {
   "private": true,
-  "name": "dev-site-documentation-template",
+  "name": "journey-optimizer-apis",
   "version": "1.0.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AdobeDocs/dev-site-documentation-template"
+    "url": "https://github.com/AdobeDocs/journey-optimizer-apis"
   },
   "author": {
     "name": "Stephan Ringel",
     "url": "https://github.com/icaraps"
   },
   "dependencies": {
-    "@adobe/gatsby-theme-aio": "^3.24.0",
-    "gatsby": "^3.6.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "@adobe/gatsby-theme-aio": "^4.6.2",
+    "gatsby": "4.22.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "start": "gatsby build && gatsby serve",
@@ -23,7 +23,9 @@
     "dev": "gatsby develop",
     "dev:https": "gatsby develop --https --host localhost.corp.adobe.com --port 9000",
     "build": "gatsby build",
+    "build:incremental": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
-  }
+  },
+  "packageManager": "yarn@3.2.2"
 }
