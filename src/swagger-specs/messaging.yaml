@@ -4,7 +4,6 @@ openapi: 3.0.0
 info:
   title: AJO Developer - Interactive Message Execution API
   description: "
-  This API is currently in beta, which may be subject to frequent updates without notice.<br/><br/>
   Interactive Message Execution API helps you with messaging capabilities. Using this REST API,
   you can send transactional messages using a Campaign Id using Email, SMS and Push channels. You will need the Campaign ID to send message using API.<br/><br/>
   <b>Related documentation:</b><br/>
@@ -18,7 +17,7 @@ info:
   For more information on how to obtain these values, see the <a href='https://developer.adobe.com/journey-optimizer-apis/references/authentication/'>authentication tutorial</a>.
   "
 
-  version: "1.0.1 - BETA"
+  version: "1.0 - GA"
   
 
 #externalDocs:
