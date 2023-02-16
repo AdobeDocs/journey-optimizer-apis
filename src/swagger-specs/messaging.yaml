@@ -103,6 +103,13 @@ components:
       in: header
       schema:
         type: string
+    x-sandbox-id:
+      name: x-sandbox-id
+      description: Platform Sandbox id.
+      required: false
+      in: header
+      schema:
+        type: string
     x-sandbox-name:
       name: x-sandbox-name
       description: >-
@@ -118,6 +125,7 @@ components:
       type: object
       required:
         - requestId
+        - campaignId
         - recipients
       properties:
         requestId:
@@ -126,7 +134,7 @@ components:
           example: "request-12345"
         campaignId:
           type: string
-          description: "the Campaign Identifier"
+          description: "the CampaignId as coming up in Campaign Summary Page "
           example: "campaign-12345"
         recipients:
           $ref: '#/components/schemas/recipients'
@@ -200,12 +208,10 @@ components:
       items:
         oneOf:
           - $ref: "#/components/schemas/AEPRecipient"
-          - $ref: "#/components/schemas/externalRecipient"
         discriminator:
           propertyName: type
           mapping:
             aep: "#/components/schemas/AEPRecipient"
-            external: "#/components/schemas/externalRecipient"
       minItems: 1
       maxItems: 20
 
@@ -236,42 +242,18 @@ components:
         context:
           $ref: "#/components/schemas/context"
 
-    externalRecipient:
-      type: object
-      description: "the External Recipient Information"
-      required:
-        - type
-        - userId
-        - namespace
-        - channelData
-      properties:
-        type:
-          type: string
-          description: "recipient type: external"
-          example: "external"
-        userId:
-          type: string
-          description: "the external user identifier. Can be email id or any other unique identifier"
-          example: "customer123@example.com"
-        namespace:
-          type: string
-          description: "the External User namespace"
-          example: "email"
-        channelData:
-          $ref: "#/components/schemas/recipientChannelData"
-        profile:
-          $ref: "#/components/schemas/profile"
-        context:
-          $ref: "#/components/schemas/context"
-
     recipientChannelData:
       type: object
-      description: "the Channel Data for recipient"
+      description: "the Channel Data for recipient , Its an Optional Field for type aep"
       properties:
         emailAddress:
           type: string
           description: "the email address for emailing which also doubles up as the external userId"
           example: "customer123@example.com"
+        mobilePhoneNumber:
+          type: string
+          description: "the mobile phone number for sms"
+          example: "111-111-1111"
     profile:
       type: object
       description: "the profile data used for dynamic variable substitution in message content"
