@@ -9,8 +9,8 @@ info:
   <b>Related documentation:</b><br/>
   To learn more about the API Triggered Campaign creation flow and supported channels, refer to product documentation
   <a href='https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html'>here</a><br/><br/>
-  <b>Code samples </b><br/>
-  <br/>Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples/'>this page</a>.<br/>
+  <b>Code samples </b>
+  <br/>Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples.md'>this page</a>.<br/><br/>
   <b>API path:</b><br/>
   Base path for Interactive Message Execution APIs: https://platform.adobe.io/ajo/im/executions <br/>
   Example of a complete path: https://platform.adobe.io/ajo/im/executions/unitary <br/><br/>
