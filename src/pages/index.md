@@ -17,8 +17,6 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Object Copy documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
 
-* [API-triggered campaigns documentation](https://experienceleague.corp.adobe.com/docs/journey-optimizer/using/campaigns/api-triggered-campaigns.html?lang=en)
-
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
 
 ## Overview
@@ -49,4 +47,3 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Interactive Message Execution API](references/messaging.md)
 
-[Journey Orchestration APIs](references/journeys.md)

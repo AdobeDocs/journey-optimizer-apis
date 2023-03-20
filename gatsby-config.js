@@ -47,10 +47,6 @@ module.exports = {
         {
           title: 'Interactive Message Execution API',
           path: '/references/messaging.md'
-        },
-        {
-          title: 'Journey Orchestration APIs',
-          path: '/references/journeys.md'
         }]
       }
     ]
