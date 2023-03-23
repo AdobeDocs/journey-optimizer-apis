@@ -47,10 +47,6 @@ module.exports = {
         {
           title: 'Interactive Message Execution API',
           path: '/references/messaging.md'
-        },
-        {
-          title: 'Samples',
-          path: '/references/messaging-samples.md'
         }]
       }
     ]
