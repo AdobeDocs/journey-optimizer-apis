@@ -16,7 +16,7 @@ info:
   All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key.
   For more information on how to obtain these values, see the <a href='https://developer.adobe.com/journey-optimizer-apis/references/authentication/'>authentication tutorial</a>.
   <br/><br/><b>Code samples </b>
-  <br/>Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples.html'>this page</a>.<br/><br/>
+  <br/>Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples/'>this page</a>.<br/><br/>
   
   "
 
