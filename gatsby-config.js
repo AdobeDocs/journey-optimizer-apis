@@ -46,7 +46,13 @@ module.exports = {
         },
         {
           title: 'Interactive Message Execution API',
-          path: '/references/messaging.md'
+          path: '/references/messaging.md',
+          menu:[{
+            title: 'Samples',
+            description: '',
+            path: '/references/messaging-samples.md'
+          }
+          ]
         }]
       }
     ]
@@ -54,3 +60,42 @@ module.exports = {
   plugins: [`@adobe/gatsby-theme-aio`],
   pathPrefix: process.env.PATH_PREFIX || '/journey-optimizer-apis/'
 };
+
+
+
+pages: [
+  {
+    title: 'Adobe Journey Optimizer APIs',
+    path: '/'
+  },
+  {
+    title: 'API References',
+    menu: [
+    {  
+      title: 'Authentication',
+      description: '',
+      path: '/references/authentication.md'
+    },
+    {
+      title: 'Suppression API',
+      description: '',
+      path: '/references/suppression.md'
+    },
+    {
+      title: 'Object Copy API',
+      path: '/references/sandbox.md'
+    },
+    {
+      title: 'Interactive Message Execution API',
+      path: '/references/messaging.md',
+      menu:[{
+        title: 'Samples',
+        description: '',
+        path: '/references/messaging-samples.md'
+      }
+      ]
+    }
+  ]
+  }
+]
+},
