@@ -47,7 +47,12 @@ module.exports = {
         {
           title: 'Interactive Message Execution API',
           path: '/references/messaging.md'
-        }]
+        },
+        {
+          title: 'Journeys APIs',
+          path: '/references/journeys.md'
+        }
+      ]
       }
     ]
   },
