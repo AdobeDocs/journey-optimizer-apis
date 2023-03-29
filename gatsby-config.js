@@ -45,6 +45,10 @@ module.exports = {
           path: '/references/sandbox.md'
         },
         {
+          title: 'Journeys APIs',
+          path: '/references/journeys.md'
+        },
+        {
           title: 'Interactive Message Execution API',
           path: '/references/messaging.md'
         }]
