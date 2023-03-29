@@ -1,41 +1,35 @@
 openapi: 3.0.1
 info:
-  title: Journeys APIs
-  description: "The Journeys APIs allow to manage capping and throttling configurations.\
+  title: Journey Orchestration APIs
+  description: "The Journey Orchestration APIs allow to manage capping configurations.\
     \ They are accessible by an authorized technical account created through the [Adobe\
     \ Developer Console](https://console.adobe.io/home).\n\nLearn more about the capping\
-    \ and throttling mechanisms in the following documentation: [Journeys integration\
-    \ with external systems](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)\n\
-    \n**Visualize API calls with Postman**:\n  - [Capping API - Postman collection\
-    \ on GitHub](https://raw.githubusercontent.com/AdobeDocs/JourneyAPI/master/postman-collections/Journey-Orchestration_Capping-API_postman-collection.json)\n\
-    \  - [Throttling API - Postman collection on GitHub](https://raw.githubusercontent.com/AdobeDocs/JourneyAPI/master/postman-collections/Journey-Orchestration_Throttling-API_postman-collection.json)\n\
-    \n\n**API paths**:\n  - Journey Optimizer Gateway URL {JO_HOST} : https://platform.adobe.io\n\
-    \  - Base path for this API {BASE_PATH} : **/journey/orchestration**\n  - Example\
-    \ of a complete path: https://platform.adobe.io/journey/orchestration/endpointConfigs\n\
-    \n**Required headers**:\n  - All calls require the authentication headers **Authorization**,\
-    \ **x-api-key**, and **x-gw-ims-org-id**.\n  - All resources in Experience Platform\
-    \ and Journey Optimizer are isolated to specific virtual sandboxes. All requests\
-    \ to these APIs require the header **x-sandbox-name** whose value is the all-lowercase\
+    \ mechanism in the following documentation: [Working with Capping API](https://docs.adobe.com/content/help/en/journeys/using/working-with-apis/capping.html)\n\
+    \n**Visualize API calls with Postman**:\n  - [Capping API Postman collection on\
+    \ GitHub](https://raw.githubusercontent.com/AdobeDocs/JourneyAPI/master/postman-collections/Journey-Orchestration_Capping-API_postman-collection.json)\n\
+    \  - [Steps for importing environments and collections in Postman](https://learning.getpostman.com/docs/postman/collection_runs/using_environments_in_collection_runs/)\n\
+    \n**API paths**:\n  - Journey Orchestration Gateway URL {JO_HOST} : https://journey.adobe.io/\n\
+    \  - Base path for this API {BASE_PATH} : **/authoring**\n  - Example of a complete\
+    \ path: https://journey.adobe.io/authoring/endpointConfigs\n\n**Required headers**:\n\
+    \  - All calls require the authentication headers **Authorization**, **x-api-key**,\
+    \ and **x-gw-ims-org-id**.\n  - All resources in Experience Platform and Journey\
+    \ Orchestration are isolated to specific virtual sandboxes. All requests to these\
+    \ APIs require the header **x-sandbox-name** whose value is the all-lowercase\
     \ name of the sandbox the operation will take place in (for example, *'prod'*).\
-    \ See the [sandboxes overview](https://experienceleague.adobe.com/docs/experience-platform/sandbox/home.html?)\
+    \ See the [sandboxes overview](https://docs.adobe.com/content/help/en/experience-platform/sandbox/home.html)\
     \ for more information.\n  - All requests with a payload in the request body (such\
     \ as POST, PUT calls) must include the header **Content-Type** with the value\
-    \ *application/json*\n  \n**Notes about configuration states and deployment status**:\n\
-    \n  - The current state of a capping or throttling configuration is either *'created'*,\
+    \ *application/json*\n  \n**About capping configuration states and deployment\
+    \ status**:\n\n  - The current state of a capping configuration is either *'created'*,\
     \ *'updated'* or *'deployed'*. Refer to the description and example below for\
     \ GET **/endpointConfigs/{uid}** and PUT **/endpointConfigs/{uid}** operations.\n\
     \n  - In creation and update responses, a **canDeploy** JSON object indicates\
-    \ whether or not a configuration can be deployed. It may contain some errors and\
-    \ warnings. Refer to the description and example below for GET **/endpointConfigs/canDeploy/{uid}**\
-    \ operation.\n\n**Specific notes about throttling configurations**:\n  - You must\
-    \ provide all the following attributes when creating or updating a throttling\
-    \ configuration: *'maxThroughput'*, *'urlPattern'* and *'methods'*.\n\n  - A throttling\
-    \ configuration must be defined on a production sandbox (given through **x-sandbox-name**\
-    \ header). It is applied at organization level.\n\n  - **Only one throttling configuration\
-    \ is currently allowed per organisation.**"
+    \ whether or not the capping configuration can be deployed. It may contain some\
+    \ errors and warnings. Refer to the description and example below for GET **/endpointConfigs/canDeploy/{uid}**\
+    \ operation."
   version: v1
 servers:
-- url: https://platform.adobe.io/journey/orchestration
+- url: https://journey.adobe.io/authoring
 paths:
   /endpointConfigs:
     post:
@@ -1339,8 +1333,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              type: object
-              example: {}
+              type: string
         required: false
       responses:
         200:
@@ -1349,7 +1342,6 @@ paths:
             application/json;charset=utf-8:
               schema:
                 type: object
-              example: {}
       x-codegen-request-body-name: body
   /throttlingConfigs:
     post:
@@ -1395,7 +1387,10 @@ paths:
       responses:
         200:
           description: 'OK: the operation was successful.'
-          content: {}
+          content:
+            application/json;charset=utf-8:
+              schema:
+                type: object
         500:
           description: 'Internal Server Error: invalid values or missing elements
             in the given payload.'
@@ -1499,7 +1494,10 @@ paths:
       responses:
         200:
           description: 'OK: operation was successful.'
-          content: {}
+          content:
+            application/json;charset=utf-8:
+              schema:
+                type: object
         404:
           description: 'Not Found: unknown given Unique ID.'
           content: {}
