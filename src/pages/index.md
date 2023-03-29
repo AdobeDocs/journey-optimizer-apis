@@ -47,4 +47,3 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Interactive Message Execution API](references/messaging.md)
 
-[Journeys API](references/journeys.md)
