@@ -29,32 +29,31 @@ module.exports = {
       },
       {
         title: 'API References',
-        menu: [
-        {  
-          title: 'Authentication',
-          description: '',
-          path: '/references/authentication.md'
-        },
-        {
-          title: 'Suppression API',
-          description: '',
-          path: '/references/suppression.md'
-        },
-        {
-          title: 'Object Copy API',
-          path: '/references/sandbox.md'
-        },
-        {
-          title: 'Interactive Message Execution API',
-          path: '/references/messaging.md'
-        },
-        {
-          title: 'Journeys APIs',
-          path: '/references/journeys.md'
-        }
-      ]
+        path:'/references/'
       }
-    ]
+    ],
+    subPages: [
+      {
+        title: 'Authentication',
+        path: '/references/authentication.md'
+      },
+      {
+        title: 'Suppression API',
+        path: '/references/suppression.md'
+      },
+      {
+        title: 'Object Copy API',
+        path: '/references/sandbox.md'
+      },
+      {
+        title: 'Interactive Message Execution API',
+        path: '/references/messaging.md'
+      },
+      {
+        title: 'Journeys APIs',
+        path: '/references/journeys.md'
+      }    
+      ]
   },
   plugins: [`@adobe/gatsby-theme-aio`],
   pathPrefix: process.env.PATH_PREFIX || '/journey-optimizer-apis/'
