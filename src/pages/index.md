@@ -13,11 +13,13 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 #### Resources
 
+* [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
+
 * [Suppression list documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
 * [Object Copy documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
 
-* [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
+* [Journeys integration with exterrnal system](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)
 
 ## Overview
 
@@ -47,3 +49,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Interactive Message Execution API](references/messaging.md)
 
+[Journeys Capping and Throttling APIs](references/journeys.md)
+
+<br/><br/>

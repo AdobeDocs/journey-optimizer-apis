@@ -1,6 +1,4 @@
----
 openapi: 3.0.1
-
 info:
   title: Journeys APIs
   description: "The Journeys APIs allow to manage capping and throttling configurations.\
