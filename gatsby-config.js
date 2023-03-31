@@ -46,6 +46,7 @@ module.exports = {
         },
         {
           title: 'Interactive Message Execution API',
+          path: '/references/',
           menu : [
             {
               title: 'API reference',
