@@ -55,6 +55,10 @@ module.exports = {
       ],
       subPages: [
         {
+          path: '/references/',
+          title: 'overview'
+        }
+        {
           path: '/references/messaging/messaging.md',
           title: 'API description'
         },
