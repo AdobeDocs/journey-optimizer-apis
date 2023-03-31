@@ -28,10 +28,6 @@ module.exports = {
         path: '/'
       },
       {
-        title: 'Code samples',
-        path: 'references/messaging-samples.md'
-      },
-      {
         title: 'API References',
         menu: [
         {  
@@ -56,6 +52,15 @@ module.exports = {
           title: 'Journeys APIs',
           path: '/references/journeys.md'
         }
+      ]
+      },
+      {
+        title: 'Code samples',
+        menu: [
+          {
+            title: 'Interactive Message Execution API',
+            path: 'references/messaging-samples.md'
+          }
       ]
       }
     ]
