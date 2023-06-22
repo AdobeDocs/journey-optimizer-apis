@@ -194,8 +194,7 @@ A detailed description of the API is available [here](https://developer.adobe.co
 
 </p>
 
-<summary>Example 6: This Example is to execute Api Triggered marketing campaigns to desired audience using api with contextual attributes. 
-We need to pass the campaign id in our Audience API and if contextual atributes are part of the message then it will be passed in the payload like below</summary>
+<summary>Example 6: This Example is to execute Api Triggered marketing campaigns to desired audience using api with contextual attributes. We need to pass the campaign id in our Audience API and if contextual atributes are part of the message then it will be passed in the payload like below</summary>
 <p>
 
 ```json
