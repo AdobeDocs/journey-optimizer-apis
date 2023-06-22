@@ -18,10 +18,8 @@ info:
   All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key.
   For more information on how to obtain these values, see the <a href='https://developer.adobe.com/journey-optimizer-apis/references/authentication/'>authentication tutorial</a>.
   "
-
   version: "1.0 - GA"
   
-
 #externalDocs:
 #  description: Journey Optimizer Campaign Documentation
 #  url: https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html
@@ -66,6 +64,87 @@ paths:
                 $ref: '#/components/schemas/imExecutionResponse'
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /im/executions/audience:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+
+    post:
+      summary: "Trigger an Audience Based Message execution."
+      tags:
+        - execution
+      operationId: postIMAudienceMessageExecution
+      security:
+        - imsUserToken: []
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/imExecutionRequestAudience'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/imExecutionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /im/executions/audience/{executionId}:
+    parameters:
+      - name: executionId
+        in: path
+        description: execution id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+    get:
+      summary: "Get Execution Status for Audience Based Message executions."
+      tags:
+        - execution
+      operationId: getBatchExecutionStatusByExecutionId
+      security:
+        - imsUserToken: []
+      description: ""
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/executionStatusResponse'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
@@ -136,11 +215,28 @@ components:
           example: "request-12345"
         campaignId:
           type: string
-          description: "the CampaignId as coming up in Campaign Summary Page "
+          description: "the Campaign Identifier"
           example: "campaign-12345"
         recipients:
           $ref: '#/components/schemas/recipients'
-       
+
+    imExecutionRequestAudience:
+      description: "the IM Execution Request Audience"
+      type: object
+      required:
+        - campaignId
+      properties:
+        requestId:
+          type: string
+          description: "the Unique Request Identifier"
+          example: "request-12345"
+        campaignId:
+          type: string
+          description: "the Campaign Identifier"
+          example: "campaign-12345"
+        context:
+          $ref: "#/components/schemas/context"
+
     imExecutionResponse:
       description: "the execution response"
       type: object
@@ -289,5 +385,41 @@ components:
         # Example 2: Simple string properties
         # {
         #   "productName": "LED TV",
-        #   "productCategory": "Electronics"
+      #   "productCategory": "Electronics"
       # }
+    executionStatusResponse:
+      type: object
+      description: "Execution Status Response"
+      required:
+        - executionId
+        - status
+        - createdAt
+      properties:
+        executionId:
+          type: string
+          description: "executionId"
+          example: "CMA-09378831"
+        audienceId:
+          type: string
+          description: "audienceId"
+          example: "audienceId-12345"
+        campaignId:
+          type: string
+          description: "campaignId"
+          example: "campaignId-12345"
+        status:
+          type: string
+          description: "execution status"
+          enum:
+            - Succeeded
+            - InProgress
+            - Failed
+          example: "Succeeded"
+        targetedProfileCount:
+          type: integer
+          description: "number of profiles exported"
+          example: "2"
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
