@@ -5,10 +5,9 @@ description: Interactive Message Execution
 
 # Interactive Message Execution code examples
 
-Below code snippets are using a sample AJO API Triggered Campaigns. 
-For each of these examples to run. You first have to create your API Triggred Campaigns in UI and get ready with your Bearer token and API key. 
+Below code snippets are using a sample AJO API Triggered Campaigns.
 
-Note that these examples are written in curl but we support the language of your choice.
+For each of these examples to run. You first have to create your API Triggred Campaigns in UI and get ready with your Bearer token and API key. Note that these examples are written in curl but we support the language of your choice.
 
 A detailed description of the API is available [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
 
@@ -192,3 +191,20 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 </p>
+
+<summary>Example 6: This Example is to execute Api Triggered marketing campaigns to desired audience using api with contextual attributes. 
+We need to pass the campaign id in our Audience API and if contextual atributes are part of the message then it will be passed in the payload like below</summary>
+
+```json
+{
+  "campaignId": "d54c23c4-d31c-429e-b8d1-9556b85a5b1f",
+  "context": {
+    "product": {
+      "name": "Jackets",
+      "category": "Clothes"
+    },
+    "offerCode": "THANKSGIVING"
+  }
+}
+```
+<p>
