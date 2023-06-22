@@ -29,9 +29,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
   ]
 }
 ```
+
 </p>
-
-
 
 <summary>Example 2 : This Example is to show how you can send an SMS Message with contextual attributes to multiple existing profiles and overriding the phoneNumber using channelData.</summary>
 <p>
@@ -74,9 +73,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
   ]
 }
 ```
+
 </p>
-
-
 
 <summary>Example 3 : This Example is to show how you can send a Push Message to an existing profile. You have to get ready with your Push meessaging. information </summary>
 
@@ -103,8 +101,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
   ]
 }
 ```
-</p>
 
+</p>
 
 <summary>Example 4: This Example is to show how to send an Email Message to an existing profile with contextual attributes (defined during campaign authooring) and personalization attributes. </summary>
 <p>
@@ -146,8 +144,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
   ]
 }
 ```
-</p>
 
+</p>
 
 <summary>Example 5: This Example is to show how to send an Email Message to an existing profile with contextual and personalization attributes and overriding email-Id using channelData. </summary>
 <p>
@@ -191,7 +189,9 @@ A detailed description of the API is available [here](https://developer.adobe.co
     }
   ]
 }
+
 ```
+
 </p>
 
 <summary>Example 6: This Example is to execute Api Triggered marketing campaigns to desired audience using api with contextual attributes. 
@@ -209,4 +209,5 @@ We need to pass the campaign id in our Audience API and if contextual atributes 
   }
 }
 ```
+
 <p>
