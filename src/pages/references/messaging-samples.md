@@ -11,6 +11,8 @@ For each of these examples to run. You first have to create your API Triggred Ca
 
 A detailed description of the API is available [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
 
+
+
 <summary>Example 1 : This Example is to show how you can send an SMS Message to an existing profile in AEP having phoneNumber defined.</summary>
 <p>
 
