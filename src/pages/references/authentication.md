@@ -19,9 +19,15 @@ To manage certificates in Adobe Developer, make sure you have ***System administ
 
 ![](ajoconsole.png)
 
-3. **Create a JSON Web Token (JWT)** from the credentials previously generated and sign it with your private key. The JWT encodes all of the identity and security information that is needed by Adobe to verify your identity and grant you access to the API.
+The JWT method to generate access tokens has been deprecated. All new integrations must be created using the [OAuth Server-to-Server authentication method](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#select-oauth-server-to-server). Adobe also recommends that you migrate your existing integrations to the OAuth method. Read the following important documentation:
 
-4. **Exchange your JWT for an Access Token** through a POST request. This Access Token will have to be used in each header of your API requests.
+[Migration guide for your applications from JWT to OAuth](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/)
+[Implementation guide for new and old applications with OAuth](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/)
+[Advantages of using the OAuth Server-to-Server credentials method](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/#why-oauth-server-to-server-credentials)
+
+<!--3. **Create a JSON Web Token (JWT)** from the credentials previously generated and sign it with your private key. The JWT encodes all of the identity and security information that is needed by Adobe to verify your identity and grant you access to the API.
+
+4. **Exchange your JWT for an Access Token** through a POST request. This Access Token will have to be used in each header of your API requests.-->
 
 To establish a secure service-to-service Adobe Developer API session, every request to an Adobe service must include in the Authorization header the information below.
 
@@ -38,6 +44,6 @@ To establish a secure service-to-service Adobe Developer API session, every requ
 
 To obtain your ORGANIZATION ID value, refer to your administrator or your Adobe technical contact. You can also retrieve it into Adobe Developer when creating a new integration, in the licenses list.
 
-**ACCESS_TOKEN**: Your personal access token, that was retrieved when exchanging your JSON Web Token through a POST request.
+**ACCESS_TOKEN**: Your personal access token
 
 **API_KEY**: your personal API Key. It is provided in Adobe Developer after creating a new integration to Adobe Journey Optimizer Service.
