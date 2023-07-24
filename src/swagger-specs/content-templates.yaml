@@ -1,14 +1,12 @@
 openapi: 3.0.0
 info:
-  description: Message Authoring Service (aka Content Service) API specification
+  description: Using this REST API, you can create and manage content templates, which are standalone templates that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
   version: 0.0.1
-  title: Content templates APIs documentation
-  x-omb-name: message-authoring
+  title: Content templates APIs
+
 security:
   - imsUserToken: []
-tags:
-  - name: template
-    description: Content Templates APIs documentation
+
 servers:
   - url: https://platform.adobe.io/ajo/content
 
