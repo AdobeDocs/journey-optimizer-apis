@@ -51,6 +51,10 @@ module.exports = {
         {
           title: 'Journeys APIs',
           path: '/references/journeys.md'
+        },
+        {
+          title: 'Content templates APIs',
+          path: '/references/content-templates.md'
         }
       ]
       },
