@@ -22,7 +22,7 @@ paths:
       description: >-
         This API could be used for creating a new content template<br>
       tags:
-        - template
+        - Content template API
       requestBody:
         description: API to create content template.
         content:
@@ -81,7 +81,7 @@ paths:
         </li>
         </ol>
       tags:
-        - template
+        - Content template API
       responses:
         200:
           description: Content Template Listing API response.
@@ -117,7 +117,7 @@ paths:
         </li>
         </ol>
       tags:
-        - template
+        - Content template API
       responses:
         200:
           description: Successful operation
@@ -142,7 +142,7 @@ paths:
       description: >-
         API to update Content Template By Id.
       tags:
-        - template
+        - Content template API
       parameters:
         - $ref: '#/components/parameters/IfMatchParam'
       requestBody:
@@ -169,7 +169,7 @@ paths:
       operationId: deleteTemplate
       description: Delete Content Template by Id.
       tags:
-        - template
+        - Content template API
       responses:
         204:
           $ref: '#/components/responses/204DELETE'
@@ -189,7 +189,7 @@ paths:
         <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
         Supported paths are ["/name", "/description" ]
       tags:
-        - template
+        - Content template API
       parameters:
         - $ref: '#/components/parameters/IfMatchParam'
       requestBody:
@@ -235,7 +235,7 @@ paths:
       operationId: update labels
       description: API to update labels for a given content template.
       tags:
-        - template
+        - Content template API
       parameters:
         - $ref: '#/components/parameters/IfMatchParam'
       requestBody:
@@ -283,7 +283,7 @@ paths:
       description: >-
         API to validate Content Template By Id.
       tags:
-        - template
+        - Content template API
       responses:
         200:
           description: Successful Validation of Content Template
@@ -454,7 +454,7 @@ components:
       title: Content Template Metadata Extension
       type: object
       required:
-        - templateType
+        - Content template APIType
         - channels
       properties:
         templateType:
@@ -568,7 +568,7 @@ components:
             - $ref: '#/components/schemas/landing-page-html-primary-page-template'
             - $ref: '#/components/schemas/landing-page-html-sub-page-template'
       required:
-        - template
+        - Content template API
 
     template-patch-response:
       title: Content Template Patch Response
