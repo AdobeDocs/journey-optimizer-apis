@@ -19,16 +19,17 @@ paths:
       - $ref: '#/components/parameters/RequestIdParam'
     post:
       operationId: createTemplate
+      summary: Create New Content Template.
       description: >-
         This API could be used for creating a new content template<br>
       tags:
         - Content template API
       requestBody:
-        description: API to create content template.
+        description: API to create a new Content Template.
         content:
           'application/vnd.adobe.cjm.template.v1+json':
             schema:
-              $ref: '#/components/schemas/template-creation-request'
+              $ref: '#/components/schemas/content-template'
         required: true
       responses:
         201:
@@ -49,9 +50,10 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/property'
       operationId: getTemplates
+      summary: List existing Content Templates.
       description: >-
-        Content Templates Listing API. There are few attributes which are filterable
         <ol>
+        Content Templates Listing API. There are few attributes which are filterable.
         <li>
           id - Supported operations are equals and not equals.
         </li>
@@ -99,7 +101,7 @@ paths:
     parameters:
       - name: templateId
         in: path
-        description: Get Content Template By id
+        description: Content Template id
         required: true
         schema:
           type: string
@@ -109,6 +111,7 @@ paths:
       - $ref: '#/components/parameters/RequestIdParam'
     get:
       operationId: getTemplate
+      summary: Fetch Content Template By Id.
       description: >-
         Fetch Content template detail with given id. Supported values for Accept header:<br>
         <ol>
@@ -124,7 +127,7 @@ paths:
           content:
             application/vnd.adobe.cjm.template.v1+json:
               schema:
-                $ref: '#/components/schemas/template-fetch-response'
+                $ref: '#/components/schemas/content-template-with-audit'
           headers:
             etag:
               $ref: '#/components/headers/etag'
@@ -139,6 +142,7 @@ paths:
 
     put:
       operationId: putTemplate
+      summary: Update Content Template By Id.
       description: >-
         API to update Content Template By Id.
       tags:
@@ -150,7 +154,7 @@ paths:
         content:
           'application/vnd.adobe.cjm.template.v1+json':
             schema:
-              $ref: "#/components/schemas/template-update-request"
+              $ref: '#/components/schemas/content-template'
         required: true
       responses:
         204:
@@ -167,6 +171,7 @@ paths:
           $ref: '#/components/responses/409'
     delete:
       operationId: deleteTemplate
+      summary: Delete Content Template By Id.
       description: Delete Content Template by Id.
       tags:
         - Content template API
@@ -184,6 +189,7 @@ paths:
 
     patch:
       operationId: patchTemplate
+      summary: Patch Content Template By Id.
       description: >-
         Patch Content Template with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
         <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
@@ -233,6 +239,7 @@ paths:
       - $ref: '#/components/parameters/RequestIdParam'
     put:
       operationId: update labels
+      summary: Update access control labels.
       description: API to update labels for a given content template.
       tags:
         - Content template API
@@ -280,6 +287,7 @@ paths:
       - $ref: '#/components/parameters/RequestIdParam'
     get:
       operationId: validateTemplate
+      summary: Fetch validation error of a given Content Template By Id.
       description: >-
         API to validate Content Template By Id.
       tags:
@@ -425,30 +433,290 @@ components:
         type: array
       required: false
       example: property=name~^test
+
   schemas:
     headers:
       title: Headers
       description: List containing custom headers(key-value pair).
       additionalProperties: true
-    editor-context:
-      title: Editor Context
-      description: List containing custom properties(key-value pair) from ACRITE.
-      additionalProperties: true
 
-    template-creation-request:
-      title: Content Template Creation Request
+    content-template-with-audit:
+      title: Content Template with audit fields.
+      type: object
+      discriminator:
+        propertyName: templateType
+        mapping:
+          "html": '#/components/schemas/email-html-template-with-audit'
+          "html_primary_page": '#/components/schemas/primary-page-email-html-template-with-audit'
+          "html_sub_page": '#/components/schemas/sub-page-email-html-template-with-audit'
+      required:
+        - name
+        - templateType
+        - channels
       properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          $ref: '#/components/schemas/template-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
         source:
           $ref: '#/components/schemas/template-source'
-      allOf:
-        - $ref: '#/components/schemas/template-metadata'
-        - $ref: '#/components/schemas/template-detail'
 
-    template-update-request:
-      title: Content Template Update Request
+    content-template-metadata:
+      title: Content Template metadata.
+      type: object
+      required:
+        - name
+        - templateType
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          $ref: '#/components/schemas/template-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/template-source'
+
+    content-template-listing-response:
+      title: Content Template
+      type: object
+      required:
+        - name
+        - templateType
+        - channels
       allOf:
-        - $ref: '#/components/schemas/template-metadata'
-        - $ref: '#/components/schemas/template-detail'
+        - $ref: '#/components/schemas/content-template-metadata'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - $ref: '#/components/schemas/self-href'
+
+    content-template:
+      title: Content Template
+      type: object
+      discriminator:
+        propertyName: templateType
+        mapping:
+          "html": '#/components/schemas/email-html-template'
+          "html_primary_page": '#/components/schemas/primary-page-email-html-template'
+          "html_sub_page": '#/components/schemas/sub-page-email-html-template'
+      required:
+        - name
+        - templateType
+        - channels
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          $ref: '#/components/schemas/template-channel-enum'
+        source:
+          $ref: '#/components/schemas/template-source'
+
+    olac-labels:
+      title: OLAC Label Details
+      type: array
+      items:
+        type: string
+        example: 'custom/sensitive-data'
+
+    id:
+      type: string
+      title: Content Template Id.
+      description: Content Template Id.
+      example: 'b6d70a45-a149-453b-85ba-809a5d40066d'
+
+    name:
+      type: string
+      title: Template Name
+      description: Template Name
+      example: "Cyber Monday Sale - Header !!"
+      minLength: 1
+
+    description:
+      type: string
+      title: Description
+      description: Template Description
+      example: "Cyber Monday Sale - Header Banner!!"
+
+    template-type:
+      type: string
+      title: Template Type
+      description: Template Type
+      example: 'html'
+      enum: [ "html", "html_primary_page", "html_sub_page" ]
+
+    template-source:
+      title: Template Source.
+      type: object
+      nullable: true
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/template-origin'
+        metadata:
+          title: MetaData
+          description: List containing custom properties(key-value pair).
+          additionalProperties: true
+
+    template-origin:
+      type: string
+      title: Origin
+      description: Content Template Origin/Source system.
+      enum:
+        - ajo
+        - aem
+
+    html:
+      type: string
+      title: Email html
+      description: Email HTML
+      example: '<html> Hi {{profile.person.name}} its a great day to shop !! </html>'
+
+    editor-context:
+      title: Editor Context
+      description: List containing custom properties(key-value pair).
+      additionalProperties: true
+
+    email-html:
+      description: Email HTML Description.
+      title: Email HTML
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+
+    email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type : object
+          properties:
+            template:
+              $ref: '#/components/schemas/email-html'
+          required:
+            - template
+
+    email-html-template-with-audit:
+      description: Email HTML Template With Audit Fields
+      title: Email HTML Template With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/email-html'
+          required:
+            - template
+
+    primary-page-email-html:
+      description: Email HTML Description.
+      title: Email HTML
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      example:
+        html: '<html> Hi {{profile.person.name}}, Here is your Primary page Content Template !! </html>'
+        editorContext: { }
+
+    primary-page-email-html-template-with-audit:
+      description: Email HTML Template with Audit Fields
+      title: Email HTML Template with Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/primary-page-email-html'
+          required:
+            - template
+
+    primary-page-email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/primary-page-email-html'
+          required:
+            - template
+
+    sub-page-email-html:
+      description: Email HTML Description.
+      title: Email HTML
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      example:
+        html: '<html> Hi {{profile.person.name}}, Here is your Sub page Content Template !! </html>'
+        editorContext: { }
+
+    sub-page-email-html-template-with-audit:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/sub-page-email-html'
+          required:
+            - template
+
+    sub-page-email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/sub-page-email-html'
+          required:
+            - template
 
     template-metadata-extension:
       title: Content Template Metadata Extension
@@ -475,7 +743,6 @@ components:
     template-listing-response:
       title: Content Template Listing Response
       allOf:
-        - $ref: '#/components/schemas/template-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
         - type: object
           required:
@@ -496,59 +763,13 @@ components:
           $ref: '#/components/schemas/template-source'
       allOf:
         - $ref: '#/components/schemas/labels-detail'
-        - $ref: '#/components/schemas/template-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
-        - $ref: '#/components/schemas/template-detail'
         - type: object
           required:
             - id
           properties:
             id:
               type: string
-
-    template-metadata:
-      title: Template Metadata.
-      type: object
-      required:
-        - name
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Template Name
-          example: "Cyber Monday Sale - Header !!"
-          minLength: 1
-        description:
-          type: string
-          title: Description
-          description: Template Description
-          example: "Cyber Monday Sale - Header Banner!!"
-        templateType:
-          type: string
-          title: Template Type
-          description: Template Type
-          example: 'html'
-          enum: [ "html", "html_primary_page", "html_sub_page" ]
-      discriminator:
-        propertyName: type
-        mapping:
-          "html": '#/components/schemas/email-html-template'
-          "html_primary_page": '#/components/schemas/landing-page-html-primary-page-template'
-          "html_sub_page": '#/components/schemas/landing-page-html-sub-page-template'
-
-    template-source:
-      title: Template Source.
-      type: object
-      nullable: true
-      required:
-        - origin
-      properties:
-        origin:
-          $ref: '#/components/schemas/template-origin'
-        metadata:
-          title: MetaData
-          description: List containing custom properties(key-value pair).
-          additionalProperties: true
 
     labels-detail:
       title: OLAC Label Details
@@ -558,18 +779,6 @@ components:
           items:
             type: string
 
-    template-detail:
-      title: Template Detail
-      properties:
-        template:
-          type: object
-          anyOf:
-            - $ref: '#/components/schemas/email-html-template'
-            - $ref: '#/components/schemas/landing-page-html-primary-page-template'
-            - $ref: '#/components/schemas/landing-page-html-sub-page-template'
-      required:
-        - Content template API
-
     template-patch-response:
       title: Content Template Patch Response
       properties:
@@ -577,7 +786,6 @@ components:
           $ref: '#/components/schemas/template-source'
       allOf:
         - $ref: '#/components/schemas/labels-detail'
-        - $ref: '#/components/schemas/template-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
         - $ref: '#/components/schemas/template-metadata-extension'
         - type: object
@@ -610,20 +818,6 @@ components:
           title: sub page
           description: Sub page HTML
           example: '<html></html>'
-        editorContext:
-          $ref: '#/components/schemas/editor-context'
-      required:
-        - html
-
-    email-html-template:
-      title: Email HTML Template
-      type: object
-      properties:
-        html:
-          type: string
-          title: email html
-          description: Email HTML
-          example: '<html> Hi {{profile.person.name}} its a great day to shop !! </html>'
         editorContext:
           $ref: '#/components/schemas/editor-context'
       required:
@@ -714,7 +908,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/template-listing-response'
+            $ref: '#/components/schemas/content-template-listing-response'
         _links:
           $ref: '#/components/schemas/template-list-link'
 
@@ -733,15 +927,6 @@ components:
           href: '/templates?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
         page:
           href: '/templates?orderBy={orderBy}&start={start}&limit={limit}'
-
-    template-origin:
-      type: string
-      title: Origin
-      description: Content Template Origin/Source system.
-      enum:
-        - ajo
-        - aem
-        - external
 
     errorResponse:
       title: Error Response
@@ -909,7 +1094,7 @@ components:
           $ref: '#/components/headers/etag'
 
     202:
-      description: Request successfuly accepted
+      description: Request successfully accepted
       headers:
         Retry-After:
           $ref: '#/components/headers/retry-after'
