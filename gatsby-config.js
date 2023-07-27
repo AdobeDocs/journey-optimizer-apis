@@ -49,11 +49,11 @@ module.exports = {
           path: '/references/messaging.md',
         },
         {
-          title: 'Journeys APIs',
+          title: 'Journeys API',
           path: '/references/journeys.md'
         },
         {
-          title: 'Content templates APIs',
+          title: 'Content API',
           path: '/references/content-templates.md'
         }
       ]
