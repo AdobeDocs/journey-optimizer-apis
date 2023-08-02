@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Journeys APIs
-  description: "The Journeys APIs allow to manage capping and throttling configurations in order to limit the the number of events sent per second.\
+  description: "The Journeys APIs allow to manage capping and throttling configurations.\
     \ They are accessible by an authorized technical account created through the [Adobe\
     \ Developer Console](https://console.adobe.io/home).\n\nLearn more about the capping\
     \ and throttling mechanisms in the following documentation: [Journeys integration\
@@ -52,7 +52,7 @@ paths:
         \ on the endpoint when executing a Custom Action\n  * *\"dataSource\"* if\
         \ the capping will be applied on the endpoint when fetching data from a Data\
         \ Source\n\n- (optional) **maxHttpConnections**: max count of simultaneous\
-        \ connections to the endpoint. If not provided, there will be no limitation\
+        \ connections to the endpoint (max value is 400). If not provided, there will be no limitation\
         \ of the number of connections to the endpoint.\n\n- Within **rating** JSON\
         \ object :\n  * **maxCallsCount**: max count of calls to be performed in the\
         \ given period (min value is 1)\n  * **periodInMs**: duration in milliseconds\
@@ -154,9 +154,9 @@ paths:
                 - GET
                 services:
                   dataSource:
-                    maxHttpConnections: 20000
+                    maxHttpConnections: 50
                     rating:
-                      maxCallsCount: 5000
+                      maxCallsCount: 500
                       periodInMs: 1000
                 orgId: <IMS Org Id>
         required: true
@@ -273,9 +273,9 @@ paths:
                   - GET
                   services:
                     dataSource:
-                      maxHttpConnections: 20000
+                      maxHttpConnections: 50
                       rating:
-                        maxCallsCount: 5000
+                        maxCallsCount: 500
                         periodInMs: 1000
                   metadata:
                     createdBy: <user name>
