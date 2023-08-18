@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: Using this REST API, you can create and manage content templates, which are standalone templates that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
   version: 0.0.1
-  title: Content templates
+  title: Content API.
 
 security:
   - imsUserToken: []
@@ -27,7 +27,7 @@ paths:
       requestBody:
         description: API to create a new Content Template.
         content:
-          'application/vnd.adobe.cjm.template.v1+json':
+          'application/vnd.adobe.ajo.template.v1+json':
             schema:
               $ref: '#/components/schemas/content-template'
         required: true
@@ -40,8 +40,6 @@ paths:
           $ref: '#/components/responses/401'
         403:
           $ref: '#/components/responses/403'
-        404:
-          $ref: '#/components/responses/404'
 
     get:
       parameters:
@@ -50,7 +48,7 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/property'
       operationId: getTemplates
-      summary: List existing Content Templates.
+      summary: List Content Templates.
       description: >-
         <ol>
         Content Templates Listing API. There are few attributes which are filterable.
@@ -88,7 +86,7 @@ paths:
         200:
           description: Content Template Listing API response.
           content:
-            application/vnd.adobe.cjm.template-list.v1+json:
+            application/vnd.adobe.ajo.template-list.v1+json:
               schema:
                 $ref: '#/components/schemas/template-page-response'
         400:
@@ -97,6 +95,7 @@ paths:
           $ref: '#/components/responses/401'
         403:
           $ref: '#/components/responses/403'
+
   /templates/{templateId}:
     parameters:
       - name: templateId
@@ -112,20 +111,14 @@ paths:
     get:
       operationId: getTemplate
       summary: Fetch Content Template By Id.
-      description: >-
-        Fetch Content template detail with given id. Supported values for Accept header:<br>
-        <ol>
-        <li>
-        application/vnd.adobe.cjm.template.v1+json
-        </li>
-        </ol>
+      description: Fetch Content template detail with given id.
       tags:
         - Content template API
       responses:
         200:
           description: Successful operation
           content:
-            application/vnd.adobe.cjm.template.v1+json:
+            application/vnd.adobe.ajo.template.v1+json:
               schema:
                 $ref: '#/components/schemas/content-template-with-audit'
           headers:
@@ -152,7 +145,7 @@ paths:
       requestBody:
         description: New/Updated Content Template Payload.
         content:
-          'application/vnd.adobe.cjm.template.v1+json':
+          'application/vnd.adobe.ajo.template.v1+json':
             schema:
               $ref: '#/components/schemas/content-template'
         required: true
@@ -169,6 +162,7 @@ paths:
           $ref: '#/components/responses/404'
         409:
           $ref: '#/components/responses/409'
+
     delete:
       operationId: deleteTemplate
       summary: Delete Content Template By Id.
@@ -210,7 +204,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/template-patch-response'
+                $ref: '#/components/schemas/content-template-with-audit'
           headers:
             etag:
               $ref: '#/components/headers/etag'
@@ -225,11 +219,96 @@ paths:
         409:
           $ref: '#/components/responses/409'
 
-  /templates/{templateId}/labels:
+  /fragments:
     parameters:
-      - name: templateId
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: createFragment
+      summary: Create New Content Fragment.
+      description: >-
+        This API could be used for creating a new content fragment<br>
+      tags:
+        - Content fragment API
+      requestBody:
+        description: new fragment
+        content:
+          'application/vnd.adobe.ajo.fragment.v1.0+json':
+            schema:
+              $ref: '#/components/schemas/content-fragment'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/201'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+    get:
+      parameters:
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
+      operationId: getFragments
+      summary: List Content Fragments.
+      description:
+        <ol>
+        Content Fragment Listing API. There are few attributes which are filterable.
+        <li>
+        id - Supported operations are equals and not equals.
+        </li>
+        <li>
+        name - Supports operations are regex and contains.
+        </li>
+        <li>
+        type - Supported operations are equal and not equals, and allowed values are [ "html"]
+        </li>
+        <li>
+        channels - Supported operations are equals and not equals.
+        </li>
+        <li>
+        createdAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+        createdBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+        modifiedAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+        modifiedBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+        origin - Supported operations are equals and not equals.
+        </li>
+        </ol>
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Content Fragment Listing API response.
+          content:
+            application/vnd.adobe.ajo.fragment-list.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/fragment-page-response'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+  /fragments/{fragmentId}:
+    parameters:
+      - name: fragmentId
         in: path
-        description: Content Template Id
+        description: Content fragment id
         required: true
         schema:
           type: string
@@ -237,27 +316,47 @@ paths:
       - $ref: '#/components/parameters/ImsOrgIdParam'
       - $ref: '#/components/parameters/SandboxNameParam'
       - $ref: '#/components/parameters/RequestIdParam'
-    put:
-      operationId: update labels
-      summary: Update access control labels.
-      description: API to update labels for a given content template.
+
+    get:
+      operationId: getFragment
+      summary: Fetch Content Fragment By Id.
+      description: Fetch Content Fragment detail by Id.
       tags:
-        - Content template API
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/content-fragment-with-audit'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+    put:
+      operationId: putFragment
+      summary: Update Content Fragment By Id.
+      description: >-
+        API to update Content Fragment By Id.
+      tags:
+        - Content fragment API
       parameters:
         - $ref: '#/components/parameters/IfMatchParam'
       requestBody:
-        description: update labels
+        description: New/Updated Content Fragment Payload.
         content:
-          'application/vnd.adobe.cjm.template-labels.v1+json':
+          'application/vnd.adobe.ajo.fragment.v1.0+json':
             schema:
-              type: object
-              properties:
-                values:
-                  type: array
-                  items:
-                    type: string
-                    example: 'custom/sensitive-data'
-
+              $ref: '#/components/schemas/content-fragment'
         required: true
       responses:
         204:
@@ -273,36 +372,25 @@ paths:
         409:
           $ref: '#/components/responses/409'
 
-  /templates/{templateId}/validation:
-    parameters:
-      - name: templateId
-        in: path
-        description: Content Template Id.
-        required: true
-        schema:
-          type: string
-      - $ref: '#/components/parameters/APIKeyParam'
-      - $ref: '#/components/parameters/ImsOrgIdParam'
-      - $ref: '#/components/parameters/SandboxNameParam'
-      - $ref: '#/components/parameters/RequestIdParam'
-    get:
-      operationId: validateTemplate
-      summary: Fetch validation error of a given Content Template By Id.
+    patch:
+      operationId: patchFragment
+      summary: Patch Content Fragment By Id.
       description: >-
-        API to validate Content Template By Id.
+        Patch fragment with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
+        Path supported: "/name", "/description"
       tags:
-        - Content template API
+        - Content fragment API
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        content:
+          'application/json-patch+json':
+            schema:
+              $ref: "#/components/schemas/patch-request"
+        required: true
       responses:
-        200:
-          description: Successful Validation of Content Template
-          content:
-            vnd.adobe.cjm.template-validation.v1+json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/validationResponse'
-                minItems: 0
-
+        204:
+          $ref: '#/components/responses/204'
         400:
           $ref: '#/components/responses/400'
         401:
@@ -424,7 +512,7 @@ components:
       name: property
       description: >-
         <p>Optional property filters. 
-        Filtering is supported on following properties: id, name, status, description, templateType, modifiedAt, createdAt, createdBy and modifiedBy
+        Filtering is supported on following properties: id, name, status, description, fragmentType, templateType, modifiedAt, createdAt, createdBy and modifiedBy
         Ex. property=id==31e62feb-69b7-4e7b-8065-a921455c2c15&property=name~^test</p>
       in: query
       schema:
@@ -544,15 +632,15 @@ components:
 
     name:
       type: string
-      title: Template Name
-      description: Template Name
+      title: Content Name
+      description: Content Name
       example: "Cyber Monday Sale - Header !!"
       minLength: 1
 
     description:
       type: string
       title: Description
-      description: Template Description
+      description: Description
       example: "Cyber Monday Sale - Header Banner!!"
 
     template-type:
@@ -583,6 +671,7 @@ components:
       enum:
         - ajo
         - aem
+        - external
 
     html:
       type: string
@@ -592,11 +681,11 @@ components:
 
     editor-context:
       title: Editor Context
-      description: List containing custom properties(key-value pair).
+      description: Map containing custom properties(key-value pair).
       additionalProperties: true
 
     email-html:
-      description: Email HTML Description.
+      description: Email HTML.
       title: Email HTML
       type: object
       required:
@@ -635,8 +724,8 @@ components:
             - template
 
     primary-page-email-html:
-      description: Email HTML Description.
-      title: Email HTML
+      description: Primary Page Email HTML.
+      title: Primary Page Email HTML.
       type: object
       required:
         - html
@@ -677,8 +766,8 @@ components:
             - template
 
     sub-page-email-html:
-      description: Email HTML Description.
-      title: Email HTML
+      description: Sub Page Email HTML.
+      title: Sub Page Email HTML.
       type: object
       required:
         - html
@@ -718,59 +807,6 @@ components:
           required:
             - template
 
-    template-metadata-extension:
-      title: Content Template Metadata Extension
-      type: object
-      required:
-        - Content template APIType
-        - channels
-      properties:
-        templateType:
-          type: string
-          title: type
-          description: Content Template type
-          enum: [ "html", "html_primary_page", "html_sub_page" ]
-        channels:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/template-channel-enum"
-        tagIds:
-          type: array
-          items:
-            type: string
-
-    template-listing-response:
-      title: Content Template Listing Response
-      allOf:
-        - $ref: '#/components/schemas/entity-audit-fields'
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
-              example: 'b6d70a45-a149-453b-85ba-809a5d40066d'
-            origin:
-              $ref: '#/components/schemas/template-origin'
-            _links:
-              $ref: '#/components/schemas/self-href'
-
-    template-fetch-response:
-      title: Summary - Content Template Fetch Response
-      properties:
-        source:
-          $ref: '#/components/schemas/template-source'
-      allOf:
-        - $ref: '#/components/schemas/labels-detail'
-        - $ref: '#/components/schemas/entity-audit-fields'
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
-
     labels-detail:
       title: OLAC Label Details
       properties:
@@ -778,22 +814,6 @@ components:
           type: array
           items:
             type: string
-
-    template-patch-response:
-      title: Content Template Patch Response
-      properties:
-        source:
-          $ref: '#/components/schemas/template-source'
-      allOf:
-        - $ref: '#/components/schemas/labels-detail'
-        - $ref: '#/components/schemas/entity-audit-fields'
-        - $ref: '#/components/schemas/template-metadata-extension'
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
 
     landing-page-html-primary-page-template:
       title: Landing Page Primary-Page HTML Template
@@ -837,15 +857,10 @@ components:
     template-channel-enum:
       type: string
       title: channel
-      description: Supported channels
+      description: Supported channels for Content Template.
       example: email
       enum:
         - email
-        - push
-        - inapp
-        - sms
-        - web
-        - directMail
         - landingpage
         - shared
 
@@ -927,6 +942,215 @@ components:
           href: '/templates?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
         page:
           href: '/templates?orderBy={orderBy}&start={start}&limit={limit}'
+
+# Fragment relates objects.
+    html-fragment:
+      description: Email HTML Description.
+      title: Email HTML
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          $ref: '#/components/schemas/fragment-content'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+
+    fragment-content:
+      type: string
+      title: Html Fragment Content
+      description: Html Fragment Content
+      example: '<div> Hi {{profile.person.name}} its a great day to shop !! </div>'
+
+    content-fragment:
+      title: Content Fragment
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          "html": '#/components/schemas/email-html-fragment'
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        channels:
+          $ref: '#/components/schemas/fragment-channel-enum'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    fragment-type:
+      type: string
+      title: Fragment Type
+      description: Fragment Type
+      example: 'html'
+      enum: [ "html" ]
+
+    fragment-channel-enum:
+      type: string
+      title: channel
+      description: Supported channels for Content Fragment.
+      example: email
+      enum:
+        - email
+        - shared
+
+    fragment-source:
+      title: Fragment Source.
+      type: object
+      nullable: true
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/fragment-origin'
+        metadata:
+          title: MetaData
+          description: Map containing custom properties(key-value pair).
+          additionalProperties: true
+
+    fragment-origin:
+      type: string
+      title: Origin
+      description: Content Fragment Origin/Source system.
+      enum:
+        - ajo
+        - external
+
+    email-html-fragment:
+      description: Email HTML Fragment
+      title: Email HTML Fragment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment'
+        - type: object
+          properties:
+            fragment:
+              $ref: '#/components/schemas/html-fragment'
+          required:
+            - fragment
+
+    content-fragment-with-audit:
+      title: Content Fragment with audit fields.
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          "html": '#/components/schemas/html-fragment-with-audit'
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        channels:
+          $ref: '#/components/schemas/fragment-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    content-fragment-metadata:
+      title: Content Fragment metadata.
+      type: object
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        channels:
+          $ref: '#/components/schemas/fragment-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    content-fragment-listing-response:
+      title: Content Fragment
+      type: object
+      required:
+        - name
+        - type
+        - channels
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-metadata'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - $ref: '#/components/schemas/fragment-self-href'
+
+    fragment-page-response:
+      title: Content Fragment Page Response
+      type: object
+      properties:
+        _page:
+          $ref: '#/components/schemas/page'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/content-fragment-listing-response'
+        _links:
+          $ref: '#/components/schemas/fragment-list-link'
+
+    fragment-list-link:
+      title: Content Fragment List Link.
+      type: object
+      required:
+        - self
+      properties:
+        next:
+          $ref: '#/components/schemas/href-link'
+        page:
+          $ref: '#/components/schemas/href-link'
+      example:
+        next:
+          href: '/fragments?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
+        page:
+          href: '/fragments?orderBy={orderBy}&start={start}&limit={limit}'
+
+    fragment-self-href:
+      title: Self-Href
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: '/fragments/b6d70a45-a149-453b-85ba-809a5d40066d'
+
+    html-fragment-with-audit:
+      description: HTML Fragment With Audit Fields
+      title: HTML Fragment With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            fragment:
+              $ref: '#/components/schemas/html-fragment'
+          required:
+            - fragment
 
     errorResponse:
       title: Error Response
@@ -1084,7 +1308,7 @@ components:
   responses:
 
     201:
-      description: Resource successfuly created
+      description: Resource successfully created
       headers:
         x-resource-id:
           $ref: '#/components/headers/x-resource-id'
