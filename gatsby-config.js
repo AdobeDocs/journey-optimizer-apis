@@ -54,7 +54,7 @@ module.exports = {
         },
         {
           title: 'Content API',
-          path: '/references/content-templates.md'
+          path: '/references/content.md'
         }
       ]
       },

@@ -461,13 +461,6 @@ components:
       description: etag of resource to match before update of resource.
       schema:
         type: string
-    OptionalIfMatchParam:
-      name: If-Match
-      in: header
-      required: false
-      description: etag to match before update of resource.
-      schema:
-        type: string
     SandboxName:
       name: sandboxName
       in: query
@@ -583,10 +576,6 @@ components:
     content-template-listing-response:
       title: Content Template
       type: object
-      required:
-        - name
-        - templateType
-        - channels
       allOf:
         - $ref: '#/components/schemas/content-template-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
@@ -739,8 +728,8 @@ components:
         editorContext: { }
 
     primary-page-email-html-template-with-audit:
-      description: Email HTML Template with Audit Fields
-      title: Email HTML Template with Audit Fields
+      description: Primary Page Email HTML Template with Audit Fields
+      title: Primary Page Email HTML Template with Audit Fields
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template-with-audit'
@@ -753,8 +742,8 @@ components:
             - template
 
     primary-page-email-html-template:
-      description: Email HTML Template
-      title: Email HTML Template
+      description: Primary Page Email HTML Template
+      title: Primary Page Email HTML Template
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template'
@@ -781,8 +770,8 @@ components:
         editorContext: { }
 
     sub-page-email-html-template-with-audit:
-      description: Email HTML Template
-      title: Email HTML Template
+      description: Sub Page Email HTML Template with Audit Fields.
+      title: Sub Page Email HTML Template with Audit Fields.
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template-with-audit'
@@ -795,8 +784,8 @@ components:
             - template
 
     sub-page-email-html-template:
-      description: Email HTML Template
-      title: Email HTML Template
+      description: Sub Page Email HTML Template
+      title: Sub Page Email HTML Template
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template'
@@ -806,14 +795,6 @@ components:
               $ref: '#/components/schemas/sub-page-email-html'
           required:
             - template
-
-    labels-detail:
-      title: OLAC Label Details
-      properties:
-        labels:
-          type: array
-          items:
-            type: string
 
     landing-page-html-primary-page-template:
       title: Landing Page Primary-Page HTML Template
@@ -855,14 +836,17 @@ components:
               example: '/templates/b6d70a45-a149-453b-85ba-809a5d40066d'
 
     template-channel-enum:
-      type: string
-      title: channel
+      type: array
+      title: channels
       description: Supported channels for Content Template.
-      example: email
-      enum:
-        - email
-        - landingpage
-        - shared
+      items:
+        type: string
+        title: channel
+        example: email
+        enum:
+          - email
+          - landingpage
+          - shared
 
     entity-audit-fields:
       title: Entity Audit Fields.
@@ -943,7 +927,6 @@ components:
         page:
           href: '/templates?orderBy={orderBy}&start={start}&limit={limit}'
 
-# Fragment relates objects.
     html-fragment:
       description: Email HTML Description.
       title: Email HTML
@@ -993,13 +976,16 @@ components:
       enum: [ "html" ]
 
     fragment-channel-enum:
-      type: string
-      title: channel
+      title: channels
       description: Supported channels for Content Fragment.
-      example: email
-      enum:
-        - email
-        - shared
+      type: array
+      items:
+        type: string
+        title: channel
+        example: email
+        enum:
+          - email
+          - shared
 
     fragment-source:
       title: Fragment Source.
@@ -1089,10 +1075,6 @@ components:
     content-fragment-listing-response:
       title: Content Fragment
       type: object
-      required:
-        - name
-        - type
-        - channels
       allOf:
         - $ref: '#/components/schemas/content-fragment-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
@@ -1229,9 +1211,7 @@ components:
             - "add"
             - "remove"
             - "replace"
-            - "move"
-            - "copy"
-            - "test"
+
         path:
           type: string
           description: A JSON-Pointer
@@ -1317,14 +1297,6 @@ components:
         etag:
           $ref: '#/components/headers/etag'
 
-    202:
-      description: Request successfully accepted
-      headers:
-        Retry-After:
-          $ref: '#/components/headers/retry-after'
-        Location:
-          $ref: '#/components/headers/Location'
-
     204:
       description: No content
       headers:
@@ -1360,13 +1332,6 @@ components:
 
     409:
       description: Conflict
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errorResponse'
-
-    412:
-      description: Precondition failed
       content:
         application/json:
           schema:
