@@ -13,6 +13,10 @@ Adobe Journey Optimizer API access is set up through the steps below. Each of th
 
 To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
 
+**Prerequisites**
+
+You need to grant developer and API access control with the Experience Platform permissions. Before creating integrations on Adobe Developer Console, your account must have developer and user permissions for an Experience Platform product profile in Adobe Admin Console. Read this [documentation](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#grant-developer-and-api-access-control).
+
 1. **Check you have a digital certificate**, or create one if necessary. The public and private keys provided with the certificate are needed in the following steps.
 
 2. **Create a new integration to Adobe Journey Optimizer Service** in Adobe Developer and configure it. Your credentials will then be generated (API Key, Client secret...).
@@ -22,7 +26,9 @@ To manage certificates in Adobe Developer, make sure you have ***System administ
 The JWT method to generate access tokens has been deprecated. All new integrations must be created using the [OAuth Server-to-Server authentication method](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#select-oauth-server-to-server). Adobe also recommends that you migrate your existing integrations to the OAuth method. Read the following important documentation:
 
 [Migration guide for your applications from JWT to OAuth](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/)
+
 [Implementation guide for new and old applications with OAuth](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/)
+
 [Advantages of using the OAuth Server-to-Server credentials method](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/#why-oauth-server-to-server-credentials)
 
 <!--3. **Create a JSON Web Token (JWT)** from the credentials previously generated and sign it with your private key. The JWT encodes all of the identity and security information that is needed by Adobe to verify your identity and grant you access to the API.
