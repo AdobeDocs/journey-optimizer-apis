@@ -7,8 +7,8 @@ info:
     \ and throttling mechanisms in the following documentation: [Journeys integration\
     \ with external systems](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)\n\
     \n**Visualize API calls with Postman**:\n  - [Capping API - Postman collection\
-    \ on GitHub](https://raw.githubusercontent.com/AdobeDocs/JourneyAPI/master/postman-collections/Journey-Orchestration_Capping-API_postman-collection.json)\n\
-    \  - [Throttling API - Postman collection on GitHub](https://raw.githubusercontent.com/AdobeDocs/JourneyAPI/master/postman-collections/Journey-Orchestration_Throttling-API_postman-collection.json)\n\
+    \ on GitHub](https://github.com/AdobeDocs/JourneyAPI/blob/master/postman-collections/Journeys_Capping-API_postman-collection.json)\n\
+    \  - [Throttling API - Postman collection on GitHub](https://github.com/AdobeDocs/JourneyAPI/blob/master/postman-collections/Journeys_Throttling-API_postman-collection.json)\n\
     \n\n**API paths**:\n  - Journey Optimizer Gateway URL {JO_HOST} : https://platform.adobe.io\n\
     \  - Base path for this API {BASE_PATH} : **/journey/orchestration**\n  - Example\
     \ of a complete path: https://platform.adobe.io/journey/orchestration/endpointConfigs\n\
