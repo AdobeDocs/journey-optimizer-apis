@@ -15,8 +15,6 @@ To manage certificates in Adobe Developer, make sure you have ***System administ
 
 **Prerequisites**
 
-You need to grant developer and API access control with the Experience Platform permissions. Before creating integrations on Adobe Developer Console, your account must have developer and user permissions for an Experience Platform product profile in Adobe Admin Console. Read this [documentation](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#grant-developer-and-api-access-control).
-
 1. **Check you have a digital certificate**, or create one if necessary. The public and private keys provided with the certificate are needed in the following steps.
 
 2. **Create a new integration to Adobe Journey Optimizer Service** in Adobe Developer and configure it. Your credentials will then be generated (API Key, Client secret...).
@@ -53,3 +51,18 @@ To obtain your ORGANIZATION ID value, refer to your administrator or your Adobe 
 **ACCESS_TOKEN**: Your personal access token
 
 **API_KEY**: your personal API Key. It is provided in Adobe Developer after creating a new integration to Adobe Journey Optimizer Service.
+
+
+**Permissions needed**
+
+You need to grant developer and API access control with the Experience Platform permissions.
+
+After creating integrations on Adobe Developer Console, your account must have developer and user permissions for an Experience Platform product profile in Adobe Admin Console. Read this [documentation](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#grant-developer-and-api-access-control).
+
+Note that you need to be sure to assign the new API profile to the expected roles in the [permissions section](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#assign-api-to-a-role)
+
+Depending on the API, different permissions need to be configured:
+
+* **Capping API** needs the "Manage Journeys Events, Data Sources and Action" permission to the targeted sandbox (Capping is configured at sandbox level).
+* **Throttling API** needs the "Manage Journeys Events, Data Sources and Action" permission to the production sandbox (Throttling can only be configured on the production sandbox) 
+
