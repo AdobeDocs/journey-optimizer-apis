@@ -59,7 +59,7 @@ paths:
           name - Supports operations are regex and contains.  
         </li>
         <li>
-          templateType - Supported operations are equal and not equals, and allowed values are [ "html", "html_primary_page", "html_sub_page"]
+          templateType - Supported operations are equal and not equals, and allowed values are [ "html", "html_primary_page", "html_sub_page", "content"]
         </li>
         <li>
           channels - Supported operations are equals and not equals.
@@ -530,6 +530,7 @@ components:
           "html": '#/components/schemas/email-html-template-with-audit'
           "html_primary_page": '#/components/schemas/primary-page-email-html-template-with-audit'
           "html_sub_page": '#/components/schemas/sub-page-email-html-template-with-audit'
+          "content": '#/components/schemas/channel-template-with-audit'
       required:
         - name
         - templateType
@@ -590,6 +591,7 @@ components:
           "html": '#/components/schemas/email-html-template'
           "html_primary_page": '#/components/schemas/primary-page-email-html-template'
           "html_sub_page": '#/components/schemas/sub-page-email-html-template'
+          "content": '#/components/schemas/channel-template'
       required:
         - name
         - templateType
@@ -637,7 +639,7 @@ components:
       title: Template Type
       description: Template Type
       example: 'html'
-      enum: [ "html", "html_primary_page", "html_sub_page" ]
+      enum: [ "html", "html_primary_page", "html_sub_page", "content" ]
 
     template-source:
       title: Template Source.
@@ -709,6 +711,45 @@ components:
           properties:
             template:
               $ref: '#/components/schemas/email-html'
+          required:
+            - template
+
+    channel-template:
+      description: Content Template
+      title: Content Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              oneOf:
+                - $ref: '#/components/schemas/in-app-variant-detail'
+                - $ref: '#/components/schemas/push-variant-detail'
+                - $ref: '#/components/schemas/email-variant-detail'
+                - $ref: '#/components/schemas/sms-variant-detail'
+                - $ref: '#/components/schemas/direct-mail-variant-detail'
+                - $ref: '#/components/schemas/web-variant-detail'
+          required:
+            - template
+
+    channel-template-with-audit:
+      description: Content Template With Audit Fields
+      title: Content Template With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              oneOf:
+                - $ref: '#/components/schemas/in-app-variant-detail'
+                - $ref: '#/components/schemas/push-variant-detail'
+                - $ref: '#/components/schemas/email-variant-detail'
+                - $ref: '#/components/schemas/sms-variant-detail'
+                - $ref: '#/components/schemas/direct-mail-variant-detail'
+                - $ref: '#/components/schemas/web-variant-detail'
           required:
             - template
 
@@ -824,6 +865,544 @@ components:
       required:
         - html
 
+    web-variant-detail:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/web-item'
+      additionalProperties: false
+      required:
+        - items
+
+    web-item:
+      type: object
+      properties:
+        schema:
+          type: string
+        contentObject:
+          $ref: '#/components/schemas/web-item-content-object'
+        uiData:
+          $ref: '#/components/schemas/web-item-ui-data'
+        attributes:
+          $ref: '#/components/schemas/web-attributes'
+
+    web-item-content-object:
+      type: object
+      nullable: true
+
+    web-attributes:
+      type: object
+      nullable: true
+      additionalProperties: true
+      properties:
+        viewName:
+          type: string
+        trackingLabel:
+          type: string
+
+    web-item-ui-data:
+      type: object
+      nullable: true
+      properties:
+        tagType:
+          type: string
+        actionType:
+          type: string
+        offerDecisionData:
+          $ref: '#/components/schemas/offer-decision-data-type'
+        assetEssentials:
+          $ref: '#/components/schemas/asset-essentials-type'
+      required:
+        - tagType
+        - actionType
+
+    offer-decision-data-type:
+      type: object
+      properties:
+        id:
+          type: string
+        activityId:
+          type: string
+        placementId:
+          type: string
+        componentType:
+          $ref: '#/components/schemas/offer-decision-component-type'
+      required:
+        - id
+        - activityId
+        - placementId
+        - componentType
+
+    offer-decision-component-type:
+      title: Component type
+      description: Offer decision component type
+      type: string
+      enum:
+        - TEXT
+        - JSON
+        - IMAGELINK
+        - HTML
+
+    asset-essentials-type:
+      type: object
+      properties:
+        assetId:
+          type: string
+        repositoryId:
+          type: string
+      required:
+        - assetId
+        - repositoryId
+
+    in-app-variant-detail:
+      type: object
+      properties:
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+        mobileParameters:
+          $ref: '#/components/schemas/mobile-parameters'
+        body:
+          $ref: '#/components/schemas/in-app-body'
+      additionalProperties: false
+      required:
+        - body
+
+    mobile-parameters:
+      title: Message Setting
+      description: List containing custom properties(key-value pair) from ACRITE.
+      nullable: true
+      additionalProperties: true
+
+    in-app-body:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/in-app-html-body'
+
+    in-app-html-body:
+      type: object
+      title: Html Body
+      properties:
+        html:
+          type: string
+          description: 'HTML/Text body string'
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - html
+
+    sms-variant-detail:
+      type: object
+      properties:
+        text:
+          type: string
+        messageType:
+          type: string
+          default: sms
+          nullable: true
+          enum:
+            - sms
+            - mms
+        title:
+          type: string
+          description: subject or title of the mms message
+          nullable: true
+        mediaUri:
+          type: string
+          description: Media url
+          nullable: true
+          example: https://www.adobe.com/adobe.jpg
+          maxLength: 2000
+      additionalProperties: false
+      required:
+        - text
+
+    push-variant-detail:
+      type: object
+      properties:
+        pushType:
+          type: string
+          nullable: true
+          enum:
+            - message
+            - silent
+          default: message
+        title:
+          type: string
+          description: push title
+          nullable: true
+          example: New Offers for you
+        message:
+          type: string
+          description: push message
+          nullable: true
+          example: Winter is here, Have you checked new offers on our latest collections.
+        appNames:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        ios:
+          description: Properties specific to ios devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-ios-specific-properties'
+        android:
+          description: Properties specific to Android devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-android-specific-properties'
+      additionalProperties: false
+
+    push-os-properties:
+      type: object
+      description: common properties for both android and ios.
+      properties:
+        interaction:
+          type: object
+          nullable: true
+          required:
+            - type
+          properties:
+            type:
+              $ref: "#/components/schemas/push-interaction-type"
+            uri:
+              $ref: "#/components/schemas/push-link-uri"
+        collapsibleKey:
+          title: Collapsible
+          type: string
+          nullable: true
+          description: Custom String used to collapse push notifications.
+          example: live_scoreboard
+          minLength: 1
+          maxLength: 50
+        soundName:
+          title: Sound
+          type: string
+          nullable: true
+          example: birdchirp
+          description: Custom Sound Filename. This file is a resource inside app.
+          minLength: 1
+          maxLength: 50
+        badge:
+          title: Badge
+          type: string
+          nullable: true
+          description: An Integer value or expression which evaluates to Integer.
+          example: "1"
+          minLength: 1
+          maxLength: 50
+        customProperties:
+          title: Custom Push Payload
+          nullable: true
+          description: List containing custom properties (key-value pair)
+          example:
+            accept: Accept Invite
+            decline: Decline Invite
+          additionalProperties:
+            type: string
+
+    push-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: On Click Interaction of Push Notification
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+      default: OPENAPP
+      example: WEBURL
+
+    push-link-uri:
+      type: string
+      nullable: true
+      description: External Link OR Deeplink
+      example: https://www.adobe.com/cis_en/products/special-offers.html
+      maxLength: 2000
+
+    push-ios-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          nullable: true
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+        notificationGroup:
+          title: Notification Group
+          type: string
+          nullable: true
+          description: Custom String to group Notifications, In apns term this is thread-id.
+          example: electionResult
+          minLength: 1
+          maxLength: 50
+        mutableContent:
+          type: boolean
+          default: false
+          nullable: true
+          title: mutable-content flag
+          description: Modify the push content before delivering in ios.
+        contentAvailable:
+          type: boolean
+          default: false
+          nullable: true
+          title: content-available flag
+          description: Flag to do background processing, This flag can now be used with Alert as well.
+        actions:
+          type: object
+          nullable: true
+          required:
+            - category
+          properties:
+            category:
+              type: string
+              title: iOS Category
+              description: App Specific Category for creating Actionable push notification.
+              example: Offers
+              minLength: 1
+              maxLength: 50
+            buttons:
+              type: array
+              nullable: true
+              items:
+                $ref: '#/components/schemas/push-button-ios'
+              minItems: 1
+              maxItems: 4
+
+    push-media-uri:
+      type: string
+      description: External Link OR Adobe Asset ID
+      nullable: true
+      example: medialib://urn:aaid:sc:US:aece0145-bf61-44e3-ae08-c1daa04d1396
+      minLength: 5
+      maxLength: 2000
+
+    push-button-ios:
+      type: object
+      nullable: true
+      required:
+        - customId
+      allOf:
+        - $ref: '#/components/schemas/push-button-common'
+      properties:
+        customId:
+          title: Custom ID
+          description: Push Button Custom ID
+          type: string
+          example: offers
+          minLength: 1
+          maxLength: 50
+
+    push-button-common:
+      type: object
+      description: Exclusive button properties for open, deeplink, web and dismiss. For other actionable button usecase, use custom properties.
+      required:
+        - label
+        - type
+      properties:
+        label:
+          title: Label
+          description: Push Button Custom Label
+          type: string
+          example: Offer
+          minLength: 1
+          maxLength: 50
+        type:
+          $ref: "#/components/schemas/push-button-interaction-type"
+        uri:
+          $ref: "#/components/schemas/push-link-uri"
+
+    push-button-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: Button Type
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+        - DISMISS
+      example: WEBURL
+
+    push-android-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          nullable: true
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+            iconUri:
+              $ref: "#/components/schemas/push-media-uri"
+        channelId:
+          type: string
+          title: Channel
+          nullable: true
+          description: Channel on which notification is sent.
+          minLength: 1
+          maxLength: 50
+        visibility:
+          $ref: "#/components/schemas/push-android-visibility"
+        notificationPriority:
+          $ref: "#/components/schemas/push-android-notification-priority"
+        deliveryPriority:
+          $ref: "#/components/schemas/push-android-delivery-priority"
+        actions:
+          type: object
+          nullable: true
+          required:
+            - buttons
+          properties:
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-common'
+              minItems: 1
+              maxItems: 3
+
+    push-android-visibility:
+      type: string
+      title: Lockscreen Visibility
+      description: Set visibility of push notifications on android screen.
+      nullable: true
+      enum:
+        - PUBLIC
+        - PRIVATE
+        - SECRET
+      default: PUBLIC
+
+    push-android-notification-priority:
+      type: string
+      title: Priority
+      description: |
+        Set the notification priority of push notifications, this priority is governed by app developer.
+        Read here - https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#NotificationPriority
+      nullable: true
+      enum:
+        - PRIORITY_MIN
+        - PRIORITY_LOW
+        - PRIORITY_DEFAULT
+        - PRIORITY_HIGH
+        - PRIORITY_MAX
+      default: PRIORITY_DEFAULT
+
+    push-android-delivery-priority:
+      type: string
+      title: Message Priority
+      description: |
+        Optimization done by FCM level for battery power optimization,
+        Read here https://firebase.google.com/docs/cloud-messaging/concept-options?authuser=0#setting-the-priority-of-a-message
+      nullable: true
+      enum:
+        - HIGH
+        - NORMAL
+      default: NORMAL
+
+    direct-mail-variant-detail:
+      type: object
+      properties:
+        fileName:
+          title: fileName
+          type: string
+          description: File name which needs to be used while exporting profile attributes.
+        appendTimeStamp:
+          title: appendTimeStamp
+          type: boolean
+          description: whether timestamp to be appended to filename.
+        notes:
+          type: string
+          title: notes
+          description: Notes/instructions for print partners.
+        notesPosition:
+          description: Include Notes in Header or Footer.
+          type: string
+          enum:
+            - header
+            - footer
+        sortBy:
+          type: string
+          description: Label on which actual data needs to be stored while generating file for direct mail.
+        attributes:
+          type: array
+          nullable: true
+          description: List representing content of direct mail.
+          items:
+            $ref: '#/components/schemas/direct-mail-content'
+            min: 1
+      additionalProperties: false
+      required:
+        - fileName
+
+    direct-mail-content:
+      type: object
+      properties:
+        label:
+          description: Label for field.
+          type: string
+        data:
+          description: Data with/without personlization attributes.
+          type: string
+      required:
+        - label
+        - data
+
+    email-variant-detail:
+      type: object
+      properties:
+        subject:
+          type: string
+          title: Subject
+          description: Subject of Mail
+          example: "Your test score"
+        html:
+          $ref: '#/components/schemas/email-body'
+        x-amp-html:
+          $ref: '#/components/schemas/email-body'
+        text:
+          $ref: '#/components/schemas/email-text-body'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+        headers:
+          $ref: '#/components/schemas/email-headers'
+      required:
+        - subject
+        - html
+      additionalProperties: false
+
+    email-body:
+      type: object
+      title: Email Body
+      description: Content of email for one mime type
+      properties:
+        body:
+          type: string
+          description: HTML/Text body string
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - body
+
+    email-text-body:
+      allOf:
+        - $ref: '#/components/schemas/email-body'
+        - $ref: '#/components/schemas/email-text-body-attributes'
+
+    email-text-body-attributes:
+      type: object
+      title: Email Text Body Attributes
+      properties:
+        syncFromHtml:
+          type: boolean
+          default: true
+          description: Whether to sync text from HTML body.
+
+    email-headers:
+      title: Headers
+      description: List containing custom headers(key-value pair).
+      additionalProperties: true
+
     self-href:
       title: Self-Href
       type: object
@@ -845,6 +1424,11 @@ components:
         example: email
         enum:
           - email
+          - push
+          - inapp
+          - sms
+          - web
+          - directMail
           - landingpage
           - shared
 
