@@ -729,7 +729,6 @@ components:
                 - $ref: '#/components/schemas/email-variant-detail'
                 - $ref: '#/components/schemas/sms-variant-detail'
                 - $ref: '#/components/schemas/direct-mail-variant-detail'
-                - $ref: '#/components/schemas/web-variant-detail'
           required:
             - template
 
@@ -749,7 +748,6 @@ components:
                 - $ref: '#/components/schemas/email-variant-detail'
                 - $ref: '#/components/schemas/sms-variant-detail'
                 - $ref: '#/components/schemas/direct-mail-variant-detail'
-                - $ref: '#/components/schemas/web-variant-detail'
           required:
             - template
 
@@ -864,97 +862,6 @@ components:
           $ref: '#/components/schemas/editor-context'
       required:
         - html
-
-    web-variant-detail:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/web-item'
-      additionalProperties: false
-      required:
-        - items
-
-    web-item:
-      type: object
-      properties:
-        schema:
-          type: string
-        contentObject:
-          $ref: '#/components/schemas/web-item-content-object'
-        uiData:
-          $ref: '#/components/schemas/web-item-ui-data'
-        attributes:
-          $ref: '#/components/schemas/web-attributes'
-
-    web-item-content-object:
-      type: object
-      nullable: true
-
-    web-attributes:
-      type: object
-      nullable: true
-      additionalProperties: true
-      properties:
-        viewName:
-          type: string
-        trackingLabel:
-          type: string
-
-    web-item-ui-data:
-      type: object
-      nullable: true
-      properties:
-        tagType:
-          type: string
-        actionType:
-          type: string
-        offerDecisionData:
-          $ref: '#/components/schemas/offer-decision-data-type'
-        assetEssentials:
-          $ref: '#/components/schemas/asset-essentials-type'
-      required:
-        - tagType
-        - actionType
-
-    offer-decision-data-type:
-      type: object
-      properties:
-        id:
-          type: string
-        activityId:
-          type: string
-        placementId:
-          type: string
-        componentType:
-          $ref: '#/components/schemas/offer-decision-component-type'
-      required:
-        - id
-        - activityId
-        - placementId
-        - componentType
-
-    offer-decision-component-type:
-      title: Component type
-      description: Offer decision component type
-      type: string
-      enum:
-        - TEXT
-        - JSON
-        - IMAGELINK
-        - HTML
-
-    asset-essentials-type:
-      type: object
-      properties:
-        assetId:
-          type: string
-        repositoryId:
-          type: string
-      required:
-        - assetId
-        - repositoryId
 
     in-app-variant-detail:
       type: object
@@ -1427,7 +1334,6 @@ components:
           - push
           - inapp
           - sms
-          - web
           - directMail
           - landingpage
           - shared
