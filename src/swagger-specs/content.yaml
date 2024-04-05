@@ -764,7 +764,7 @@ components:
           $ref: '#/components/schemas/editor-context'
       example:
         html: '<html> Hi {{profile.person.name}}, Here is your Primary page Content Template !! </html>'
-        editorContext: { }
+        editorContext: {  "wysiwyg-content":"Hi {{profile.person.name}} its a great day to shop !!"   }
 
     primary-page-email-html-template-with-audit:
       description: Primary Page Email HTML Template with Audit Fields
@@ -806,7 +806,7 @@ components:
           $ref: '#/components/schemas/editor-context'
       example:
         html: '<html> Hi {{profile.person.name}}, Here is your Sub page Content Template !! </html>'
-        editorContext: { }
+        editorContext: {  "wysiwyg-content":"Hi {{profile.person.name}} its a great day to shop !!"  }
 
     sub-page-email-html-template-with-audit:
       description: Sub Page Email HTML Template with Audit Fields.
