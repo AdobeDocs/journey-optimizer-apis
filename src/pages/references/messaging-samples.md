@@ -78,10 +78,6 @@ A detailed description of the API is available [here](https://developer.adobe.co
 
 <summary>Example 3 : This example is to show how you can send a Push Message to an existing profile.</summary>
 
->[!NOTE]
->
->Before proceeding, you need to get ready with your push messaging. [Learn how to configure push notification channel](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/push/push-config/push-configuration)
-
 <p>
 
 ```json
