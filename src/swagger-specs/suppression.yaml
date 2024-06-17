@@ -302,6 +302,7 @@ paths:
                 $ref: '#/components/schemas/uploadJob'
     delete:
       summary: Delete a specific upload job.
+      description: The purpose of this operation is to delete the job record created. It does not delete the suppressions created through the job.
       tags:
         - Suppression
       operationId: deleteUploadJobId
