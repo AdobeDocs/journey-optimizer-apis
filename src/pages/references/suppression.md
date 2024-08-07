@@ -6,6 +6,7 @@ keywords:
   - API Documentation
   - Suppression
 layout: none
---- 
-<RedoclyAPIBlock src="/journey-optimizer-apis/main/src/swagger-specs/suppression.yaml"/>
+---
+
+<RedoclyAPIBlock src="https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/suppression.yaml"/>
 
