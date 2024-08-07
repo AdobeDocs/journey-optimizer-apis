@@ -1,5 +1,11 @@
 ---
 title: Suppression
 description: Suppression
-openAPISpec: https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/suppression.yaml
+keywords: 
+  - Journey Optimizer
+  - API Documentation
+  - Suppression
+layout: none
 --- 
+<RedoclyAPIBlock src="/journey-optimizer-apis/src/swagger-specs/suppression.yaml"/>
+
