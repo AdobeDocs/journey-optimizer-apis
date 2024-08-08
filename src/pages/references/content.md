@@ -1,5 +1,10 @@
 ---
 title: Content APIs
 description: Content APIs
-openAPISpec: https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/content.yaml
---- 
+keywords: 
+  - Journey Optimizer
+  - API Documentation
+layout: none
+---
+
+<RedoclyAPIBlock src="https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/content.yaml"/>
