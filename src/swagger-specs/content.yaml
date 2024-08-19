@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: Using this REST API, you can create and manage content templates, which are standalone templates that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
+  description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
   version: 0.0.1
   title: Content API.
 
@@ -44,7 +44,7 @@ paths:
     get:
       parameters:
         - $ref: '#/components/parameters/orderBy'
-        - $ref: '#/components/parameters/template-limit'
+        - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/property'
       operationId: getTemplates
@@ -400,6 +400,116 @@ paths:
         404:
           $ref: '#/components/responses/404'
 
+  /fragments/publications:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: publishFragment
+      summary: Publish Content Fragment.
+      description: >-
+        API to publish fragment.<br>
+        Publishing a content fragment will freeze the content of the fragment. Notably, it is a pre-requisite to publish
+        a fragment  before activating / publishing a campaign / journey. Fragment Publication is an async process under
+        the hood which can take a few seconds. The status of the fragment publication can be fetched by lastPublicationStatus
+        API whereas the content of the last successful publication of a fragment can be fetched by the liveFragment API.
+      tags:
+        - Content fragment API
+      requestBody:
+        description: publish request body
+        content:
+          'application/vnd.adobe.ajo.fragment.publication.request.v1.0+json':
+            schema:
+              $ref: '#/components/schemas/publish-fragment-request'
+        required: true
+      responses:
+        202:
+          $ref: '#/components/responses/202'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+  /fragments/{fragmentId}/liveFragment:
+    parameters:
+      - name: fragmentId
+        in: path
+        description: Content fragment id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+
+    get:
+      operationId: getLiveFragment
+      summary: Fetch content of fragment's last successful publication
+      description: >-
+        Fetch content of fragment's last successful publication.
+        A fragment can have multiple publications. A publication can either be successful, in progress or can error out.
+        This API will be responsible for fetching the content of the last successful publication for a fragment.
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.publication.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/live-fragment-content'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+  /fragments/{fragmentId}/lastPublicationStatus:
+    parameters:
+      - name: fragmentId
+        in: path
+        description: Content fragment id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+
+    get:
+      operationId: getLastPublicationStatus
+      summary: Fetch status of last publication
+      description: >-
+        Fetch the status of last publication request for a content fragment by Id.
+        A fragment can have multiple publications. A publication can either be successful, in progress or can error out.
+        This API will be responsible for fetching the status of the last issued publication request for a fragment.
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.publication.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/publishing-job-status'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
 components:
   securitySchemes:
     imsUserToken:
@@ -461,6 +571,13 @@ components:
       description: etag of resource to match before update of resource.
       schema:
         type: string
+    OptionalIfMatchParam:
+      name: If-Match
+      in: header
+      required: false
+      description: etag to match before update of resource.
+      schema:
+        type: string
     SandboxName:
       name: sandboxName
       in: query
@@ -478,7 +595,7 @@ components:
         default: -modifiedAt
       required: false
       example: orderBy=%2BmodifiedAt.
-    template-limit:
+    limit:
       name: limit
       description: >-
         Limit response to a specified positive number of objects.
@@ -764,11 +881,11 @@ components:
           $ref: '#/components/schemas/editor-context'
       example:
         html: '<html> Hi {{profile.person.name}}, Here is your Primary page Content Template !! </html>'
-        editorContext: {  "wysiwyg-content":"Hi {{profile.person.name}} its a great day to shop !!"   }
+        editorContext: { }
 
     primary-page-email-html-template-with-audit:
-      description: Primary Page Email HTML Template with Audit Fields
-      title: Primary Page Email HTML Template with Audit Fields
+      description: Email HTML Template with Audit Fields
+      title: Email HTML Template with Audit Fields
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template-with-audit'
@@ -781,8 +898,8 @@ components:
             - template
 
     primary-page-email-html-template:
-      description: Primary Page Email HTML Template
-      title: Primary Page Email HTML Template
+      description: Email HTML Template
+      title: Email HTML Template
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template'
@@ -806,11 +923,11 @@ components:
           $ref: '#/components/schemas/editor-context'
       example:
         html: '<html> Hi {{profile.person.name}}, Here is your Sub page Content Template !! </html>'
-        editorContext: {  "wysiwyg-content":"Hi {{profile.person.name}} its a great day to shop !!"  }
+        editorContext: { }
 
     sub-page-email-html-template-with-audit:
-      description: Sub Page Email HTML Template with Audit Fields.
-      title: Sub Page Email HTML Template with Audit Fields.
+      description: Email HTML Template
+      title: Email HTML Template
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template-with-audit'
@@ -823,8 +940,8 @@ components:
             - template
 
     sub-page-email-html-template:
-      description: Sub Page Email HTML Template
-      title: Sub Page Email HTML Template
+      description: Email HTML Template
+      title: Email HTML Template
       type: object
       allOf:
         - $ref: '#/components/schemas/content-template'
@@ -1322,21 +1439,18 @@ components:
               example: '/templates/b6d70a45-a149-453b-85ba-809a5d40066d'
 
     template-channel-enum:
-      type: array
-      title: channels
+      type: string
+      title: channel
       description: Supported channels for Content Template.
-      items:
-        type: string
-        title: channel
-        example: email
-        enum:
-          - email
-          - push
-          - inapp
-          - sms
-          - directMail
-          - landingpage
-          - shared
+      example: email
+      enum:
+        - email
+        - push
+        - inapp
+        - sms
+        - directMail
+        - landingpage
+        - shared
 
     entity-audit-fields:
       title: Entity Audit Fields.
@@ -1458,6 +1572,13 @@ components:
         source:
           $ref: '#/components/schemas/fragment-source'
 
+    fragment-status:
+      type: string
+      title: Fragment Status
+      description: Fragment Status
+      example: 'DRAFT'
+      enum: [ "DRAFT", "PUBLISHING", "PUBLISHED" ]
+
     fragment-type:
       type: string
       title: Fragment Type
@@ -1466,16 +1587,13 @@ components:
       enum: [ "html" ]
 
     fragment-channel-enum:
-      title: channels
+      type: string
+      title: channel
       description: Supported channels for Content Fragment.
-      type: array
-      items:
-        type: string
-        title: channel
-        example: email
-        enum:
-          - email
-          - shared
+      example: email
+      enum:
+        - email
+        - shared
 
     fragment-source:
       title: Fragment Source.
@@ -1512,6 +1630,53 @@ components:
           required:
             - fragment
 
+    publish-fragment-request:
+      type: object
+      properties:
+        fragmentId:
+          $ref: '#/components/schemas/id'
+      required:
+        - fragmentId
+
+    publishing-job-status:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - complete
+            - inProgress
+            - error
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/errorResponse'
+
+    error-chain:
+      properties:
+        serviceId:
+          type: string
+        errorCode:
+          type: string
+        invokingServiceId:
+          type: string
+        unixTimeStampMs:
+          type: integer
+          format: int64
+
+    live-fragment-content:
+      title: Published Content Fragment
+      type: object
+      required:
+        - type
+        - fragment
+      properties:
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        fragment:
+          oneOf:
+            - $ref: '#/components/schemas/published-html-fragment-content'
+
     content-fragment-with-audit:
       title: Content Fragment with audit fields.
       type: object
@@ -1532,6 +1697,8 @@ components:
           $ref: '#/components/schemas/description'
         type:
           $ref: '#/components/schemas/fragment-type'
+        status:
+          $ref: '#/components/schemas/fragment-status'
         channels:
           $ref: '#/components/schemas/fragment-channel-enum'
         labels:
@@ -1555,6 +1722,8 @@ components:
           $ref: '#/components/schemas/description'
         type:
           $ref: '#/components/schemas/fragment-type'
+        status:
+          $ref: '#/components/schemas/fragment-status'
         channels:
           $ref: '#/components/schemas/fragment-channel-enum'
         labels:
@@ -1623,6 +1792,16 @@ components:
               $ref: '#/components/schemas/html-fragment'
           required:
             - fragment
+
+    published-html-fragment-content:
+      description: Published HTML Fragment content
+      title: Published HTML Fragment content.
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          $ref: '#/components/schemas/fragment-content'
 
     errorResponse:
       title: Error Response
@@ -1786,6 +1965,14 @@ components:
           $ref: '#/components/headers/Location'
         etag:
           $ref: '#/components/headers/etag'
+
+    202:
+      description: Request successfuly accepted
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/retry-after'
+        Location:
+          $ref: '#/components/headers/Location'
 
     204:
       description: No content
