@@ -55,6 +55,10 @@ module.exports = {
         {
           title: 'Content API',
           path: '/references/content.md'
+        },
+        {
+          title: 'Simulations API',
+          path: '/references/simulations.md'
         }
       ]
       },

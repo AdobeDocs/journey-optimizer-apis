@@ -55,4 +55,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Content APIs](references/content.md)
 
+[Simulation APIs](references/simulations.md)
+
 <br/><br/>

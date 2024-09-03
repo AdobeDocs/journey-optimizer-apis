@@ -1,0 +1,433 @@
+openapi: 3.0.0
+info:
+  title: Simulation API.
+  description: APIs for sending Campaign Proofs.
+  version: 0.0.1
+
+security:
+  - imsUserToken: []
+
+servers:
+  - url: https://platform.adobe.io/ajo/simulations
+
+paths:
+  /campaigns/{campaignId}/proof:
+    parameters:
+      - $ref: '#/components/parameters/CampaignIdParam'
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+    post:
+      tags:
+        - Campaign Proof API
+      summary: Trigger Campaign Proof Job
+      description: Use this API to trigger proof job of a Campaign. Sending Campaign proof is an async process, the API will return a proofJobId which can be used to check the status of the proof.
+      operationId: triggerCampaignProof
+      requestBody:
+        $ref: '#/components/requestBodies/CampaignProofJobRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/CampaignProofJobResponse'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+  /campaign/{campaignId}/proof/{proofJobId}:
+    parameters:
+      - $ref: '#/components/parameters/AuthorizationParam'
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/CampaignIdParam'
+      - $ref: '#/components/parameters/ProofJobIdParam'
+    get:
+      tags:
+        - Campaign Proof API
+      summary: Get Campaign Proof Status
+      description: Use this API to get status of a Campaign Proof
+      operationId: getCampaignProofStatus
+      responses:
+        200:
+          $ref: '#/components/responses/CampaignProofJobResponse'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+components:
+  securitySchemes:
+    imsUserToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CampaignProofJob:
+      type: object
+      properties:
+        recipients:
+          description: Recipients
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipient'
+
+
+    Recipient:
+      type: object
+      properties:
+        userId:
+          description: Identifier of the test profile
+          type: string
+          example: test@gmail.com
+        namespace:
+          description: Namespace of the userId. Can be Email, ECID etc
+          type: string
+          example: Email
+        channelsData:
+          description: Recipient address
+          type: object
+          properties:
+            channel:
+              $ref: '#/components/schemas/Channel'
+          anyOf:
+            - $ref: '#/components/schemas/EmailChannelData'
+            - $ref: '#/components/schemas/SmsChannelData'
+            - $ref: '#/components/schemas/PushChannelData'
+          required:
+            - channel
+        profile:
+          description: Profile attributes in form of json key values
+          type: object
+        context:
+          description: Context attributes in form of json key values
+          type: object
+      required:
+        - userId
+        - namespace
+        - channelsData
+
+    EmailChannelData:
+      type: object
+      properties:
+        subjectPrefix:
+          description: Subject prefix
+          type: string
+        emailAddresses:
+          description: List of recipient email addresses.
+          type: array
+          maxItems: 10
+          minItems: 1
+          items:
+            type: string
+            example: test@gmail.com
+      required:
+        - emailAddresses
+
+    SmsChannelData:
+      type: object
+      properties:
+        phoneNumbers:
+          description: List of recipient phone numbers
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+      required:
+        - phoneNumbers
+
+    PushChannelData:
+      type: object
+      properties:
+        tokens:
+          description: Tokens for push channel
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/PushToken'
+      required:
+        - tokens
+
+    PushToken:
+      type: object
+      properties:
+        pushToken:
+          type: string
+        platform:
+          type: string
+
+    Channel:
+      type: object
+      description: channel
+      enum:
+        - email
+        - push
+        - sms
+
+    CampaignProofResponse:
+      type: object
+      description: Campaign Proof Response
+      properties:
+        proofJobId:
+          description: Proof job id
+          type: string
+          example: d516349b-9b10-492a-92bb-ea9d941c2df2
+        status:
+          description: Aggregated status of the campaign proof job. CREATED is the initial status. PROCESSING is intermediate status. SUBMITTED is terminal status when the proof job is submitted for delivery. PARTIALLY_FAILED when some of the delivery are failed. FAILED is the status when all deliveries failed.
+          type: string
+          enum:
+            - CREATED
+            - PROCESSING
+            - SUBMITTED
+            - PARTIALLY_FAILED
+            - FAILED
+        proofs:
+          description: Variant level proof job information
+          type: array
+          items:
+            $ref: '#/components/schemas/ProofItem'
+        _links:
+          description: HATEOS Links
+          type: object
+          properties:
+            self:
+              description: Self link
+              type: object
+              properties:
+                href:
+                  type: string
+                  example: /campaign/8fd4b5e2-e559-425b-bd89-389b007d32d5/proof/8fd4b5e2-e559-425b-bd89-389b007d32d5
+
+    ProofItem:
+      type: object
+      description: Proof information at Message Variant level
+      properties:
+        messageId:
+          type: string
+          description: Message ID
+          example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+        variantId:
+          type: string
+          description: Variant ID of Message
+          example: 2d277062-b2d8-441c-85e6-6eb99b6a8600
+        startDate:
+          type: string
+          description: Start Date
+        targeted:
+          type: integer
+          format: int64
+          description: Count of total targeted recipients
+        submitted:
+          type: integer
+          format: int64
+          description: Count of recipients submitted for delivery
+        status:
+          type: string
+          description: Status of the individual proof job. CREATED is the initial status. PROCESSING is intermediate status. SUBMITTED is terminal status when the proof job is submitted for delivery. FAILED when there is some error in processing the request.
+          enum:
+            - CREATED
+            - PROCESSING
+            - SUBMITTED
+            - FAILED
+        proofFailureReasons:
+          type: array
+          description: Reasons for proof failure.
+          items:
+            $ref: '#/components/schemas/ProfilesFailureReasons'
+
+    ProfilesFailureReasons:
+      type: object
+      properties:
+        profileIds:
+          title: Profile Identifier
+          description: List of profile ids
+          type: array
+          items:
+            type: string
+            example: test@gmail.com
+          minItems: 1
+        failureReasons:
+          title: Failure Reasons
+          type: array
+          description: List of failure reason
+          items:
+            $ref: '#/components/schemas/FailureReason'
+          minItems: 1
+
+    FailureReason:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "https://ns.adobe.com/aep/errors/CJMPTS-1000-400"
+        title:
+          type: string
+          example: "A concise error message"
+        status:
+          type: string
+          example: 400
+        report:
+          $ref: '#/components/schemas/ReportInError'
+        error-chain:
+          $ref: '#/components/schemas/ErrorChain'
+
+    ErrorResponse:
+      type: object
+      properties:
+        path:
+          type: string
+          title: Path
+          description: API path
+        request-id:
+          type: array
+          title: Request ID
+          items:
+            type: string
+            example: '4b485f56-9a06-4c00-ae03-e4a27468b113'
+          description: Request ID
+      allOf:
+        - $ref: '#/components/schemas/FailureReason'
+
+    ReportInError:
+      type: object
+      properties:
+        tenantInfo:
+          $ref: '#/components/schemas/TenantInfoInError'
+        additionalContext:
+          type: object
+          example:
+            detailedMessage: message
+          description: Additional Context of Error
+
+    TenantInfoInError:
+      type: object
+      properties:
+        sandboxName:
+          type: string
+          example: 'prod'
+        sandboxId:
+          type: string
+          example: 'missing'
+        imsOrgId:
+          type: string
+          example: 'fajbfabfhbahbfhbahb@AdobeOrg'
+
+    ErrorChain:
+      type: array
+      title: Error Chain
+      description: Error Chain
+      items:
+        type: object
+        example:
+          serviceId: ptservice
+          errorCode: CJMPTS-*
+          invokingServiceId: cjm-ptservice
+          unixTimeStampMs: 1610446917396
+
+  requestBodies:
+    CampaignProofJobRequest:
+      description: Campaign Proof Request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CampaignProofJob'
+
+  responses:
+    CampaignProofJobResponse:
+      description: Success Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CampaignProofResponse'
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  parameters:
+    APIKeyParam:
+      name: x-api-key
+      in: header
+      description: API Key located in Adobe Developer Console
+      required: true
+      schema:
+        type: string
+        example: 829495afa589475ab56850a702359cf9
+
+    ImsOrgIdParam:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization id
+      required: true
+      schema:
+        type: string
+        example: 0A7F574EBB4C6E1423973F52@AdobeOrg
+
+    AuthorizationParam:
+      name: Authorization
+      in: header
+      description: Authorization token
+      required: true
+      schema:
+        type: string
+        example: Bearer {{token}}
+
+    SandboxNameParam:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name
+      required: true
+      schema:
+        type: string
+        example: prod
+
+    CampaignIdParam:
+      name: campaignId
+      in: path
+      description: Campaign Id
+      required: true
+      schema:
+        type: string
+        example: 8fd4b5e2-e559-425b-bd89-389b007d32d5
+
+    ProofJobIdParam:
+      name: proofJobId
+      in: path
+      description: Campaign proof job Id
+      required: true
+      schema:
+        type: string
+        example: 2b380e1d-e4e2-4451-a5f7-3968af23e8c2
