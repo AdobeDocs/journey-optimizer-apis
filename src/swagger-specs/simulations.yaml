@@ -11,7 +11,7 @@ servers:
   - url: https://platform.adobe.io/ajo/simulations
 
 paths:
-  /campaigns/{campaignId}/proof:
+  /campaigns/{campaignId}/proofs:
     parameters:
       - $ref: '#/components/parameters/CampaignIdParam'
       - $ref: '#/components/parameters/AuthorizationParam'
@@ -38,7 +38,7 @@ paths:
         404:
           $ref: '#/components/responses/404'
 
-  /campaign/{campaignId}/proof/{proofJobId}:
+  /campaign/{campaignId}/proofs/{proofJobId}:
     parameters:
       - $ref: '#/components/parameters/AuthorizationParam'
       - $ref: '#/components/parameters/APIKeyParam'
@@ -96,16 +96,19 @@ components:
           example: Email
         channelsData:
           description: Recipient address
-          type: object
-          properties:
-            channel:
-              $ref: '#/components/schemas/Channel'
-          anyOf:
-            - $ref: '#/components/schemas/EmailChannelData'
-            - $ref: '#/components/schemas/SmsChannelData'
-            - $ref: '#/components/schemas/PushChannelData'
-          required:
-            - channel
+          type: array
+          items:
+            type: object
+            properties:
+              channel:
+                $ref: '#/components/schemas/Channel'
+            anyOf:
+              - $ref: '#/components/schemas/EmailChannelData'
+              - $ref: '#/components/schemas/SmsChannelData'
+              - $ref: '#/components/schemas/PushChannelData'
+            required:
+              - channel
+
         profile:
           description: Profile attributes in form of json key values
           type: object
@@ -163,10 +166,13 @@ components:
     PushToken:
       type: object
       properties:
-        pushToken:
+        token:
           type: string
         platform:
           type: string
+          enum:
+            - apns
+            - fcm
 
     Channel:
       type: object
