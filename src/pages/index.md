@@ -15,13 +15,13 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
 
-* [Suppression list documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
+* [Understand the suppression list](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
-* [Object Copy documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
+* [Sandbox management in Journey Optimizer](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
 
 * [Journeys integration with exterrnal system](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)
 
-* [Content documentation](https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html)
+* Work with [content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates) and [content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments) 
 
 ## Overview
 
