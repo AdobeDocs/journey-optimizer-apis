@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments">Journey Optimizer documentation</a>.
+  description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to Journey Optimizer documentation: <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates">Content templates</a> - <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments">Content fragments</a.
   version: 0.0.1
   title: Content API.
 
@@ -22,6 +22,7 @@ paths:
       summary: Create New Content Template.
       description: >-
         This API could be used for creating a new content template<br>
+        <b>subType</b> field is only supported for content template with code channel
       tags:
         - Content template API
       requestBody:
@@ -104,6 +105,13 @@ paths:
         required: true
         schema:
           type: string
+      - name: Accept
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+            - 'application/vnd.adobe.ajo.template.v1+json'
       - $ref: '#/components/parameters/APIKeyParam'
       - $ref: '#/components/parameters/ImsOrgIdParam'
       - $ref: '#/components/parameters/SandboxNameParam'
@@ -137,7 +145,8 @@ paths:
       operationId: putTemplate
       summary: Update Content Template By Id.
       description: >-
-        API to update Content Template By Id.
+        API to update Content Template By Id.<br>
+        <b>subType</b> field is only supported for content template with code channel
       tags:
         - Content template API
       parameters:
@@ -312,6 +321,13 @@ paths:
         required: true
         schema:
           type: string
+      - name: Accept
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+            - 'application/vnd.adobe.ajo.fragment.v1.0+json'
       - $ref: '#/components/parameters/APIKeyParam'
       - $ref: '#/components/parameters/ImsOrgIdParam'
       - $ref: '#/components/parameters/SandboxNameParam'
@@ -667,6 +683,8 @@ components:
           $ref: '#/components/schemas/olac-labels'
         source:
           $ref: '#/components/schemas/template-source'
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
 
     content-template-metadata:
       title: Content Template metadata.
@@ -694,12 +712,17 @@ components:
     content-template-listing-response:
       title: Content Template
       type: object
+      properties:
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
       allOf:
         - $ref: '#/components/schemas/content-template-metadata'
         - $ref: '#/components/schemas/entity-audit-fields'
         - $ref: '#/components/schemas/self-href'
 
     content-template:
+      description: Content templates allow us to easily reuse custom content, facilitating accelerated and improved design process.<br>
+        <b>subType</b> field is only supported for content template with code channel
       title: Content Template
       type: object
       discriminator:
@@ -721,9 +744,16 @@ components:
         templateType:
           $ref: '#/components/schemas/template-type'
         channels:
-          $ref: '#/components/schemas/template-channel-enum'
+          type: array
+          title: Channels
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/template-channel-enum'
         source:
           $ref: '#/components/schemas/template-source'
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
 
     olac-labels:
       title: OLAC Label Details
@@ -1448,9 +1478,19 @@ components:
         - push
         - inapp
         - sms
+        - code
         - directMail
         - landingpage
         - shared
+
+    template-sub-type-enum:
+      title: Template sub type
+      description: Sub type. This is only enabled for Content templates with code channel.
+      type: string
+      enum:
+        - HTML
+        - JSON
+      example: HTML
 
     entity-audit-fields:
       title: Entity Audit Fields.
@@ -1568,7 +1608,12 @@ components:
         type:
           $ref: '#/components/schemas/fragment-type'
         channels:
-          $ref: '#/components/schemas/fragment-channel-enum'
+          type: array
+          title: Channels
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/fragment-channel-enum'
         source:
           $ref: '#/components/schemas/fragment-source'
 
