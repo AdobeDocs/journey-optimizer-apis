@@ -870,9 +870,9 @@ components:
           properties:
             template:
               oneOf:
+                - $ref: '#/components/schemas/email-variant-detail'
                 - $ref: '#/components/schemas/in-app-variant-detail'
                 - $ref: '#/components/schemas/push-variant-detail'
-                - $ref: '#/components/schemas/email-variant-detail'
                 - $ref: '#/components/schemas/sms-variant-detail'
                 - $ref: '#/components/schemas/direct-mail-variant-detail'
           required:
