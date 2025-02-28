@@ -27,6 +27,10 @@ The Adobe Journey Optimizer API allows you to deliver personalized, connected, a
 
 Adobe Journey Optimizer is built natively on the Adobe Experience Platform and combines a unified, real-time customer profile, an API-first open framework, centralized offer decisioning, and artificial intelligence (AI) and machine learning (ML) for personalization and optimization. By integrating with the Journey Optimizer API, brands can intelligently determine the next best interaction with scale, speed, and flexibility across the entire customer journey.
 
+<InlineAlert slots="text"/>
+
+The <b>Object Copy</b> API is now deprecated. To copy objects such as journeys, content templates, or fragments, across multiple sandboxes, use the <b>Sandbox tooling</b> feature detailed in <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/copy-objects-to-sandbox">Journey Optimizer documentation</a>.
+
 ## Discover
 
 <DiscoverBlock slots="heading, link, text"/>
