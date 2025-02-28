@@ -1,9 +1,9 @@
 ---
-title: Interactive Message Execution code examples
-description: Interactive Message Execution
+title: Trigger campaigns using APIs - Code examples
+description: Trigger campaigns using APIs - Code examples
 --- 
 
-# Interactive Message Execution code examples
+# Trigger campaigns using APIs - Code examples
 
 Below code snippets are using sample Adobe Journey Optimizer API-triggered campaigns.
 

@@ -47,7 +47,7 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Suppression API](references/suppression.md)
 
-[Interactive Message Execution API](references/messaging.md)
+[Trigger campaigns using APIs](references/messaging.md)
 
 [Journeys Capping and Throttling APIs](references/journeys.md)
 

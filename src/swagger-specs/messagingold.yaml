@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   description: "This API is currently in beta, which may be subject to frequent updates without notice."
   version: "1.0.0 - BETA"
-  title: Interactive Message Execution API
+  title: Trigger campaigns using APIs
 
 security:
   - imsUserToken: []

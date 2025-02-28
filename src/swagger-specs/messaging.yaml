@@ -2,7 +2,7 @@
 openapi: 3.0.0
 
 info:
-  title: AJO Developer - Interactive Message Execution API
+  title: Trigger campaigns using APIs
   description: "
   Interactive Message Execution API helps you with messaging capabilities. Using this REST API,
   you can send marketing or transactional messages using a Campaign Id using Email, SMS and Push channels. You will need the Campaign ID to send message using API.<br/><br/>

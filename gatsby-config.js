@@ -40,9 +40,8 @@ module.exports = {
           description: '',
           path: '/references/suppression.md'
         },
-  
         {
-          title: 'Interactive Message Execution API',
+          title: 'Trigger campaigns using APIs',
           path: '/references/messaging.md',
         },
         {
@@ -63,7 +62,7 @@ module.exports = {
         title: 'Code samples',
         menu: [
           {
-            title: 'Interactive Message Execution API',
+            title: 'Trigger campaigns using APIs',
             path: 'references/messaging-samples.md'
           }
       ]
