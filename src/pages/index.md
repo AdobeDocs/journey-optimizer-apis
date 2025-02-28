@@ -17,8 +17,6 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * [Understand the suppression list](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
 
-* [Sandbox management in Journey Optimizer](https://experienceleague.adobe.com/docs/journey-optimizer/using/access-control/sandboxes.html)
-
 * [Journeys integration with exterrnal system](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)
 
 * Work with [content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates) and [content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments) 
@@ -46,8 +44,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 <DiscoverBlock slots="link, text"/>
 
 [Suppression API](references/suppression.md)
-
-[Object Copy API](references/sandbox.md)
 
 [Interactive Message Execution API](references/messaging.md)
 

@@ -40,10 +40,7 @@ module.exports = {
           description: '',
           path: '/references/suppression.md'
         },
-        {
-          title: 'Object Copy API',
-          path: '/references/sandbox.md'
-        },
+  
         {
           title: 'Interactive Message Execution API',
           path: '/references/messaging.md',
