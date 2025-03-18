@@ -107,6 +107,7 @@ paths:
           type: string
       - name: Accept
         in: header
+        required: true
         schema:
           type: string
           enum:
@@ -1582,11 +1583,27 @@ components:
         editorContext:
           $ref: '#/components/schemas/editor-context'
 
+    expression-fragment-content:
+      description: Expression fragment content description.
+      title: Expression fragment content
+      type: object
+      required:
+        - expression
+      properties:
+        expression:
+          $ref: '#/components/schemas/expression-content'
+
     fragment-content:
       type: string
       title: Html Fragment Content
       description: Html Fragment Content
       example: '<div> Hi {{profile.person.name}} its a great day to shop !! </div>'
+
+    expression-content:
+      type: string
+      title: Expression Content
+      description: Expression Content
+      example: 'Hi {{profile.person.name}} its a great day to shop !!'
 
     content-fragment:
       title: Content Fragment
@@ -1595,6 +1612,7 @@ components:
         propertyName: type
         mapping:
           "html": '#/components/schemas/email-html-fragment'
+          "expression": '#/components/schemas/expression-fragment'
       required:
         - name
         - type
@@ -1606,13 +1624,6 @@ components:
           $ref: '#/components/schemas/description'
         type:
           $ref: '#/components/schemas/fragment-type'
-        channels:
-          type: array
-          title: Channels
-          minItems: 1
-          maxItems: 1
-          items:
-            $ref: '#/components/schemas/fragment-channel-enum'
         source:
           $ref: '#/components/schemas/fragment-source'
 
@@ -1628,7 +1639,7 @@ components:
       title: Fragment Type
       description: Fragment Type
       example: 'html'
-      enum: [ "html" ]
+      enum: [ "html", "expression" ]
 
     fragment-channel-enum:
       type: string
@@ -1668,11 +1679,57 @@ components:
       allOf:
         - $ref: '#/components/schemas/content-fragment'
         - type: object
+          required:
+            - fragment
+            - channels
           properties:
             fragment:
               $ref: '#/components/schemas/html-fragment'
+            channels:
+              type: array
+              title: Channels
+              minItems: 1
+              maxItems: 1
+              items:
+                type: string
+                title: channel
+                description: Supported channels for Content Fragment.
+                example: email
+                enum:
+                  - email
+
+    expression-fragment:
+      description: Expression Fragment
+      title: Expression Fragment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment'
+        - type: object
           required:
             - fragment
+            - subType
+            - channels
+          properties:
+            fragment:
+              $ref: '#/components/schemas/expression-fragment-content'
+            subType:
+              type: string
+              enum:
+                - TEXT
+                - HTML
+                - JSON
+            channels:
+              type: array
+              title: Channels
+              minItems: 1
+              maxItems: 1
+              items:
+                type: string
+                title: channel
+                description: Supported channels for Content Fragment.
+                example: shared
+                enum:
+                  - shared
 
     publish-fragment-request:
       type: object
@@ -1720,6 +1777,7 @@ components:
         fragment:
           oneOf:
             - $ref: '#/components/schemas/published-html-fragment-content'
+            - $ref: '#/components/schemas/published-expression-fragment-content'
 
     content-fragment-with-audit:
       title: Content Fragment with audit fields.
@@ -1728,6 +1786,7 @@ components:
         propertyName: type
         mapping:
           "html": '#/components/schemas/html-fragment-with-audit'
+          "expression": '#/components/schemas/expression-fragment-with-audit'
       required:
         - name
         - type
@@ -1837,6 +1896,20 @@ components:
           required:
             - fragment
 
+    expression-fragment-with-audit:
+      description: Expression Fragment With Audit Fields
+      title: Expression Fragment With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            fragment:
+              $ref: '#/components/schemas/expression-fragment-content'
+          required:
+            - fragment
+
     published-html-fragment-content:
       description: Published HTML Fragment content
       title: Published HTML Fragment content.
@@ -1846,6 +1919,16 @@ components:
       properties:
         content:
           $ref: '#/components/schemas/fragment-content'
+
+    published-expression-fragment-content:
+      description: Published Expression Fragment content
+      title: Published Expression Fragment content.
+      type: object
+      required:
+        - expression
+      properties:
+        expression:
+          $ref: '#/components/schemas/expression-content'
 
     errorResponse:
       title: Error Response
