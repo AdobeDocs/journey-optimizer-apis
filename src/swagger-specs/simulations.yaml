@@ -64,7 +64,7 @@ paths:
         404:
           $ref: '#/components/responses/404'
 
-  /campaigns/{campaignId}/preview:
+  /campaigns/{campaignId}/previews:
     parameters:
       - $ref: '#/components/parameters/CampaignIdParam'
       - $ref: '#/components/parameters/AuthorizationParam'
