@@ -385,8 +385,7 @@ components:
       name: orderby
       description: >-
         Sort parameter and direction for sorting the response.
-        Add the prefix as -/+ for desc/asc. If unspecified, the response will be sorted in desc order.
-        Ex. orderby=+creationdate.
+        Add the `-` prefix to sort the responding in descending order. If unspecified, the response will be sorted in ascending order. Ex. orderby=creationdate.
       in: query
       schema:
         type: string
