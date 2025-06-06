@@ -2,8 +2,6 @@
 openapi: 3.0.0
 
 info:
-  description: Interactive Message Execution API
-  version: "1.0.1"
   title: Trigger campaigns using APIs
   description: "
   Interactive Message Execution API helps you with messaging capabilities. Using this REST API,
@@ -27,7 +25,7 @@ info:
 #  url: https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html
 
 security:
-  - imsUserToken: [ ]
+  - imsUserToken: []
 
 servers:
   - url: https://platform-stage.adobe.io/ajo
@@ -49,7 +47,7 @@ paths:
         - execution
       operationId: postIMUnitaryMessageExecution
       security:
-        - imsUserToken: [ ]
+        - imsUserToken: []
       description: ""
       requestBody:
         required: true
@@ -85,12 +83,12 @@ paths:
       - $ref: '#/components/parameters/x-sandbox-name'
 
     post:
-      summary: "Trigger or Schedule an Audience Based Message execution."
+      summary: "Trigger an Audience Based Message execution."
       tags:
         - execution
       operationId: postIMAudienceMessageExecution
       security:
-        - imsUserToken: [ ]
+        - imsUserToken: []
       description: ""
       requestBody:
         required: true
@@ -104,9 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/imExecutionResponse'
-                  - $ref: '#/components/schemas/ScheduledExecutionResponse'
+                $ref: '#/components/schemas/imExecutionResponse'
         '400':
           description: Bad Request
           content:
@@ -138,7 +134,7 @@ paths:
         - execution
       operationId: getBatchExecutionStatusByExecutionId
       security:
-        - imsUserToken: [ ]
+        - imsUserToken: []
       description: ""
       responses:
         '200':
@@ -160,73 +156,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorResponse'
 
-  /im/executions/schedules/{scheduleId}:
-    parameters:
-      - name: scheduleId
-        in: path
-        description: schedule id
-        required: true
-        schema:
-          type: string
-      - $ref: '#/components/parameters/x-api-key'
-      - $ref: '#/components/parameters/x-request-id'
-      - $ref: '#/components/parameters/x-gw-ims-org-id'
-      - $ref: '#/components/parameters/x-sandbox-name'
-    get:
-      summary: "Get Execution Status for Audience Based Message executions."
-      tags:
-        - execution
-      operationId: getBatchExecutionStatusByScheduleId
-      security:
-        - imsUserToken: [ ]
-      description: ""
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ScheduledExecutionResponse'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorResponse'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorResponse'
-    delete:
-      summary: "Delete a scheduled campaign execution."
-      tags:
-        - execution
-      operationId: deleteScheduledExecution
-      security:
-        - imsUserToken: [ ]
-      description: "Deletes a scheduled campaign execution before it has been triggered."
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                description: "Empty response for successful deletion"
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorResponse'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorResponse'
 components:
   securitySchemes:
     imsUserToken: # arbitrary name for the security scheme
@@ -305,12 +234,8 @@ components:
           type: string
           description: "the Campaign Identifier"
           example: "campaign-12345"
-        audience:
-          $ref: '#/components/schemas/Audience'
         context:
           $ref: "#/components/schemas/context"
-        schedule:
-          $ref: "#/components/schemas/schedule"
 
     imExecutionResponse:
       description: "the execution response"
@@ -319,7 +244,7 @@ components:
         executionId:
           description: "the execution ID"
           type: string
-          example: "HUMA-00859153"
+          example: "UMA-00859153"
         requestId:
           description: "the request ID"
           type: string
@@ -371,7 +296,7 @@ components:
             - additionalContext
           example:
             "additionalContext": {
-              "requestId": "04e7a2a5-f6db-4d15-a1ba-edda77bdb66f",
+              "requestId":"04e7a2a5-f6db-4d15-a1ba-edda77bdb66f",
               "campaignId": "campaign-1234567"
             }
 
@@ -381,25 +306,12 @@ components:
       items:
         oneOf:
           - $ref: "#/components/schemas/AEPRecipient"
-          - $ref: "#/components/schemas/ExternalRecipient"
         discriminator:
           propertyName: type
           mapping:
             aep: "#/components/schemas/AEPRecipient"
-            external: "#/components/schemas/ExternalRecipient"
       minItems: 1
       maxItems: 20
-
-    Audience:
-      type: object
-      description: "Details of the AEP Audience "
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          description: "Represents either audience or segment id"
-          example: "AEP-ProfileID-12345"
 
     AEPRecipient:
       type: object
@@ -417,41 +329,6 @@ components:
           type: string
           description: "the AEP Profile identifier"
           example: "AEP-ProfileID-12345"
-        namespace:
-          type: string
-          description: "the AEP Profile namespace"
-          example: "email"
-        mergePolicyName:
-          type: string
-          description: "Merge Policy Name"
-          example: "Default Timebased"
-        mergePolicySchema:
-          type: string
-          description: "Merge Policy Schema"
-          example: "_xdm.context.profile"
-        channelData:
-          $ref: "#/components/schemas/recipientChannelData"
-        profile:
-          $ref: "#/components/schemas/profile"
-        context:
-          $ref: "#/components/schemas/context"
-
-    ExternalRecipient:
-      type: object
-      description: "External Recipient Information"
-      required:
-        - type
-        - userId
-        - namespace
-      properties:
-        type:
-          type: string
-          description: "recipient type: external"
-          example: "external"
-        userId:
-          type: string
-          description: "External profile identifier, usually same as emailId or phoneNumber"
-          example: "customer123@example.com"
         namespace:
           type: string
           description: "the AEP Profile namespace"
@@ -484,13 +361,13 @@ components:
           - type: object
       example:
         {
-          "person": { "name": { "firstName": "Jane", "lastName": "Doe" } }
+          "person": {"name": {"firstName": "Jane", "lastName": "Doe"}}
         }
         # Multiple examples support is not available in the currently used OpenAPI version
         # So showing additional examples as comments
         # Example 2: Simple string properties
-      # "mobilePhone": {
-      #   "primary": "111-111-1111"
+        # "mobilePhone": {
+        #   "primary": "111-111-1111"
       # }
     context:
       type: object
@@ -506,19 +383,10 @@ components:
         # Multiple examples support is not available in the currently used OpenAPI version
         # So showing additional examples as comments
         # Example 2: Simple string properties
-      # {
-      #   "productName": "LED TV",
+        # {
+        #   "productName": "LED TV",
       #   "productCategory": "Electronics"
       # }
-    schedule:
-      type: object
-      description: "The time at which campaign execution should be triggered"
-      properties:
-        executeAt:
-          type: string
-          format: date-time
-          description: "the time of execution trigger"
-          example: "2016-08-29T09:12:33.001Z"
     executionStatusResponse:
       type: object
       description: "Execution Status Response"
@@ -531,14 +399,14 @@ components:
           type: string
           description: "executionId"
           example: "CMA-09378831"
-        campaignId:
-          type: string
-          description: "campaignId"
-          example: "campaignId-12345"
         audienceId:
           type: string
           description: "audienceId"
           example: "audienceId-12345"
+        campaignId:
+          type: string
+          description: "campaignId"
+          example: "campaignId-12345"
         status:
           type: string
           description: "execution status"
@@ -555,35 +423,3 @@ components:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'
-
-    ScheduledExecutionResponse:
-      type: object
-      description: "Scheduled Execution Response for scheduling or status check of scheduled execution"
-      required:
-        - scheduleId
-        - scheduleStatus
-      properties:
-        scheduleId:
-          type: string
-          description: "scheduleId"
-          example: "schedule-id-123"
-        audience:
-          $ref: "#/components/schemas/Audience"
-        campaignId:
-          type: string
-          description: "campaignId"
-          example: "campaignId-12345"
-        executeAt:
-          type: string
-          format: date-time
-          description: "the time of execution trigger"
-          example: "2016-08-29T09:12:33.001Z"
-        scheduleStatus:
-          type: string
-          description: "schedule status"
-          enum:
-            - Scheduled
-            - Triggered
-          example: "Scheduled"
-        executionDetails:
-          $ref: "#/components/schemas/executionStatusResponse"
