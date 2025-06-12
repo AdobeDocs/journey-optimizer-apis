@@ -131,16 +131,8 @@ components:
           type: string
           example: Email
         profileAttributes:
-          description: Profile attributes in form of json key values, profileAttributes will be used for rendering if provided. Profile details will not be fetched for above provided userId & namespace.
+          description: Profile attributes in form of json key values. If profileAttributes are provided in the request payload as JSON key-value pairs, they will be used to render content. In this case, profile details will not be fetched from the Unified Profile Store using userId and namespace.
           type: object
-          example:
-            {
-              "firstName": "John",
-              "personalEmail": {
-                "address": "john@adobe.com"
-              },
-              "testProfile": true
-            }
         contextAttributes:
           description: Context attributes in form of json key values
           type: object
