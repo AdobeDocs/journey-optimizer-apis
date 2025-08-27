@@ -55,6 +55,10 @@ module.exports = {
         {
           title: 'Simulations API',
           path: '/references/simulations.md'
+        },
+        {
+          title: 'Orchestrated campaigns validation and enablement on datasets',
+          path: '/references/orchestrated-campaign-dataset.md'
         }
       ]
       },

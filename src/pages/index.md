@@ -21,6 +21,8 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 
 * Work with [content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates) and [content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments) 
 
+* [Enable datasets for Orchestrated campaigns](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/manual-schema#enable)
+
 ## Overview
 
 The Adobe Journey Optimizer API allows you to deliver personalized, connected, and timely customer experiences across any app, device, or channel and in turn, effectively managing the end-to-end customer journey. The customer journey is the entire process of a customer's interactions with a brand, from the first moment of contact until the customer leaves. It starts with the awareness phase, where the customer learns about the brand and starts engaging. The customer will then further interact with the brand, visit online and physical sites, make purchases, send messages, or post reviews.
@@ -55,6 +57,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Simulation APIs](references/simulations.md)
 
-[Validate or enable orchestrated campaign extension on dataset](references/orchestrated-campaign-dataset.md)
+[Orchestrated campaigns validation and enablement on datasets](references/orchestrated-campaign-dataset.md)
 
 <br/><br/>
