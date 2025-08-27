@@ -5,9 +5,9 @@ description: Trigger campaigns using APIs - Code examples
 
 # Trigger campaigns using APIs - Code examples
 
-Below code snippets are using sample Adobe Journey Optimizer API-triggered campaigns.
+Below code snippets are using sample Adobe Journey Optimizer API triggered campaigns.
 
-For each of these examples to run, you first have to create your API-triggered campaigns in the user interface and get ready with your Bearer token and API key. Note that these examples are written in curl but we support the language of your choice.
+For each of these examples to run, you first have to create your API triggered campaigns in the user interface and get ready with your Bearer token and API key. Note that these examples are written in curl but we support the language of your choice.
 
 A detailed description of the API is available [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
 
@@ -218,7 +218,7 @@ A detailed description of the API is available [here](https://developer.adobe.co
 
 </p>
 
-<summary>Example 7: This example is to execute API-triggered marketing campaigns to a given audience using API with contextual attributes. We need to pass the campaign ID in our Audience API and, if contextual atributes are part of the message, then they will be passed in the payload like below.</summary>
+<summary>Example 7: This example is to execute API triggered marketing campaigns to a given audience using API with contextual attributes. We need to pass the campaign ID in our Audience API and, if contextual atributes are part of the message, then they will be passed in the payload like below.</summary>
 <p>
 
 ```json
