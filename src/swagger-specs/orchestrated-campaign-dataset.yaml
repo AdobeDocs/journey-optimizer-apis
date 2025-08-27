@@ -1,0 +1,300 @@
+openapi: 3.0.0
+info:
+  title: Validate or Enable Orchestrated Campaign Extension on Dataset
+  version: 1.0.0
+  description: |
+    Use this API to validate or enable the 'Orchestrated Campaign' extension on a dataset for use with Orchestrated Campaigns in Adobe Journey Optimizer. 
+
+    Once enabled, the dataset becomes available to orchestration campaigns.
+
+    **Constraints:**
+    - Dataset must be associated with a mode-based schema.
+    - Schema must have a primary key and version descriptor.
+    - Dataset cannot be a System dataset or a profile-enabled dataset.
+    - Dataset must be of CDC type.
+
+
+servers:
+  - url: https://platform.adobe.io/ajo/relational
+
+security:
+  - imsUserToken: []
+
+paths:
+  /modeler/datasets/{datasetId}/extensions/validation:
+    get:
+      operationId: validateOrchestratedCampaignExtensionOnDataset
+      tags:
+        - DatasetEnablement
+      summary: Validate if Orchestrated Campaign extension is applicable for a single dataset
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/datasetId'
+        - $ref: '#/components/parameters/x-gw-ims-org-id' 
+        - $ref: '#/components/parameters/x-request-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+      responses:
+        '200':
+          description: Dataset validated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datasetJobResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Internal Server Error. An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /modeler/datasets/extensions/enablement:
+    post:
+      operationId: enableOrchestratedCampaignExtensionOnDataset
+      tags:
+        - DatasetEnablement
+      summary: "Enable Orchestrated Campaign extension for datasets. Currently, only one dataset can be enabled at a time."
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/x-gw-ims-org-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+        - $ref: '#/components/parameters/x-request-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/datasetJobRequest'
+      responses:
+        201:
+          description: "Dataset enablement requests created successfully."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/datasetJobResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: "Internal Server Error: An unexpected error occurred."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /modeler/datasets/extensions/enablement/jobs/{jobId}:
+    get:
+      operationId: getDatasetExtensionEnablementStatus
+      tags:
+        - DatasetEnablement
+      summary: "Get the status of a dataset extension enablement job"
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/x-gw-ims-org-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+        - $ref: '#/components/parameters/x-request-id'
+        - in: path
+          name: jobId
+          schema:
+            type: string
+          required: true
+          description: "Job Id of the dataset enablement request"
+      responses:
+        '200':
+          description: "Dataset enablement job status retrieved successfully."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datasetJobResponse'
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: "Internal Server Error: An unexpected error occurred."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+components:
+  parameters:
+    x-gw-ims-org-id:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization ID.
+      required: true
+      schema:
+        type: string
+    x-sandbox-name:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name.
+      required: true
+      schema:
+        type: string
+    x-user-token:
+      name: x-user-token
+      in: header
+      description: The access token for the user on whose behalf this call is made. If present, use this token instead of the token in the authorization header.
+      required: false
+      schema:
+        type: string
+    x-request-id:
+      name: x-request-id
+      in: header
+      description: A unique string to identify the request, MUST be unique for each request.
+      required: false
+      schema:
+        type: string
+    x-api-key:
+      name: x-api-key
+      in: header
+      description: Specific API key for your unique Journey Orchestration configuration {API_KEY}
+      required: true
+      schema:
+        type: string
+    datasetId:
+      name: datasetId
+      in: path
+      description: Dataset Id on which Campaign Orchestration Extension needs to be validated or enabled
+      required: true
+      schema:
+        type: string
+    jobId:
+      name: jobId
+      in: path
+      description: Job Id recieved post submission of the dataset enablement request
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    imsUserToken: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    datasetJobRequest:
+      type: object
+      required:
+        - datasetIds
+      properties:
+        datasetIds:
+          type: array
+          description: IDs of the datasets to be enabled for Campaign Orchestration Extension
+          items:
+            type: string
+          example: [ "dataset1", "dataset2" ]
+    datasetJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: "Job id for tracking the dataset extension enablement request"
+        datasetId:
+          type: string
+          description: "Dataset id that was validated or enabled"
+        datasetName:
+          type: string
+          description: "Name of the dataset"
+        jobStatus:
+          type: string
+          enum: [PENDING, IN_PROGRESS, COMPLETED, FAILED, TIMEOUT]
+          description: "Status of the job"
+        jobState:
+          type: string
+          enum: [VALIDATED, ACKNOWLEDGED, DDL_APPLIED, DATA_COPIED]
+          description: "Current state of the job"
+        submittedBy:
+          type: string
+          description: "The IMS user ID of who submitted the dataset updation request."   
+          example: A5562A9C64003F290A495E88@fa9b251563ec3409495eab.e
+        submittedAtEpochMilli:
+          type: integer
+          description: "The initial updated time in UTC, formatted in ISO 8601."
+          example: 1719436800000
+        modifiedAtEpochMilli:
+          type: integer
+          description: "The last update time in UTC, formatted in ISO 8601."
+          example: 1719436800000
+    
+    errorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "the error type"
+          example: "https://ns.adobe.com/aep/errors/CJMDMS-100193-400"
+        title:
+          type: string
+          description: "the error title"
+          example: "An error has occurred"
+        status:
+          description: "the error status"
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "An error has occurred"
+        unixTimeStampMs:
+          type: integer
+          description: "the unix timestamp in milliseconds"
+          example: 1719436800000
+        code:
+          type: string
+          description: "the error code"
+          example: "CJMDMS-100193-400"

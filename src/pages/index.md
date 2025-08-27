@@ -55,4 +55,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Simulation APIs](references/simulations.md)
 
+[Validate or enable orchestrated campaign extension on dataset](references/orchestrated-campaign-dataset.md)
+
 <br/><br/>
