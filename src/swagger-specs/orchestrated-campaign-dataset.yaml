@@ -3,19 +3,21 @@ info:
   title: Validate or Enable Orchestrated Campaign Extension on Dataset
   version: 1.0.0
   description: |
-    Use this API to validate or enable the 'Orchestrated Campaign' extension on a dataset for use with Orchestrated Campaigns in Adobe Journey Optimizer. 
+    Use these APIs to validate or enable the **Orchestrated Campaign extension** on a **dataset**, making it available for use with **Orchestrated Campaigns** in **Adobe Journey Optimizer**.
 
     Once enabled, the dataset becomes available to orchestration campaigns.
 
-    **Constraints:**
-    - Dataset must be associated with a mode-based schema.
-    - Schema must have a primary key and version descriptor.
-    - Dataset cannot be a System dataset or a profile-enabled dataset.
-    - Dataset must be of CDC type.
+    **Constraints for Enabling Orchestrated Campaign Extension on a Dataset**
+    - **Dataset** must be associated with a **model-based schema**.
+    - **Dataset** must not be a **System dataset** or a **Profile-enabled dataset**.
+    - **Schema behavior** must be set to **record**. (Schemas with behavior **timeseries** are not supported.)
+    - **Schema** must define both a **primary key** and a **version descriptor**.
+    - **Dataset** must be of **CDC (Change Data Capture)** type.
 
 
 servers:
   - url: https://platform.adobe.io/ajo/relational
+  - url: https://platform-stage.adobe.io/ajo/relational
 
 security:
   - imsUserToken: []
@@ -26,7 +28,7 @@ paths:
       operationId: validateOrchestratedCampaignExtensionOnDataset
       tags:
         - DatasetEnablement
-      summary: Validate if Orchestrated Campaign extension is applicable for a single dataset
+      summary: Validate if Orchestrated Campaign extension can be applied on a dataset
       security:
         - imsUserToken: [ ]
       parameters:
@@ -41,7 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/datasetJobResponse'
+                $ref: '#/components/schemas/datasetValidationResponse'
         '400':
           description: Bad Request
           content:
@@ -72,7 +74,11 @@ paths:
       operationId: enableOrchestratedCampaignExtensionOnDataset
       tags:
         - DatasetEnablement
-      summary: "Enable Orchestrated Campaign extension for datasets. Currently, only one dataset can be enabled at a time."
+      summary: "Enable Orchestrated Campaign extension for datasets"
+      description: >
+        Currently, only `one dataset` can be enabled at a time.  
+        This is an asynchronous API that performs multiple tasks in the background.  
+        To check the latest status, use the provided `jobId`, or fetch the dataset details with `datasetId` using `Datasets APIs` to check the extension status.
       security:
         - imsUserToken: [ ]
       parameters:
@@ -237,7 +243,20 @@ components:
           description: IDs of the datasets to be enabled for Campaign Orchestration Extension
           items:
             type: string
-          example: [ "dataset1", "dataset2" ]
+          example: [ "dataset1"]
+    datasetValidationResponse:
+      type: object
+      properties:
+        datasetId:
+          type: string
+          description: "Dataset id that was validated or enabled"
+        datasetName:
+          type: string
+          description: "Name of the dataset"
+        extensionSupported:
+          type: boolean
+          description: "Whether the extension is supported for the dataset"
+          example: true
     datasetJobResponse:
       type: object
       properties:
@@ -278,18 +297,31 @@ components:
         type:
           type: string
           description: "the error type"
-          example: "https://ns.adobe.com/aep/errors/CJMDMS-100193-400"
+          example: "http://ns.adobe.com/aep/errors/CJMDMS-100169-400"
         title:
           type: string
           description: "the error title"
-          example: "An error has occurred"
+          example: "Extension already enabled on dataset"
+        path:
+          type: string
+          description: "the error path"
+          example: "/modeler/datasets/extensions/enablement"
+        dynamicErrorAttributes:
+          type: object
+          additionalProperties:
+            type: string
+          description: >
+            Key-value pairs containing context-specific attributes for the error.  
+            The keys are dynamic and vary depending on the error scenario.  
+            For example, it may include identifiers like `datasetId`, `sandboxId`, or other metadata.
+          example: { "dataset": "68af1be6244b7fbda18ed348" }
         status:
           description: "the error status"
           type: integer
           example: 400
-        message:
+        errorMessage:
           type: string
-          example: "An error has occurred"
+          example: "The orchestrated campaign extension is already enabled on dataset 68af1be6244b7fbda18ed348."
         unixTimeStampMs:
           type: integer
           description: "the unix timestamp in milliseconds"
