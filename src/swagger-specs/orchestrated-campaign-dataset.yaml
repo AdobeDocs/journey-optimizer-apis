@@ -7,6 +7,68 @@ info:
 
     Once enabled, the dataset becomes available to orchestration campaigns.
 
+    **API paths**:
+    - Journey Optimizer Gateway URL {JO_HOST} : https://platform.adobe.io
+    - Base path for this API {BASE_PATH} : **/ajo/relational**
+    - Example of a complete path: https://platform.adobe.io/ajo/relational
+
+    **Required headers**:
+    - All calls require the authentication headers **Authorization**,
+    **x-api-key**, and **x-gw-ims-org-id**.
+    - All resources in Experience Platform and Journey Optimizer are isolated to specific virtual sandboxes. All requests
+    to these APIs require the header **x-sandbox-name** whose value is the all-lowercase name of the sandbox the operation will take place in (for example, *'prod'*).
+    See the [sandboxes overview](https://experienceleague.adobe.com/docs/experience-platform/sandbox/home.html?) for more information.
+    - All requests with a payload in the request body (such as POST, PUT calls) must include the header **Content-Type** with the value *application/json*
+
+    **Notes about the Orchestrated Campaign extension in dataset**
+    - e.g. The extensions object in the [Datasets APIs](https://developer.adobe.com/experience-platform-apis/references/catalog/#operation/retrieveDataset) response contains metadata about extensions enabled on a dataset.
+    - For a dataset with the Orchestrated Campaign extension enabled, the response includes an adobe_journeyOptimizer entry describing the extension status and provisioning job details.
+    - Once enabled, the dataset becomes available to orchestration campaigns.
+    - When the Orchestrated Campaign extension adobe_journeyOptimizer is enabled successfully, the **extensions** object in the response includes the following:
+        ```
+        {
+            "extensions": {
+                "adobe_journeyOptimizer": {
+                    "enabled": true,
+                    "status": "COMPLETED",
+                    "internalState": {
+                        "jobId": "6d374538-b8f0-4985-8a1e-d8d609884545",
+                        "startTime": "2025-06-24T11:15:51Z",
+                        "endTime": "2025-06-24T11:16:04Z",
+                        "jobState": "DDL_APPLIED"
+                    }
+                }
+            }
+        }
+        ```
+    - When the Orchestrated Campaign extension adobe_journeyOptimizer enablement fails, the **extensions** object in the response includes the following:
+        ```
+        {
+            "extensions": {
+                "adobe_journeyOptimizer": {
+                    "status": "FAILED",
+                    "internalState": {
+                        "jobId": "6d374538-b8f0-4985-8a1e-d8d609884545",
+                        "startTime": "2025-06-24T11:15:51Z",
+                        "endTime": "2025-06-24T11:16:04Z",
+                        "jobState": "VALIDATED"
+                    },
+                    "error": {
+                        "errorCode": "CJMDMS-100169-400",
+                        "errorDesc": "The orchestrated campaign extension is already enabled on dataset 68af1be6244b7fbda18ed348."
+                    }
+                }
+            }
+        }
+        ```
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `COMPLETED` if the extension is enabled successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `FAILED` if the extension is not enabled successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `IN_PROGRESS` if the extension is being enabled.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `PENDING` if the extension is not enabled yet.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `VALIDATED` if the extension is validated successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `ACKNOWLEDGED` if the extension is acknowledged successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `DDL_APPLIED` if the extension is applied successfully.
+
     **Constraints for Enabling Orchestrated Campaign Extension on a Dataset**
     - **Dataset** must be associated with a **model-based schema**.
     - **Dataset** must not be a **System dataset** or a **Profile-enabled dataset**.
@@ -29,6 +91,15 @@ paths:
       tags:
         - DatasetEnablement
       summary: Validate if Orchestrated Campaign extension can be applied on a dataset
+      description: |
+        This API validates if the Orchestrated Campaign extension can be applied on a dataset.
+        It checks if the dataset meets the following criteria:
+        - Dataset must be associated with a model-based schema.
+        - Dataset must not be a System dataset or a Profile-enabled dataset.
+        - Schema behavior must be set to record. (Schemas with behavior **timeseries** are not supported.)
+        - Schema must define both a primary key and a version descriptor.
+        - Dataset must be of CDC (Change Data Capture) type.
+        - Orchestrated Campaign extension is not enabled on the dataset or in progress.
       security:
         - imsUserToken: [ ]
       parameters:
@@ -75,10 +146,12 @@ paths:
       tags:
         - DatasetEnablement
       summary: "Enable Orchestrated Campaign extension for datasets"
-      description: >
-        Currently, only `one dataset` can be enabled at a time.  
-        This is an asynchronous API that performs multiple tasks in the background.  
-        To check the latest status, use the provided `jobId`, or fetch the dataset details with `datasetId` using `Datasets APIs` to check the extension status.
+      description: |
+        Currently, this API supports enabling Orchestrated Campaign extension for only one dataset at a time.  
+        - This is an asynchronous API that performs multiple tasks in the background.  
+        - To check the latest status, use the provided `jobId` and call [Get Dataset Extension Enablement Job Status](https://developer.adobe.com/journey-optimizer-apis/references/orchestrated-campaign-dataset/#operation/getDatasetExtensionEnablementJobStatus) API.
+        - Alternatively, to check the status of the extension on dataset, fetch the dataset details with `datasetId` using [Datasets APIs](https://developer.adobe.com/experience-platform-apis/references/catalog/#operation/retrieveDataset) to check the extension status.
+        - The response will contain the `jobId` of the enablement request.
       security:
         - imsUserToken: [ ]
       parameters:
