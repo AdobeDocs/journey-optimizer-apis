@@ -200,7 +200,7 @@ paths:
                 $ref: '#/components/schemas/errorResponse'
   /modeler/datasets/extensions/enablement/jobs/{jobId}:
     get:
-      operationId: getDatasetExtensionEnablementStatus
+      operationId: getDatasetExtensionEnablementJobStatus
       tags:
         - DatasetEnablement
       summary: "Get the status of a dataset extension enablement job"
