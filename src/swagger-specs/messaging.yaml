@@ -4,25 +4,8 @@ openapi: 3.0.0
 info:
   title: Trigger campaigns using APIs
   description: "
-  Interactive Message Execution API helps you with messaging capabilities. Using this REST API,
-  you can send marketing or transactional messages using a Campaign Id using Email, SMS and Push channels. You will need the Campaign ID to send message using API.<br/><br/>
-  <b>Related documentation:</b><br/>
-  To learn more about the API triggered Campaign creation flow and supported channels, refer to product documentation
-  <a href='https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html'>here</a><br/><br/>
-  <b>Code examples:</b><br/>
-  Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples/'>this page</a>.<br/><br/>
-  <b>API path:</b><br/>
-  Base path for Interactive Message Execution APIs: https://platform.adobe.io/ajo/im/executions <br/>
-  Example of a complete path: https://platform.adobe.io/ajo/im/executions/unitary <br/><br/><br/>
-  <b>Required headers:</b><br/>
-  All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key.
-  For more information on how to obtain these values, see the <a href='https://developer.adobe.com/journey-optimizer-apis/references/authentication/'>authentication tutorial</a>.
-  "
+  Interactive Message Execution API helps you with messaging capabilities. Using this REST API, you can send marketing or transactional messages using a Campaign Id using Email, SMS and Push channels. You will need the Campaign ID to send message using API.<br/><br/><b>Related documentation:</b><br/> To learn more about the API triggered Campaign creation flow and supported channels, refer to the product documentation<a href='https://experienceleague.adobe.com/docs/journey-optimizer/using/campaigns/create-campaign.html'>here</a><br/><br/><b>Code examples:</b><br/>Examples of how to trigger Campaigns using various channels are available in <a href='https://developer.adobe.com/journey-optimizer-apis/references/messaging-samples/'>this page</a>.<br/><br/><b>API path:</b><br/>Base path for Interactive Message Execution APIs: https://platform.adobe.io/ajo/im/executions<br/>Example of a complete path: https://platform.adobe.io/ajo/im/executions/unitary<br/><br/><b>Required headers:</b><br/>All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key. For more information on how to obtain these values, see the <a href='https://developer.adobe.com/journey-optimizer-apis/references/authentication/'>authentication tutorial</a>.<br/><br/><b>Call timeout</b><br/>The call to the Interactive Message Execution REST API has a timeout of 60 sec. However internal retries are in place in case of unexpected timeouts to guarantee the delivery."
   version: "1.0 - GA"
-  
-externalDocs:
-  description: Journey Optimizer Campaign Documentation
-  url: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/API triggered-campaigns
 
 security:
   - imsUserToken: [ ]
