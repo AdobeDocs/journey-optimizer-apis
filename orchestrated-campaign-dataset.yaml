@@ -1,0 +1,405 @@
+openapi: 3.0.0
+info:
+  title: Validate or Enable Orchestrated Campaign Extension on Dataset
+  version: 1.0.0
+  description: |
+    Use these APIs to validate or enable the **Orchestrated Campaign extension** on a **dataset**, making it available for use with **Orchestrated Campaigns** in **Adobe Journey Optimizer**.
+
+    Once enabled, the dataset becomes available to orchestration campaigns.
+
+    **API paths**:
+    - Journey Optimizer Gateway URL {JO_HOST} : https://platform.adobe.io
+    - Base path for this API {BASE_PATH} : **/ajo/relational**
+    - Example of a complete path: https://platform.adobe.io/ajo/relational
+
+    **Required headers**:
+    - All calls require the authentication headers **Authorization**,
+    **x-api-key**, and **x-gw-ims-org-id**.
+    - All resources in Experience Platform and Journey Optimizer are isolated to specific virtual sandboxes. All requests
+    to these APIs require the header **x-sandbox-name** whose value is the all-lowercase name of the sandbox the operation will take place in (for example, *'prod'*).
+    See the [sandboxes overview](https://experienceleague.adobe.com/docs/experience-platform/sandbox/home.html?) for more information.
+    - All requests with a payload in the request body (such as POST, PUT calls) must include the header **Content-Type** with the value *application/json*
+
+    **Notes about the Orchestrated Campaign extension in dataset**
+    - e.g. The extensions object in the [Datasets APIs](https://developer.adobe.com/experience-platform-apis/references/catalog/#operation/retrieveDataset) response contains metadata about extensions enabled on a dataset.
+    - For a dataset with the Orchestrated Campaign extension enabled, the response includes an adobe_journeyOptimizer entry describing the extension status and provisioning job details.
+    - Once enabled, the dataset becomes available to orchestration campaigns.
+    - When the Orchestrated Campaign extension adobe_journeyOptimizer is enabled successfully, the **extensions** object in the response includes the following:
+        ```
+        {
+            "extensions": {
+                "adobe_journeyOptimizer": {
+                    "enabled": true,
+                    "status": "COMPLETED",
+                    "internalState": {
+                        "jobId": "6d374538-b8f0-4985-8a1e-d8d609884545",
+                        "startTime": "2025-06-24T11:15:51Z",
+                        "endTime": "2025-06-24T11:16:04Z",
+                        "jobState": "DDL_APPLIED"
+                    }
+                }
+            }
+        }
+        ```
+    - When the Orchestrated Campaign extension adobe_journeyOptimizer enablement fails, the **extensions** object in the response includes the following:
+        ```
+        {
+            "extensions": {
+                "adobe_journeyOptimizer": {
+                    "status": "FAILED",
+                    "internalState": {
+                        "jobId": "6d374538-b8f0-4985-8a1e-d8d609884545",
+                        "startTime": "2025-06-24T11:15:51Z",
+                        "endTime": "2025-06-24T11:16:04Z",
+                        "jobState": "VALIDATED"
+                    },
+                    "error": {
+                        "errorCode": "CJMDMS-100169-400",
+                        "errorDesc": "The orchestrated campaign extension is already enabled on dataset 68af1be6244b7fbda18ed348."
+                    }
+                }
+            }
+        }
+        ```
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `COMPLETED` if the extension is enabled successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `FAILED` if the extension is not enabled successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `IN_PROGRESS` if the extension is being enabled.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the status will be `PENDING` if the extension is not enabled yet.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `VALIDATED` if the extension is validated successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `ACKNOWLEDGED` if the extension is acknowledged successfully.
+    - For Orchestrated Campaign extension **adobe_journeyOptimizer**, the jobState will be `DDL_APPLIED` if the extension is applied successfully.
+
+    **Constraints for Enabling Orchestrated Campaign Extension on a Dataset**
+    - **Dataset** must be associated with a **model-based schema**.
+    - **Dataset** must not be a **System dataset** or a **Profile-enabled dataset**.
+    - **Schema behavior** must be set to **record**. (Schemas with behavior **timeseries** are not supported.)
+    - **Schema** must define both a **primary key** and a **version descriptor**.
+    - **Dataset** must be of **CDC (Change Data Capture)** type.
+
+
+servers:
+  - url: https://platform.adobe.io/ajo/relational
+  - url: https://platform-stage.adobe.io/ajo/relational
+
+security:
+  - imsUserToken: []
+
+paths:
+  /modeler/datasets/{datasetId}/extensions/validation:
+    get:
+      operationId: validateOrchestratedCampaignExtensionOnDataset
+      tags:
+        - DatasetEnablement
+      summary: Validate if Orchestrated Campaign extension can be applied on a dataset
+      description: |
+        This API validates if the Orchestrated Campaign extension can be applied on a dataset.
+        It checks if the dataset meets the following criteria:
+        - Dataset must be associated with a model-based schema.
+        - Dataset must not be a System dataset or a Profile-enabled dataset.
+        - Schema behavior must be set to record. (Schemas with behavior **timeseries** are not supported.)
+        - Schema must define both a primary key and a version descriptor.
+        - Dataset must be of CDC (Change Data Capture) type.
+        - Orchestrated Campaign extension is not enabled on the dataset or in progress.
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/datasetId'
+        - $ref: '#/components/parameters/x-gw-ims-org-id' 
+        - $ref: '#/components/parameters/x-request-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+      responses:
+        '200':
+          description: Dataset validated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datasetValidationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Internal Server Error. An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /modeler/datasets/extensions/enablement:
+    post:
+      operationId: enableOrchestratedCampaignExtensionOnDataset
+      tags:
+        - DatasetEnablement
+      summary: "Enable Orchestrated Campaign extension for datasets"
+      description: |
+        Currently, this API supports enabling Orchestrated Campaign extension for only one dataset at a time.  
+        - This is an asynchronous API that performs multiple tasks in the background.  
+        - To check the latest status, use the provided `jobId` and call [Get Dataset Extension Enablement Job Status](https://developer.adobe.com/journey-optimizer-apis/references/orchestrated-campaign-dataset/#operation/getDatasetExtensionEnablementJobStatus) API.
+        - Alternatively, to check the status of the extension on dataset, fetch the dataset details with `datasetId` using [Datasets APIs](https://developer.adobe.com/experience-platform-apis/references/catalog/#operation/retrieveDataset) to check the extension status.
+        - The response will contain the `jobId` of the enablement request.
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/x-gw-ims-org-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+        - $ref: '#/components/parameters/x-request-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/datasetJobRequest'
+      responses:
+        201:
+          description: "Dataset enablement requests created successfully."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/datasetJobResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        500:
+          description: "Internal Server Error: An unexpected error occurred."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+  /modeler/datasets/extensions/enablement/jobs/{jobId}:
+    get:
+      operationId: getDatasetExtensionEnablementJobStatus
+      tags:
+        - DatasetEnablement
+      summary: "Get the status of a dataset extension enablement job"
+      security:
+        - imsUserToken: [ ]
+      parameters:
+        - $ref: '#/components/parameters/x-api-key'
+        - $ref: '#/components/parameters/x-gw-ims-org-id'
+        - $ref: '#/components/parameters/x-sandbox-name'
+        - $ref: '#/components/parameters/x-request-id'
+        - in: path
+          name: jobId
+          schema:
+            type: string
+          required: true
+          description: "Job Id of the dataset enablement request"
+      responses:
+        '200':
+          description: "Dataset enablement job status retrieved successfully."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/datasetJobResponse'
+        '400':
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '403':
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: "Internal Server Error: An unexpected error occurred."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+components:
+  parameters:
+    x-gw-ims-org-id:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization ID.
+      required: true
+      schema:
+        type: string
+    x-sandbox-name:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name.
+      required: true
+      schema:
+        type: string
+    x-user-token:
+      name: x-user-token
+      in: header
+      description: The access token for the user on whose behalf this call is made. If present, use this token instead of the token in the authorization header.
+      required: false
+      schema:
+        type: string
+    x-request-id:
+      name: x-request-id
+      in: header
+      description: A unique string to identify the request, MUST be unique for each request.
+      required: false
+      schema:
+        type: string
+    x-api-key:
+      name: x-api-key
+      in: header
+      description: Specific API key for your unique Journey Orchestration configuration {API_KEY}
+      required: true
+      schema:
+        type: string
+    datasetId:
+      name: datasetId
+      in: path
+      description: Dataset Id on which Campaign Orchestration Extension needs to be validated or enabled
+      required: true
+      schema:
+        type: string
+    jobId:
+      name: jobId
+      in: path
+      description: Job Id recieved post submission of the dataset enablement request
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    imsUserToken: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    datasetJobRequest:
+      type: object
+      required:
+        - datasetIds
+      properties:
+        datasetIds:
+          type: array
+          description: IDs of the datasets to be enabled for Campaign Orchestration Extension
+          items:
+            type: string
+          example: [ "dataset1"]
+    datasetValidationResponse:
+      type: object
+      properties:
+        datasetId:
+          type: string
+          description: "Dataset id that was validated or enabled"
+        datasetName:
+          type: string
+          description: "Name of the dataset"
+        extensionSupported:
+          type: boolean
+          description: "Whether the extension is supported for the dataset"
+          example: true
+    datasetJobResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: "Job id for tracking the dataset extension enablement request"
+        datasetId:
+          type: string
+          description: "Dataset id that was validated or enabled"
+        datasetName:
+          type: string
+          description: "Name of the dataset"
+        jobStatus:
+          type: string
+          enum: [PENDING, IN_PROGRESS, COMPLETED, FAILED, TIMEOUT]
+          description: "Status of the job"
+        jobState:
+          type: string
+          enum: [VALIDATED, ACKNOWLEDGED, DDL_APPLIED, DATA_COPIED]
+          description: "Current state of the job"
+        submittedBy:
+          type: string
+          description: "The IMS user ID of who submitted the dataset updation request."   
+          example: A5562A9C64003F290A495E88@fa9b251563ec3409495eab.e
+        submittedAtEpochMilli:
+          type: integer
+          description: "The initial updated time in UTC, formatted in ISO 8601."
+          example: 1719436800000
+        modifiedAtEpochMilli:
+          type: integer
+          description: "The last update time in UTC, formatted in ISO 8601."
+          example: 1719436800000
+    
+    errorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "the error type"
+          example: "http://ns.adobe.com/aep/errors/CJMDMS-100169-400"
+        title:
+          type: string
+          description: "the error title"
+          example: "Extension already enabled on dataset"
+        path:
+          type: string
+          description: "the error path"
+          example: "/modeler/datasets/extensions/enablement"
+        dynamicErrorAttributes:
+          type: object
+          additionalProperties:
+            type: string
+          description: >
+            Key-value pairs containing context-specific attributes for the error.  
+            The keys are dynamic and vary depending on the error scenario.  
+            For example, it may include identifiers like `datasetId`, `sandboxId`, or other metadata.
+          example: { "dataset": "68af1be6244b7fbda18ed348" }
+        status:
+          description: "the error status"
+          type: integer
+          example: 400
+        errorMessage:
+          type: string
+          example: "The orchestrated campaign extension is already enabled on dataset 68af1be6244b7fbda18ed348."
+        unixTimeStampMs:
+          type: integer
+          description: "the unix timestamp in milliseconds"
+          example: 1719436800000
+        code:
+          type: string
+          description: "the error code"
+          example: "CJMDMS-100193-400"

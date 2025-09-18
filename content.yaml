@@ -1,0 +1,2143 @@
+openapi: 3.0.0
+info:
+  description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates">Journey Optimizer documentation</a>.
+  version: 0.0.1
+  title: Content API.
+
+security:
+  - imsUserToken: []
+
+servers:
+  - url: https://platform.adobe.io/ajo/content
+  - url: https://platform-stage.adobe.io/ajo/content
+
+paths:
+  /templates:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: createTemplate
+      summary: Create New Content Template.
+      description: >-
+        This API could be used for creating a new content template<br>
+        <b>subType</b> field is only supported for content template with code channel
+      tags:
+        - Content template API
+      requestBody:
+        description: API to create a new Content Template.
+        content:
+          'application/vnd.adobe.ajo.template.v1+json':
+            schema:
+              $ref: '#/components/schemas/content-template'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/201'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+    get:
+      parameters:
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
+      operationId: getTemplates
+      summary: List Content Templates.
+      description: >-
+        <ol>
+        Content Templates Listing API. There are few attributes which are filterable.
+        <li>
+          id - Supported operations are equals and not equals.
+        </li>
+        <li>
+          name - Supports operations are regex and contains.  
+        </li>
+        <li>
+          templateType - Supported operations are equal and not equals, and allowed values are [ "html", "html_primary_page", "html_sub_page", "content"]
+        </li>
+        <li>
+          channels - Supported operations are equals and not equals.
+        </li>
+        <li>
+          createdAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+          createdBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+          modifiedAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+          modifiedBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+          origin - Supported operations are equals and not equals.
+        </li>
+        </ol>
+      tags:
+        - Content template API
+      responses:
+        200:
+          description: Content Template Listing API response.
+          content:
+            application/vnd.adobe.ajo.template-list.v1+json:
+              schema:
+                $ref: '#/components/schemas/template-page-response'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+  /templates/{templateId}:
+    parameters:
+      - name: templateId
+        in: path
+        description: Content Template id
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+            - 'application/vnd.adobe.ajo.template.v1+json'
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    get:
+      operationId: getTemplate
+      summary: Fetch Content Template By Id.
+      description: Fetch Content template detail with given id.
+      tags:
+        - Content template API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.template.v1+json:
+              schema:
+                $ref: '#/components/schemas/content-template-with-audit'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+    put:
+      operationId: putTemplate
+      summary: Update Content Template By Id.
+      description: >-
+        API to update Content Template By Id.<br>
+        <b>subType</b> field is only supported for content template with code channel
+      tags:
+        - Content template API
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        description: New/Updated Content Template Payload.
+        content:
+          'application/vnd.adobe.ajo.template.v1+json':
+            schema:
+              $ref: '#/components/schemas/content-template'
+        required: true
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'
+
+    delete:
+      operationId: deleteTemplate
+      summary: Delete Content Template By Id.
+      description: Delete Content Template by Id.
+      tags:
+        - Content template API
+      responses:
+        204:
+          $ref: '#/components/responses/204DELETE'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+    patch:
+      operationId: patchTemplate
+      summary: Patch Content Template By Id.
+      description: >-
+        Patch Content Template with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
+        <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
+        Supported paths are ["/name", "/description" ]
+      tags:
+        - Content template API
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        content:
+          'application/json-patch+json':
+            schema:
+              $ref: "#/components/schemas/patch-request"
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-template-with-audit'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'
+
+  /fragments:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: createFragment
+      summary: Create New Content Fragment.
+      description: >-
+        This API could be used for creating a new content fragment<br>
+      tags:
+        - Content fragment API
+      requestBody:
+        description: new fragment
+        content:
+          'application/vnd.adobe.ajo.fragment.v1.0+json':
+            schema:
+              $ref: '#/components/schemas/content-fragment'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/201'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+    get:
+      parameters:
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/property'
+      operationId: getFragments
+      summary: List Content Fragments.
+      description:
+        <ol>
+        Content Fragment Listing API. There are few attributes which are filterable.
+        <li>
+        id - Supported operations are equals and not equals.
+        </li>
+        <li>
+        name - Supports operations are regex and contains.
+        </li>
+        <li>
+        type - Supported operations are equal and not equals, and allowed values are [ "html"]
+        </li>
+        <li>
+        channels - Supported operations are equals and not equals.
+        </li>
+        <li>
+        createdAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+        createdBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+        modifiedAt - Supported operations are less-than, less-than-equal-to, greater-than, greater-than-equal-to, equals-to.
+        </li>
+        <li>
+        modifiedBy - Supported operations are equals, not equals and regex.
+        </li>
+        <li>
+        origin - Supported operations are equals and not equals.
+        </li>
+        </ol>
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Content Fragment Listing API response.
+          content:
+            application/vnd.adobe.ajo.fragment-list.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/fragment-page-response'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+  /fragments/{fragmentId}:
+    parameters:
+      - name: fragmentId
+        in: path
+        description: Content fragment id
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+            - 'application/vnd.adobe.ajo.fragment.v1.0+json'
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+
+    get:
+      operationId: getFragment
+      summary: Fetch Content Fragment By Id.
+      description: Fetch Content Fragment detail by Id.
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/content-fragment-with-audit'
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+    put:
+      operationId: putFragment
+      summary: Update Content Fragment By Id.
+      description: >-
+        API to update Content Fragment By Id.
+      tags:
+        - Content fragment API
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        description: New/Updated Content Fragment Payload.
+        content:
+          'application/vnd.adobe.ajo.fragment.v1.0+json':
+            schema:
+              $ref: '#/components/schemas/content-fragment'
+        required: true
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        409:
+          $ref: '#/components/responses/409'
+
+    patch:
+      operationId: patchFragment
+      summary: Patch Content Fragment By Id.
+      description: >-
+        Patch fragment with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
+        Path supported: "/name", "/description"
+      tags:
+        - Content fragment API
+      parameters:
+        - $ref: '#/components/parameters/IfMatchParam'
+      requestBody:
+        content:
+          'application/json-patch+json':
+            schema:
+              $ref: "#/components/schemas/patch-request"
+        required: true
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+  /fragments/publications:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+    post:
+      operationId: publishFragment
+      summary: Publish Content Fragment.
+      description: >-
+        API to publish fragment.<br>
+        Publishing a content fragment will freeze the content of the fragment. Notably, it is a pre-requisite to publish
+        a fragment  before activating / publishing a campaign / journey. Fragment Publication is an async process under
+        the hood which can take a few seconds. The status of the fragment publication can be fetched by lastPublicationStatus
+        API whereas the content of the last successful publication of a fragment can be fetched by the liveFragment API.
+      tags:
+        - Content fragment API
+      requestBody:
+        description: publish request body
+        content:
+          'application/vnd.adobe.ajo.fragment.publication.request.v1.0+json':
+            schema:
+              $ref: '#/components/schemas/publish-fragment-request'
+        required: true
+      responses:
+        202:
+          $ref: '#/components/responses/202'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+
+  /fragments/{fragmentId}/liveFragment:
+    parameters:
+      - name: fragmentId
+        in: path
+        description: Content fragment id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+
+    get:
+      operationId: getLiveFragment
+      summary: Fetch content of fragment's last successful publication
+      description: >-
+        Fetch content of fragment's last successful publication.
+        A fragment can have multiple publications. A publication can either be successful, in progress or can error out.
+        This API will be responsible for fetching the content of the last successful publication for a fragment.
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.publication.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/live-fragment-content'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+  /fragments/{fragmentId}/lastPublicationStatus:
+    parameters:
+      - name: fragmentId
+        in: path
+        description: Content fragment id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
+      - $ref: '#/components/parameters/RequestIdParam'
+
+    get:
+      operationId: getLastPublicationStatus
+      summary: Fetch status of last publication
+      description: >-
+        Fetch the status of last publication request for a content fragment by Id.
+        A fragment can have multiple publications. A publication can either be successful, in progress or can error out.
+        This API will be responsible for fetching the status of the last issued publication request for a fragment.
+      tags:
+        - Content fragment API
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/vnd.adobe.ajo.fragment.publication.v1.0+json:
+              schema:
+                $ref: '#/components/schemas/publishing-job-status'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+
+components:
+  securitySchemes:
+    imsUserToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    imsServiceToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    RequestIdParam:
+      in: header
+      name: x-request-id
+      description: A unique string to identify the request, MUST be unique for each request
+      required: false
+      schema:
+        type: string
+    APIKeyParam:
+      name: x-api-key
+      in: "header"
+      description: "API Key"
+      required: true
+      schema:
+        type: "string"
+        x-example: "cjm client"
+    ImsOrgIdParam:
+      name: x-gw-ims-org-id
+      in: header
+      description: Your Identity Management Services (IMS) Organization id
+      required: true
+      schema:
+        type: string
+    ImsUserTokenParam:
+      name: x-user-token
+      in: header
+      description: Your valid Identity Management Services (IMS) user token.
+      required: true
+      schema:
+        type: string
+    SandboxIdParam:
+      name: x-sandbox-id
+      in: header
+      description: Filter on platform sandbox id (required with service token)
+      required: false
+      schema:
+        type: string
+    SandboxNameParam:
+      name: x-sandbox-name
+      in: header
+      description: Filter on platform sandbox name
+      required: true
+      schema:
+        type: string
+    IfMatchParam:
+      name: If-Match
+      in: header
+      required: true
+      description: etag of resource to match before update of resource.
+      schema:
+        type: string
+    OptionalIfMatchParam:
+      name: If-Match
+      in: header
+      required: false
+      description: etag to match before update of resource.
+      schema:
+        type: string
+    SandboxName:
+      name: sandboxName
+      in: query
+      required: false
+      schema:
+        type: string
+    orderBy:
+      name: orderBy
+      description: >-
+        Sort parameter and direction for sorting the response.
+        Add the prefix as -/+ for desc/asc. If unspecified, the response will be sorted in desc order.
+      in: query
+      schema:
+        type: string
+        default: -modifiedAt
+      required: false
+      example: orderBy=%2BmodifiedAt.
+    limit:
+      name: limit
+      description: >-
+        Limit response to a specified positive number of objects.
+        Ex. limit=10
+      in: query
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 1000
+      required: false
+    start:
+      name: start
+      description: >-
+        Used for pagination. Specifies the criteria for next page
+        with respect to the property specified in orderBy.
+      in: query
+      schema:
+        type: string
+        format: byte
+      required: false
+      example: start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+    property:
+      name: property
+      description: >-
+        <p>Optional property filters. 
+        Filtering is supported on following properties: id, name, status, description, fragmentType, templateType, modifiedAt, createdAt, createdBy and modifiedBy
+        Ex. property=id==31e62feb-69b7-4e7b-8065-a921455c2c15&property=name~^test</p>
+      in: query
+      schema:
+        items:
+          type: string
+        type: array
+      required: false
+      example: property=name~^test
+
+  schemas:
+    headers:
+      title: Headers
+      description: List containing custom headers(key-value pair).
+      additionalProperties: true
+
+    content-template-with-audit:
+      title: Content Template with audit fields.
+      type: object
+      discriminator:
+        propertyName: templateType
+        mapping:
+          "html": '#/components/schemas/email-html-template-with-audit'
+          "html_primary_page": '#/components/schemas/primary-page-email-html-template-with-audit'
+          "html_sub_page": '#/components/schemas/sub-page-email-html-template-with-audit'
+          "content": '#/components/schemas/channel-template-with-audit'
+      required:
+        - name
+        - templateType
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          $ref: '#/components/schemas/template-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/template-source'
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
+
+    content-template-metadata:
+      title: Content Template metadata.
+      type: object
+      required:
+        - name
+        - templateType
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          $ref: '#/components/schemas/template-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/template-source'
+
+    content-template-listing-response:
+      title: Content Template
+      type: object
+      properties:
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
+      allOf:
+        - $ref: '#/components/schemas/content-template-metadata'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - $ref: '#/components/schemas/self-href'
+
+    content-template:
+      description: Content templates allow us to easily reuse custom content, facilitating accelerated and improved design process.<br>
+        <b>subType</b> field is only supported for content template with code channel
+      title: Content Template
+      type: object
+      discriminator:
+        propertyName: templateType
+        mapping:
+          "html": '#/components/schemas/email-html-template'
+          "html_primary_page": '#/components/schemas/primary-page-email-html-template'
+          "html_sub_page": '#/components/schemas/sub-page-email-html-template'
+          "content": '#/components/schemas/channel-template'
+      required:
+        - name
+        - templateType
+        - channels
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        templateType:
+          $ref: '#/components/schemas/template-type'
+        channels:
+          type: array
+          title: Channels
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/template-channel-enum'
+        source:
+          $ref: '#/components/schemas/template-source'
+        subType:
+          $ref: '#/components/schemas/template-sub-type-enum'
+
+    olac-labels:
+      title: OLAC Label Details
+      type: array
+      items:
+        type: string
+        example: 'custom/sensitive-data'
+
+    id:
+      type: string
+      title: Content Template Id.
+      description: Content Template Id.
+      example: 'b6d70a45-a149-453b-85ba-809a5d40066d'
+
+    name:
+      type: string
+      title: Content Name
+      description: Content Name
+      example: "Cyber Monday Sale - Header !!"
+      minLength: 1
+
+    description:
+      type: string
+      title: Description
+      description: Description
+      example: "Cyber Monday Sale - Header Banner!!"
+
+    template-type:
+      type: string
+      title: Template Type
+      description: Template Type
+      example: 'html'
+      enum: [ "html", "html_primary_page", "html_sub_page", "content" ]
+
+    template-source:
+      title: Template Source.
+      type: object
+      nullable: true
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/template-origin'
+        metadata:
+          title: MetaData
+          description: List containing custom properties(key-value pair).
+          additionalProperties: true
+
+    template-origin:
+      type: string
+      title: Origin
+      description: Content Template Origin/Source system.
+      enum:
+        - ajo
+        - aem
+        - external
+
+    html:
+      type: string
+      title: Email html
+      description: Email HTML
+      example: '<html> Hi {{profile.person.name}} its a great day to shop !! </html>'
+
+    editor-context:
+      title: Editor Context
+      description: Map containing custom properties(key-value pair).
+      additionalProperties: true
+
+    email-html:
+      description: Email HTML.
+      title: Email HTML
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+
+    email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type : object
+          properties:
+            template:
+              $ref: '#/components/schemas/email-html'
+          required:
+            - template
+
+    email-html-template-with-audit:
+      description: Email HTML Template With Audit Fields
+      title: Email HTML Template With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/email-html'
+          required:
+            - template
+
+    channel-template:
+      description: Content Template
+      title: Content Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              oneOf:
+                - $ref: '#/components/schemas/email-variant-detail'
+                - $ref: '#/components/schemas/in-app-variant-detail'
+                - $ref: '#/components/schemas/push-variant-detail'
+                - $ref: '#/components/schemas/sms-variant-detail'
+                - $ref: '#/components/schemas/direct-mail-variant-detail'
+          required:
+            - template
+
+    channel-template-with-audit:
+      description: Content Template With Audit Fields
+      title: Content Template With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              oneOf:
+                - $ref: '#/components/schemas/in-app-variant-detail'
+                - $ref: '#/components/schemas/push-variant-detail'
+                - $ref: '#/components/schemas/email-variant-detail'
+                - $ref: '#/components/schemas/sms-variant-detail'
+                - $ref: '#/components/schemas/direct-mail-variant-detail'
+          required:
+            - template
+
+    primary-page-email-html:
+      description: Primary Page Email HTML.
+      title: Primary Page Email HTML.
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      example:
+        html: '<html> Hi {{profile.person.name}}, Here is your Primary page Content Template !! </html>'
+        editorContext: { }
+
+    primary-page-email-html-template-with-audit:
+      description: Email HTML Template with Audit Fields
+      title: Email HTML Template with Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/primary-page-email-html'
+          required:
+            - template
+
+    primary-page-email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/primary-page-email-html'
+          required:
+            - template
+
+    sub-page-email-html:
+      description: Sub Page Email HTML.
+      title: Sub Page Email HTML.
+      type: object
+      required:
+        - html
+      properties:
+        html:
+          $ref: '#/components/schemas/html'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      example:
+        html: '<html> Hi {{profile.person.name}}, Here is your Sub page Content Template !! </html>'
+        editorContext: { }
+
+    sub-page-email-html-template-with-audit:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/sub-page-email-html'
+          required:
+            - template
+
+    sub-page-email-html-template:
+      description: Email HTML Template
+      title: Email HTML Template
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-template'
+        - type: object
+          properties:
+            template:
+              $ref: '#/components/schemas/sub-page-email-html'
+          required:
+            - template
+
+    landing-page-html-primary-page-template:
+      title: Landing Page Primary-Page HTML Template
+      type: object
+      properties:
+        html:
+          type: string
+          title: primary page
+          description: Primary page HTML
+          example: '<html></html>'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      required:
+        - html
+
+    landing-page-html-sub-page-template:
+      title: Landing Page Sub-Page HTML Template
+      type: object
+      properties:
+        html:
+          type: string
+          title: sub page
+          description: Sub page HTML
+          example: '<html></html>'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+      required:
+        - html
+
+    in-app-variant-detail:
+      type: object
+      properties:
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+        mobileParameters:
+          $ref: '#/components/schemas/mobile-parameters'
+        body:
+          $ref: '#/components/schemas/in-app-body'
+      additionalProperties: false
+      required:
+        - body
+
+    mobile-parameters:
+      title: Message Setting
+      description: List containing custom properties(key-value pair) from ACRITE.
+      nullable: true
+      additionalProperties: true
+
+    in-app-body:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/in-app-html-body'
+
+    in-app-html-body:
+      type: object
+      title: Html Body
+      properties:
+        html:
+          type: string
+          description: 'HTML/Text body string'
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - html
+
+    sms-variant-detail:
+      type: object
+      properties:
+        text:
+          type: string
+        messageType:
+          type: string
+          default: sms
+          nullable: true
+          enum:
+            - sms
+            - mms
+        title:
+          type: string
+          description: subject or title of the mms message
+          nullable: true
+        mediaUri:
+          type: string
+          description: Media url
+          nullable: true
+          example: https://www.adobe.com/adobe.jpg
+          maxLength: 2000
+      additionalProperties: false
+      required:
+        - text
+
+    push-variant-detail:
+      type: object
+      properties:
+        pushType:
+          type: string
+          nullable: true
+          enum:
+            - message
+            - silent
+          default: message
+        title:
+          type: string
+          description: push title
+          nullable: true
+          example: New Offers for you
+        message:
+          type: string
+          description: push message
+          nullable: true
+          example: Winter is here, Have you checked new offers on our latest collections.
+        appNames:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        ios:
+          description: Properties specific to ios devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-ios-specific-properties'
+        android:
+          description: Properties specific to Android devices only
+          allOf:
+            - $ref: '#/components/schemas/push-os-properties'
+            - $ref: '#/components/schemas/push-android-specific-properties'
+      additionalProperties: false
+
+    push-os-properties:
+      type: object
+      description: common properties for both android and ios.
+      properties:
+        interaction:
+          type: object
+          nullable: true
+          required:
+            - type
+          properties:
+            type:
+              $ref: "#/components/schemas/push-interaction-type"
+            uri:
+              $ref: "#/components/schemas/push-link-uri"
+        collapsibleKey:
+          title: Collapsible
+          type: string
+          nullable: true
+          description: Custom String used to collapse push notifications.
+          example: live_scoreboard
+          minLength: 1
+          maxLength: 50
+        soundName:
+          title: Sound
+          type: string
+          nullable: true
+          example: birdchirp
+          description: Custom Sound Filename. This file is a resource inside app.
+          minLength: 1
+          maxLength: 50
+        badge:
+          title: Badge
+          type: string
+          nullable: true
+          description: An Integer value or expression which evaluates to Integer.
+          example: "1"
+          minLength: 1
+          maxLength: 50
+        customProperties:
+          title: Custom Push Payload
+          nullable: true
+          description: List containing custom properties (key-value pair)
+          example:
+            accept: Accept Invite
+            decline: Decline Invite
+          additionalProperties:
+            type: string
+
+    push-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: On Click Interaction of Push Notification
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+      default: OPENAPP
+      example: WEBURL
+
+    push-link-uri:
+      type: string
+      nullable: true
+      description: External Link OR Deeplink
+      example: https://www.adobe.com/cis_en/products/special-offers.html
+      maxLength: 2000
+
+    push-ios-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          nullable: true
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+        notificationGroup:
+          title: Notification Group
+          type: string
+          nullable: true
+          description: Custom String to group Notifications, In apns term this is thread-id.
+          example: electionResult
+          minLength: 1
+          maxLength: 50
+        mutableContent:
+          type: boolean
+          default: false
+          nullable: true
+          title: mutable-content flag
+          description: Modify the push content before delivering in ios.
+        contentAvailable:
+          type: boolean
+          default: false
+          nullable: true
+          title: content-available flag
+          description: Flag to do background processing, This flag can now be used with Alert as well.
+        actions:
+          type: object
+          nullable: true
+          required:
+            - category
+          properties:
+            category:
+              type: string
+              title: iOS Category
+              description: App Specific Category for creating Actionable push notification.
+              example: Offers
+              minLength: 1
+              maxLength: 50
+            buttons:
+              type: array
+              nullable: true
+              items:
+                $ref: '#/components/schemas/push-button-ios'
+              minItems: 1
+              maxItems: 4
+
+    push-media-uri:
+      type: string
+      description: External Link OR Adobe Asset ID
+      nullable: true
+      example: medialib://urn:aaid:sc:US:aece0145-bf61-44e3-ae08-c1daa04d1396
+      minLength: 5
+      maxLength: 2000
+
+    push-button-ios:
+      type: object
+      nullable: true
+      required:
+        - customId
+      allOf:
+        - $ref: '#/components/schemas/push-button-common'
+      properties:
+        customId:
+          title: Custom ID
+          description: Push Button Custom ID
+          type: string
+          example: offers
+          minLength: 1
+          maxLength: 50
+
+    push-button-common:
+      type: object
+      description: Exclusive button properties for open, deeplink, web and dismiss. For other actionable button usecase, use custom properties.
+      required:
+        - label
+        - type
+      properties:
+        label:
+          title: Label
+          description: Push Button Custom Label
+          type: string
+          example: Offer
+          minLength: 1
+          maxLength: 50
+        type:
+          $ref: "#/components/schemas/push-button-interaction-type"
+        uri:
+          $ref: "#/components/schemas/push-link-uri"
+
+    push-button-interaction-type:
+      type: string
+      title: On Click Behavior
+      description: Button Type
+      enum:
+        - OPENAPP
+        - DEEPLINK
+        - WEBURL
+        - DISMISS
+      example: WEBURL
+
+    push-android-specific-properties:
+      type: object
+      properties:
+        media:
+          type: object
+          nullable: true
+          minProperties: 1
+          properties:
+            uri:
+              $ref: "#/components/schemas/push-media-uri"
+            iconUri:
+              $ref: "#/components/schemas/push-media-uri"
+        channelId:
+          type: string
+          title: Channel
+          nullable: true
+          description: Channel on which notification is sent.
+          minLength: 1
+          maxLength: 50
+        visibility:
+          $ref: "#/components/schemas/push-android-visibility"
+        notificationPriority:
+          $ref: "#/components/schemas/push-android-notification-priority"
+        deliveryPriority:
+          $ref: "#/components/schemas/push-android-delivery-priority"
+        actions:
+          type: object
+          nullable: true
+          required:
+            - buttons
+          properties:
+            buttons:
+              type: array
+              items:
+                $ref: '#/components/schemas/push-button-common'
+              minItems: 1
+              maxItems: 3
+
+    push-android-visibility:
+      type: string
+      title: Lockscreen Visibility
+      description: Set visibility of push notifications on android screen.
+      nullable: true
+      enum:
+        - PUBLIC
+        - PRIVATE
+        - SECRET
+      default: PUBLIC
+
+    push-android-notification-priority:
+      type: string
+      title: Priority
+      description: |
+        Set the notification priority of push notifications, this priority is governed by app developer.
+        Read here - https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#NotificationPriority
+      nullable: true
+      enum:
+        - PRIORITY_MIN
+        - PRIORITY_LOW
+        - PRIORITY_DEFAULT
+        - PRIORITY_HIGH
+        - PRIORITY_MAX
+      default: PRIORITY_DEFAULT
+
+    push-android-delivery-priority:
+      type: string
+      title: Message Priority
+      description: |
+        Optimization done by FCM level for battery power optimization,
+        Read here https://firebase.google.com/docs/cloud-messaging/concept-options?authuser=0#setting-the-priority-of-a-message
+      nullable: true
+      enum:
+        - HIGH
+        - NORMAL
+      default: NORMAL
+
+    direct-mail-variant-detail:
+      type: object
+      properties:
+        fileName:
+          title: fileName
+          type: string
+          description: File name which needs to be used while exporting profile attributes.
+        appendTimeStamp:
+          title: appendTimeStamp
+          type: boolean
+          description: whether timestamp to be appended to filename.
+        notes:
+          type: string
+          title: notes
+          description: Notes/instructions for print partners.
+        notesPosition:
+          description: Include Notes in Header or Footer.
+          type: string
+          enum:
+            - header
+            - footer
+        sortBy:
+          type: string
+          description: Label on which actual data needs to be stored while generating file for direct mail.
+        attributes:
+          type: array
+          nullable: true
+          description: List representing content of direct mail.
+          items:
+            $ref: '#/components/schemas/direct-mail-content'
+            min: 1
+      additionalProperties: false
+      required:
+        - fileName
+
+    direct-mail-content:
+      type: object
+      properties:
+        label:
+          description: Label for field.
+          type: string
+        data:
+          description: Data with/without personlization attributes.
+          type: string
+      required:
+        - label
+        - data
+
+    email-variant-detail:
+      type: object
+      properties:
+        subject:
+          type: string
+          title: Subject
+          description: Subject of Mail
+          example: "Your test score"
+        html:
+          $ref: '#/components/schemas/email-body'
+        x-amp-html:
+          $ref: '#/components/schemas/email-body'
+        text:
+          $ref: '#/components/schemas/email-text-body'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+        headers:
+          $ref: '#/components/schemas/email-headers'
+      required:
+        - subject
+        - html
+      additionalProperties: false
+
+    email-body:
+      type: object
+      title: Email Body
+      description: Content of email for one mime type
+      properties:
+        body:
+          type: string
+          description: HTML/Text body string
+          example: '<html>Hello {{profile.name}} </html>'
+      required:
+        - body
+
+    email-text-body:
+      allOf:
+        - $ref: '#/components/schemas/email-body'
+        - $ref: '#/components/schemas/email-text-body-attributes'
+
+    email-text-body-attributes:
+      type: object
+      title: Email Text Body Attributes
+      properties:
+        syncFromHtml:
+          type: boolean
+          default: true
+          description: Whether to sync text from HTML body.
+
+    email-headers:
+      title: Headers
+      description: List containing custom headers(key-value pair).
+      additionalProperties: true
+
+    self-href:
+      title: Self-Href
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: '/templates/b6d70a45-a149-453b-85ba-809a5d40066d'
+
+    template-channel-enum:
+      type: string
+      title: channel
+      description: Supported channels for Content Template.
+      example: email
+      enum:
+        - email
+        - push
+        - inapp
+        - sms
+        - code
+        - directMail
+        - landingpage
+        - shared
+
+    template-sub-type-enum:
+      title: Template sub type
+      description: Sub type. This is only enabled for Content templates with code channel.
+      type: string
+      enum:
+        - HTML
+        - JSON
+      example: HTML
+
+    entity-audit-fields:
+      title: Entity Audit Fields.
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        createdBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+        modifiedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        modifiedBy:
+          type: string
+          example: '4c0190e5d702748f0931@AdobeId'
+
+    href-link:
+      title: Href-link
+      type: object
+      required:
+        - href
+      properties:
+        href:
+          type: string
+    page:
+      title: Page
+      type: object
+      properties:
+        orderBy:
+          type: string
+          enum:
+            - modifiedAt
+            - createdAt
+            - name
+          example: '-modifiedAt'
+        start:
+          type: string
+          format: byte
+          example: eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+        next:
+          type: string
+          format: byte
+          example: eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==
+        count:
+          type: integer
+          example: 10
+
+    template-page-response:
+      title: Content Template Page Response
+      type: object
+      properties:
+        _page:
+          $ref: '#/components/schemas/page'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/content-template-listing-response'
+        _links:
+          $ref: '#/components/schemas/template-list-link'
+
+    template-list-link:
+      title: Content Template List Link.
+      type: object
+      required:
+        - self
+      properties:
+        next:
+          $ref: '#/components/schemas/href-link'
+        page:
+          $ref: '#/components/schemas/href-link'
+      example:
+        next:
+          href: '/templates?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
+        page:
+          href: '/templates?orderBy={orderBy}&start={start}&limit={limit}'
+
+    html-fragment:
+      description: Email HTML Description.
+      title: Email HTML
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          $ref: '#/components/schemas/fragment-content'
+        editorContext:
+          $ref: '#/components/schemas/editor-context'
+
+    expression-fragment-content:
+      description: Expression fragment content description.
+      title: Expression fragment content
+      type: object
+      required:
+        - expression
+      properties:
+        expression:
+          $ref: '#/components/schemas/expression-content'
+
+    fragment-content:
+      type: string
+      title: Html Fragment Content
+      description: Html Fragment Content
+      example: '<div> Hi {{profile.person.name}} its a great day to shop !! </div>'
+
+    expression-content:
+      type: string
+      title: Expression Content
+      description: Expression Content
+      example: 'Hi {{profile.person.name}} its a great day to shop !!'
+
+    content-fragment:
+      title: Content Fragment
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          "html": '#/components/schemas/email-html-fragment'
+          "expression": '#/components/schemas/expression-fragment'
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    fragment-status:
+      type: string
+      title: Fragment Status
+      description: Fragment Status
+      example: 'DRAFT'
+      enum: [ "DRAFT", "PUBLISHING", "PUBLISHED" ]
+
+    fragment-type:
+      type: string
+      title: Fragment Type
+      description: Fragment Type
+      example: 'html'
+      enum: [ "html", "expression" ]
+
+    fragment-channel-enum:
+      type: string
+      title: channel
+      description: Supported channels for Content Fragment.
+      example: email
+      enum:
+        - email
+        - shared
+
+    fragment-source:
+      title: Fragment Source.
+      type: object
+      nullable: true
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/fragment-origin'
+        metadata:
+          title: MetaData
+          description: Map containing custom properties(key-value pair).
+          additionalProperties: true
+
+    fragment-origin:
+      type: string
+      title: Origin
+      description: Content Fragment Origin/Source system.
+      enum:
+        - ajo
+        - external
+
+    email-html-fragment:
+      description: Email HTML Fragment
+      title: Email HTML Fragment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment'
+        - type: object
+          required:
+            - fragment
+            - channels
+          properties:
+            fragment:
+              $ref: '#/components/schemas/html-fragment'
+            channels:
+              type: array
+              title: Channels
+              minItems: 1
+              maxItems: 1
+              items:
+                type: string
+                title: channel
+                description: Supported channels for Content Fragment.
+                example: email
+                enum:
+                  - email
+
+    expression-fragment:
+      description: Expression Fragment
+      title: Expression Fragment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment'
+        - type: object
+          required:
+            - fragment
+            - subType
+            - channels
+          properties:
+            fragment:
+              $ref: '#/components/schemas/expression-fragment-content'
+            subType:
+              type: string
+              enum:
+                - TEXT
+                - HTML
+                - JSON
+            channels:
+              type: array
+              title: Channels
+              minItems: 1
+              maxItems: 1
+              items:
+                type: string
+                title: channel
+                description: Supported channels for Content Fragment.
+                example: shared
+                enum:
+                  - shared
+
+    publish-fragment-request:
+      type: object
+      properties:
+        fragmentId:
+          $ref: '#/components/schemas/id'
+      required:
+        - fragmentId
+
+    publishing-job-status:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - complete
+            - inProgress
+            - error
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/errorResponse'
+
+    error-chain:
+      properties:
+        serviceId:
+          type: string
+        errorCode:
+          type: string
+        invokingServiceId:
+          type: string
+        unixTimeStampMs:
+          type: integer
+          format: int64
+
+    live-fragment-content:
+      title: Published Content Fragment
+      type: object
+      required:
+        - type
+        - fragment
+      properties:
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        fragment:
+          oneOf:
+            - $ref: '#/components/schemas/published-html-fragment-content'
+            - $ref: '#/components/schemas/published-expression-fragment-content'
+
+    content-fragment-with-audit:
+      title: Content Fragment with audit fields.
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          "html": '#/components/schemas/html-fragment-with-audit'
+          "expression": '#/components/schemas/expression-fragment-with-audit'
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        status:
+          $ref: '#/components/schemas/fragment-status'
+        channels:
+          $ref: '#/components/schemas/fragment-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    content-fragment-metadata:
+      title: Content Fragment metadata.
+      type: object
+      required:
+        - name
+        - type
+        - channels
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        type:
+          $ref: '#/components/schemas/fragment-type'
+        status:
+          $ref: '#/components/schemas/fragment-status'
+        channels:
+          $ref: '#/components/schemas/fragment-channel-enum'
+        labels:
+          $ref: '#/components/schemas/olac-labels'
+        source:
+          $ref: '#/components/schemas/fragment-source'
+
+    content-fragment-listing-response:
+      title: Content Fragment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-metadata'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - $ref: '#/components/schemas/fragment-self-href'
+
+    fragment-page-response:
+      title: Content Fragment Page Response
+      type: object
+      properties:
+        _page:
+          $ref: '#/components/schemas/page'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/content-fragment-listing-response'
+        _links:
+          $ref: '#/components/schemas/fragment-list-link'
+
+    fragment-list-link:
+      title: Content Fragment List Link.
+      type: object
+      required:
+        - self
+      properties:
+        next:
+          $ref: '#/components/schemas/href-link'
+        page:
+          $ref: '#/components/schemas/href-link'
+      example:
+        next:
+          href: '/fragments?start=eyJtb2RpZmllZEF0IjoxNjA2OTc2NzI3NTQ5fQ==&limit=20&orderBy=%2BmodifiedAt'
+        page:
+          href: '/fragments?orderBy={orderBy}&start={start}&limit={limit}'
+
+    fragment-self-href:
+      title: Self-Href
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: '/fragments/b6d70a45-a149-453b-85ba-809a5d40066d'
+
+    html-fragment-with-audit:
+      description: HTML Fragment With Audit Fields
+      title: HTML Fragment With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            fragment:
+              $ref: '#/components/schemas/html-fragment'
+          required:
+            - fragment
+
+    expression-fragment-with-audit:
+      description: Expression Fragment With Audit Fields
+      title: Expression Fragment With Audit Fields
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/content-fragment-with-audit'
+        - $ref: '#/components/schemas/entity-audit-fields'
+        - type: object
+          properties:
+            fragment:
+              $ref: '#/components/schemas/expression-fragment-content'
+          required:
+            - fragment
+
+    published-html-fragment-content:
+      description: Published HTML Fragment content
+      title: Published HTML Fragment content.
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          $ref: '#/components/schemas/fragment-content'
+
+    published-expression-fragment-content:
+      description: Published Expression Fragment content
+      title: Published Expression Fragment content.
+      type: object
+      required:
+        - expression
+      properties:
+        expression:
+          $ref: '#/components/schemas/expression-content'
+
+    errorResponse:
+      title: Error Response
+      type: object
+      properties:
+        path:
+          type: string
+          title: Path
+          example: /templates
+          description: API path
+        request-id:
+          type: array
+          title: Request ID
+          items:
+            type: string
+            example: 9db4dd09-455f-44eb-a0e3-aca3342745d2
+          description: Request ID
+        type:
+          type: string
+          title: Type
+          example: https://ns.adobe.com/aep/errors/CJMMAS-*
+          description: Error type
+        title:
+          type: string
+          title: Title
+          example: Error Title
+          description: Title of Error
+        status:
+          type: integer
+          title: Status
+          description: HTTP status
+        report:
+          type: object
+          title: report
+          description: Error Report
+          properties:
+            tenantInfo:
+              type: object
+              example:
+                sandboxName: cjm-team
+                sandboxId: 70f58060-5d47-11ea-bdff-a5384333ff34
+                imsOrgId: 745F37C35E4B776E0A49421B@AdobeOrg
+            additionalContext:
+              type: object
+              example:
+                detailedMessage : templates
+              description: Additional Context of Error
+        error-chain:
+          type: array
+          title: Error Chain
+          description: Error Chain
+          items:
+            type: object
+            example:
+              serviceId: contentservice
+              errorCode: CJMMAS-*
+              invokingServiceId: cjm-content-service
+              unixTimeStampMs: 1610446917396
+
+    patch-request:
+      title: Patch Request
+      type: array
+      items:
+        $ref: "#/components/schemas/patch-document"
+    patch-document:
+      title: Patch Document
+      description: A JSONPatch document as defined by RFC 6902
+      required:
+        - "op"
+        - "path"
+      properties:
+        op:
+          type: string
+          description: The operation to be performed
+          enum:
+            - "add"
+            - "remove"
+            - "replace"
+
+        path:
+          type: string
+          description: A JSON-Pointer
+        value:
+          type: object
+          description: The value to be used within the operations.
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+
+    validationResponse:
+      title: Validation Response
+      type: object
+      properties:
+        type:
+          type: string
+          title: type
+          example: https://ns.adobe.com/aep/errors/CJMMAS-*
+          description: Error type
+        title:
+          type: string
+          title: Title
+          example: Error Title
+          description: Title of Error
+        status:
+          type: integer
+          title: Status
+          description: HTTP status
+          example: 200
+        report:
+          type: object
+          description: Validation Error Report
+          properties:
+            additionalContext:
+              type: object
+              properties:
+                errorLevel:
+                  type: string
+                  enum:
+                    - ERROR
+                    - WARNING
+                    - INFO
+                  example:
+                    ERROR
+                  description: Error level in decreasing order of severity - ERROR WARNING INFO
+                variantId:
+                  type: string
+                  example: c9e3f73b-c01d-4651-8099-25bb63021b5a
+                  description: Content Template ID in which validation error found
+                source:
+                  type: string
+                  example: TEMPLATE
+                channel:
+                  $ref: '#/components/schemas/template-channel-enum'
+
+  headers:
+    x-resource-id:
+      schema:
+        type: string
+      description: id of resource
+    Location:
+      schema:
+        type: string
+      description: URL of resource
+    retry-after:
+      schema:
+        type: integer
+      description: polling retry interval
+    etag:
+      schema:
+        type: string
+      description: etag of resource
+
+  responses:
+
+    201:
+      description: Resource successfully created
+      headers:
+        x-resource-id:
+          $ref: '#/components/headers/x-resource-id'
+        Location:
+          $ref: '#/components/headers/Location'
+        etag:
+          $ref: '#/components/headers/etag'
+
+    202:
+      description: Request successfuly accepted
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/retry-after'
+        Location:
+          $ref: '#/components/headers/Location'
+
+    204:
+      description: No content
+      headers:
+        etag:
+          $ref: '#/components/headers/etag'
+
+    204DELETE:
+      description: No content
+
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+
+    401:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+
+    404:
+      description: Resource Not found
+
+    409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
