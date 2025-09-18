@@ -7,4 +7,4 @@ keywords:
 layout: none
 ---
 
-<RedoclyAPIBlock src="../../swagger-specs/messaging.yaml"/> 
+<RedoclyAPIBlock src="/journey-optimizer-apis/messaging.yaml"/>
