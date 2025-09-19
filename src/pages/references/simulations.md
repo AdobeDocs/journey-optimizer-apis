@@ -7,4 +7,4 @@ keywords:
 layout: none
 ---
 
-<RedoclyAPIBlock src="https://raw.githubusercontent.com/AdobeDocs/journey-optimizer-apis/main/src/swagger-specs/simulations.yaml"/>
+<RedoclyAPIBlock src="/journey-optimizer-apis/simulations.yaml"/>
