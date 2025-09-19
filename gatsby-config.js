@@ -41,15 +41,19 @@ module.exports = {
           path: '/references/suppression.md'
         },
         {
-          title: 'Trigger campaigns using APIs',
+          title: 'Trigger campaigns',
           path: '/references/messaging.md',
         },
         {
-          title: 'Journeys API',
-          path: '/references/journeys.md'
+          title: 'Retrieve journeys',
+          path: '/references/journeys-retrieve.md'
         },
         {
-          title: 'Content API',
+          title: 'Journeys throttling configurations',
+          path: '/references/journeys-throttling.md'
+        },
+        {
+          title: 'Content fragments & templates',
           path: '/references/content.md'
         },
         {
@@ -57,7 +61,7 @@ module.exports = {
           path: '/references/simulations.md'
         },
         {
-          title: 'Orchestrated campaigns validation and enablement on datasets',
+          title: 'Enable datasets for Orchestrated campaigns',
           path: '/references/orchestrated-campaign-dataset.md'
         }
       ]
