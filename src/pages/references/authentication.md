@@ -5,7 +5,6 @@ description: A collection of high-level references for all endpoints provided by
 
 # Adobe Journey Optimizer APIs Authentication
 
-
 Adobe Journey Optimizer API access is set up through the steps below. Each of these steps is detailed in the [Adobe Developer documentation](https://developer.adobe.com/developer-console/docs/guides/services/).
 
 

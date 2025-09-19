@@ -53,10 +53,12 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Journeys Capping and Throttling APIs](references/journeys.md)
 
-[Content APIs](references/content.md)
+[Retrieve journeys using APIs](references/messaging.md)
+
+[Content templates & fragments APIs](references/content.md)
 
 [Simulation APIs](references/simulations.md)
 
-[Orchestrated campaigns validation and enablement on datasets](references/orchestrated-campaign-dataset.md)
+[Orchestrated campaigns extension for datasets](references/orchestrated-campaign-dataset.md)
 
 <br/><br/>

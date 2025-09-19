@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: Journeys APIs
-  description: "The Journeys APIs allow to manage capping and throttling configurations.\
+  title: Journeys throttling configurations APIs
+  description: "The Journeys throttling configuration APIs allow to manage capping and throttling configurations.\
     \ They are accessible by an authorized technical account created through the [Adobe\
     \ Developer Console](https://console.adobe.io/home).\n\nLearn more about the capping\
     \ and throttling mechanisms in the following documentation: [Journeys integration\
