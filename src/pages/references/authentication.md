@@ -7,11 +7,9 @@ description: A collection of high-level references for all endpoints provided by
 
 Adobe Journey Optimizer API access is set up through the steps below. Each of these steps is detailed in the [Adobe Developer documentation](https://developer.adobe.com/developer-console/docs/guides/services/).
 
-
 <InlineAlert slots="text"/>
 
 To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
-
 
 **Prerequisites**
 
@@ -52,7 +50,6 @@ To obtain your ORGANIZATION ID value, refer to your administrator or your Adobe 
 
 **API_KEY**: your personal API Key. It is provided in Adobe Developer after creating a new integration to Adobe Journey Optimizer Service.
 
-
 **Permissions needed**
 
 You need to grant developer and API access control with the Experience Platform permissions.
@@ -64,5 +61,4 @@ Note that you need to be sure to assign the new API profile to the expected role
 Depending on the API, different permissions need to be configured:
 
 * **Capping API** needs the "Manage Journeys Events, Data Sources and Action" permission to the targeted sandbox (Capping is configured at sandbox level).
-* **Throttling API** needs the "Manage Journeys Events, Data Sources and Action" permission to the production sandbox (Throttling can only be configured on the production sandbox) 
-
+* **Throttling API** needs the "Manage Journeys Events, Data Sources and Action" permission to the production sandbox (Throttling can only be configured on the production sandbox)
