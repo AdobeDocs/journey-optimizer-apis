@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates">Journey Optimizer documentation</a>.
   version: 0.0.1
-  title: Content API.
+  title: Content templates & fragments API
 
 security:
   - imsUserToken: []

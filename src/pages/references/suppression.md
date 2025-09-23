@@ -9,4 +9,3 @@ layout: none
 ---
 
 <RedoclyAPIBlock src="/journey-optimizer-apis/suppression.yaml"/>
-

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Validate or Enable Orchestrated Campaign Extension on Dataset
+  title: Orchestrated campaigns extension for datasets
   version: 1.0.0
   description: |
     Use these APIs to validate or enable the **Orchestrated Campaign extension** on a **dataset**, making it available for use with **Orchestrated Campaigns** in **Adobe Journey Optimizer**.

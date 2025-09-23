@@ -14,13 +14,9 @@ Journey Optimizer provide RESTful APIs that allow you to programmatically perfor
 #### Resources
 
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
-
 * [Understand the suppression list](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
-
 * [Journeys integration with exterrnal system](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)
-
-* [Work with content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates) and [content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments) 
-
+* [Work with content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates) and [content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments)
 * [Enable datasets for Orchestrated campaigns](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/manual-schema#enable)
 
 ## Overview
@@ -51,12 +47,14 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Trigger campaigns using APIs](references/messaging.md)
 
-[Journeys Capping and Throttling APIs](references/journeys.md)
+[Journeys Capping and Throttling APIs](references/journeys-throttling.md)
 
-[Content APIs](references/content.md)
+[Retrieve journeys using APIs](references/journeys-retrieve.md)
+
+[Content templates & fragments APIs](references/content.md)
 
 [Simulation APIs](references/simulations.md)
 
-[Orchestrated campaigns validation and enablement on datasets](references/orchestrated-campaign-dataset.md)
+[Orchestrated campaigns extension for datasets](references/orchestrated-campaign-dataset.md)
 
 <br/><br/>
