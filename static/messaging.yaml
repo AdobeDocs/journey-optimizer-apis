@@ -220,7 +220,7 @@ paths:
       - $ref: '#/components/parameters/x-sandbox-name'
 
     post:
-      summary: "Trigger an unitary high throughput message execution."
+      summary: "Trigger an unitary high throughput message execution"
       tags:
         - execution
       operationId: postIMUnitaryHAMessageExecution
