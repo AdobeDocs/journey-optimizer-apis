@@ -212,7 +212,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorResponse'
 
-  /im/executions/unitary/highthroughput:
+  /im/executions/highthroughput:
     parameters:
       - $ref: '#/components/parameters/x-api-key'
       - $ref: '#/components/parameters/x-request-id'
@@ -252,6 +252,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorResponse'
+
+  /im/health:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+
+    get:
+      summary: "Health of Unitary API Service"
+      tags:
+        - health
+      security:
+        - imsUserToken: [ ]
+      description: "Health of Unitary API Service"
+      responses:
+        '200':
+          description: Health Response
 
 components:
   securitySchemes:
