@@ -47,7 +47,7 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Trigger campaigns using APIs](references/messaging.md)
 
-[Journeys Capping and Throttling APIs](references/journeys.md)
+[Journeys Capping and Throttling APIs](references/journeys-throttling.md)
 
 [Retrieve journeys using APIs](references/journeys-retrieve.md)
 
