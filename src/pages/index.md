@@ -44,17 +44,10 @@ Follow this tutorial to gather the required authentication credentials for all J
 <DiscoverBlock slots="link, text"/>
 
 [Suppression API](references/suppression.md)
-
 [Trigger campaigns using APIs](references/messaging.md)
-
 [Journeys Capping and Throttling APIs](references/journeys-throttling.md)
-
-[Retrieve journeys using APIs](references/journeys-retrieve.md)
-
 [Content templates & fragments APIs](references/content.md)
-
 [Simulation APIs](references/simulations.md)
-
 [Orchestrated campaigns extension for datasets](references/orchestrated-campaign-dataset.md)
 
 <br/><br/>
