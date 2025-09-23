@@ -208,6 +208,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorResponse'
+
+  /im/executions/highthroughput:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-request-id'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+      - $ref: '#/components/parameters/x-sandbox-name'
+
+    post:
+      summary: "Trigger an unitary high throughput message execution."
+      tags:
+        - execution
+      operationId: postIMUnitaryHAMessageExecution
+      security:
+        - imsUserToken: [ ]
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/imExecutionRequestHighThroughput'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/imExecutionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /im/health:
+    parameters:
+      - $ref: '#/components/parameters/x-api-key'
+      - $ref: '#/components/parameters/x-gw-ims-org-id'
+
+    get:
+      summary: "Health of Unitary API Service"
+      tags:
+        - health
+      security:
+        - imsUserToken: [ ]
+      description: "Health of Unitary API Service"
+      responses:
+        '200':
+          description: Health Response
+
 components:
   securitySchemes:
     imsUserToken: # arbitrary name for the security scheme
@@ -271,6 +329,35 @@ components:
           example: "campaign-12345"
         recipients:
           $ref: '#/components/schemas/recipients'
+
+    imExecutionRequestHighThroughput:
+      description: "the IM Execution Request Unitary High Throughput"
+      type: object
+      required:
+        - requestId
+        - campaignId
+        - recipients
+      properties:
+        requestId:
+          type: string
+          description: "the Unique Request Identifier"
+          example: "request-12345"
+        campaignId:
+          type: string
+          description: "the Campaign Identifier"
+          example: "campaign-12345"
+        recipients:
+          type: array
+          description: "the list of recipients"
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/ExternalRecipient"
+            discriminator:
+              propertyName: type
+              mapping:
+                external: "#/components/schemas/ExternalRecipient"
+          minItems: 1
+          maxItems: 20
 
     imExecutionRequestAudience:
       description: "the IM Execution Request Audience"
