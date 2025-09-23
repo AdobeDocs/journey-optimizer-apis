@@ -2,7 +2,7 @@
 openapi: 3.0.0
 
 info:
-  title: AJO Developer - Suppression API
+  title: Suppression API
   description: "
   
   With this API, you can control your <b>outgoing messages</b> using suppression and allow lists.<br/><br/>
