@@ -45,6 +45,10 @@ module.exports = {
           path: '/references/messaging.md',
         },
         {
+          title: 'Retrieve Journeys',
+          path: '/references/journeys-retrieve.md'
+        },
+        {
           title: 'Journeys throttling configurations',
           path: '/references/journeys-throttling.md'
         },

@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: Retrieve Journeys using APIs
+  description: API for managing and retrieving Journeys and their associated campaigns
+  version: 1.0.0
+  contact:
+    name: Adobe Journey Optimizer Team
+    email: support@adobe.com
+  license:
+    name: Adobe Proprietary
+servers:
+  - url: https://api.adobe.io/journey
+    description: Production server
+  - url: https://stage.adobe.io/journey
+    description: Staging server
+
+paths:
+  /journeys:
+    get:
+      summary: Get list of journeys
+      description: Returns a paginated list of journeys
+      operationId: getJourneyList
+      tags:
+        - Journeys
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicJourneyList'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /journeys/{id}:
+    get:
+      summary: Get journey by ID
+      description: Returns a journey by its ID with optional includes for additional data
+      operationId: getJourneyById
+      tags:
+        - Journeys
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The journey ID
+          schema:
+            type: string
+        - name: include
+          in: query
+          required: false
+          description: List of additional data to include (e.g., "campaigns", "surfaces")
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [campaigns, surfaces]
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicJourney'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Journey not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    PublicJourneyList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicJourney'
+          default: []
+        page:
+          type: integer
+          default: 0
+          description: Current page number (0-based)
+        limit:
+          type: integer
+          default: 10
+          description: Number of items per page
+        pages:
+          type: integer
+          default: 1
+          description: Total number of pages
+      required:
+        - results
+        - page
+        - limit
+        - pages
+
+    PublicJourney:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the journey
+        name:
+          type: string
+          description: Human-readable name of the journey
+        description:
+          type: string
+          description: Detailed description of the journey
+        version:
+          type: string
+          description: Version of the journey
+        type:
+          $ref: '#/components/schemas/JourneyType'
+        status:
+          $ref: '#/components/schemas/JourneyStatus'
+        imsOrgId:
+          type: string
+          description: IMS Organization ID
+        sandboxName:
+          type: string
+          description: Name of the sandbox
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        timeouts:
+          $ref: '#/components/schemas/JourneyTimeouts'
+        priority:
+          type: integer
+          description: Priority level of the journey
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        reentrance:
+          $ref: '#/components/schemas/Reentrance'
+        labels:
+          type: array
+          items:
+            type: string
+          description: Labels associated with the journey
+        metrics:
+          type: array
+          items:
+            type: string
+          description: Metrics tracked for the journey
+        cappingRuleset:
+          $ref: '#/components/schemas/CappingRuleset'
+        profileMergePolicyId:
+          type: string
+          description: Profile merge policy identifier
+        startNodeId:
+          type: string
+          description: ID of the starting node
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/JourneyNode'
+          description: List of journey nodes
+
+    JourneyType:
+      type: string
+      enum: [UNITARY, BATCH, READ_AUDIENCE]
+      description: Type of journey
+
+    JourneyStatus:
+      type: string
+      enum: [DRAFT, LIVE, STOPPED, FINISHED, ERROR]
+      description: Current status of the journey
+
+    Metadata:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        createdBy:
+          type: string
+          description: User who created the journey
+        updatedBy:
+          type: string
+          description: User who last updated the journey
+
+    JourneyTimeouts:
+      type: object
+      properties:
+        globalTimeout:
+          type: integer
+          description: Global timeout in seconds
+        nodeTimeout:
+          type: integer
+          description: Node timeout in seconds
+
+    Schedule:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+          description: Journey start date
+        endDate:
+          type: string
+          format: date-time
+          description: Journey end date
+        timezone:
+          type: string
+          description: Timezone for the schedule
+
+    Reentrance:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Whether reentrance is allowed
+        waitTime:
+          type: integer
+          description: Wait time before reentrance in minutes
+
+    CappingRuleset:
+      type: object
+      properties:
+        maxEntries:
+          type: integer
+          description: Maximum number of entries allowed
+        timeWindow:
+          type: integer
+          description: Time window in minutes
+
+    JourneyNode:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Node identifier
+        type:
+          type: string
+          description: Type of the node (e.g., email_message, sms_message, wait)
+        name:
+          type: string
+          description: Human-readable name of the node
+        campaign:
+          $ref: '#/components/schemas/PublicCampaign'
+        configuration:
+          type: object
+          description: Node-specific configuration
+
+    PublicCampaign:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: Campaign identifier
+        name:
+          type: string
+          description: Campaign name
+        description:
+          type: string
+          description: Campaign description
+        type:
+          type: string
+          description: Campaign type
+        status:
+          type: string
+          description: Campaign status
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Journeys
+    description: Operations related to journey management
