@@ -49,7 +49,7 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 [Journeys Capping and Throttling APIs](references/journeys-throttling.md)
 
-[Retrieve journeys using APIs](references/journeys-retrieve.md)
+[Retrieve Journeys using APIs](references/journeys-retrieve.md)
 
 [Content templates & fragments APIs](references/content.md)
 

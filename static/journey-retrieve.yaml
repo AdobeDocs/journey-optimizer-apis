@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Retrieve journeys using APIs
-  description: API for managing and retrieving journeys and their associated campaigns
+  title: Retrieve Journeys using APIs
+  description: API for managing and retrieving Journeys and their associated campaigns
   version: 1.0.0
   contact:
     name: Adobe Journey Optimizer Team
