@@ -7,4 +7,4 @@ keywords:
 layout: none
 ---
 
-<RedoclyAPIBlock src="/journey-optimizer-apis/campaign-retrieve.yaml"/>
+<RedoclyAPIBlock src="/journey-optimizer-apis/campaigns-retrieve.yaml"/>
