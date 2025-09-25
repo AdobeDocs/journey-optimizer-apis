@@ -1,16 +1,11 @@
 openapi: 3.0.1
 info:
-  title: AJO Campaigns API
+  title: Retrieve & filter Action Campaigns
   description: AJO Campaigns API
   version: v1.77
 externalDocs:
   description: AJO Campaigns API Tech Spec
-  url: https://wiki.corp.adobe.com/display/CJM/AJO+Campaigns
 servers:
-  - url: https://platform-int.adobe.io/journey/campaigns
-    description: QA
-  - url: https://platform-stage.adobe.io/journey/campaigns
-    description: Stage
   - url: https://platform.adobe.io/journey/campaigns
     description: Prod
 security:
