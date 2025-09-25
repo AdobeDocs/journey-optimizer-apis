@@ -683,7 +683,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/{messageId}/{channel}/variants/{variantId}: 
@@ -702,7 +702,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
     put: 
@@ -724,7 +724,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/{messageId}/variants/{variantId}: 
@@ -743,7 +743,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
     put: 
@@ -765,7 +765,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/{messageId}/context: 
@@ -784,7 +784,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
     put: 
@@ -807,7 +807,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-campaigns/{campaignId}: 
@@ -843,7 +843,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 $ref: "#/components/schemas/Campaign Model"
       security: 
@@ -1457,7 +1457,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
       security: 
@@ -1502,7 +1502,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
       security: 
@@ -2734,7 +2734,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/multilingual/inline-messages/manual-translation-ops: 
@@ -2751,7 +2751,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/multilingual/auto-translation-ops/jobs: 
@@ -2768,7 +2768,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages: 
@@ -2785,7 +2785,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/{messageId}/variant-references: 
@@ -2808,7 +2808,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/publications: 
@@ -2825,7 +2825,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-campaigns/{campaignId}/versions: 
@@ -4115,7 +4115,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
     patch: 
@@ -4137,7 +4137,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/campaigns/{campaignId}: 
@@ -4471,7 +4471,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/metadata/surfaces: 
@@ -4754,7 +4754,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/validation: 
@@ -4772,7 +4772,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/publications/{messagePublicationId}: 
@@ -4791,7 +4791,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/inline-messages/publications/{messagePublicationId}/status: 
@@ -4810,7 +4810,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/decision-policies: 
@@ -5299,7 +5299,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
       security: 
@@ -5926,7 +5926,7 @@ paths:
         200: 
           description: "OK"
           content: 
-            "*/*": 
+
               schema: 
                 type: "object"
   /service/campaigns/{campaignId}/treatments/{treatmentId}: 
