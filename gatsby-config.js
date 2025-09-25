@@ -49,7 +49,7 @@ module.exports = {
           path: '/references/journeys-retrieve.md'
         },
         {
-          title: 'Retrieve Actio ncampaigns',
+          title: 'Retrieve & filter Action campaigns',
           path: '/references/campaign-retrieve.md'
         },
         {

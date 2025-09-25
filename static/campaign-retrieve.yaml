@@ -2,7 +2,7 @@
 openapi: "3.0.1"
 info: 
   title: "Retrieve Action Campaigns using APIs"
-  description: "Retrieve Journey Optimizer Action Campaigns using APIs"
+  description: "Retrieve and filter Action Campaigns using APIs"
   version: "v1.77"
 security: 
 -
