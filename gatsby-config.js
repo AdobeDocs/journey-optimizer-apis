@@ -50,7 +50,7 @@ module.exports = {
         },
         {
           title: 'Retrieve & filter Action campaigns',
-          path: '/references/campaign-retrieve.md'
+          path: '/references/campaigns-retrieve.md'
         },
         {
           title: 'Journeys throttling configurations',
