@@ -48,6 +48,9 @@ module.exports = {
           title: 'Retrieve Journeys',
           path: '/references/journeys-retrieve.md'
         },
+          title: 'Retrieve Action Campaigns',
+          path: '/references/campaigns-retrieve.md'
+        },
         {
           title: 'Journeys throttling configurations',
           path: '/references/journeys-throttling.md'
