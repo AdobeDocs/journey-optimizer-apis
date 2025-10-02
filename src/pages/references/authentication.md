@@ -7,11 +7,9 @@ description: A collection of high-level references for all endpoints provided by
 
 Adobe Journey Optimizer API access is set up through the steps below. Each of these steps is detailed in the [Adobe Developer documentation](https://developer.adobe.com/developer-console/docs/guides/services/).
 
-<InlineAlert variant="warning" slots="header, text1">
+<InlineAlert variant="warning">
 
-<header>JWT Deprecation Notice</header>
-
-<text1>
+**JWT Deprecation Notice**
 
 The JWT method to generate access tokens has been deprecated. All new integrations must be created using the [OAuth Server-to-Server authentication method](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#select-oauth-server-to-server). Adobe also recommends that you migrate your existing integrations to the OAuth method. Read the following important documentation:
 
@@ -21,19 +19,17 @@ The JWT method to generate access tokens has been deprecated. All new integratio
 
 To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
 
-</text1>
-
 </InlineAlert>
 
 ## Prerequisites
 
 Create a new integration to Adobe Journey Optimizer Service in [Adobe Developer Console](https://developer.adobe.com/console) and configure it. Your credentials will then be generated (API Key, Client secret...).
 
-   1. [Create a new project](https://developer.adobe.com/developer-console/docs/guides/projects/projects-empty).
-   2. [Add the AJO API](https://developer.adobe.com/developer-console/docs/guides/services/services-add-api-oauth-s2s).
-   <br/>![](ajoconsole.png)
-   3. [Add AEP Permissions](https://experienceleague.adobe.com/en/docs/experience-platform/access-control/abac/permissions-ui/permissions#manage-api-credentials-for-role) to the *role* that coincides with the *product profile* you included for the AJO API.
-   <br/>![](ajorole.png)
+1. [Create a new project](https://developer.adobe.com/developer-console/docs/guides/projects/projects-empty).
+2. [Add the AJO API](https://developer.adobe.com/developer-console/docs/guides/services/services-add-api-oauth-s2s).
+<br/><img src="ajoconsole.png">
+3. [Add AEP Permissions](https://experienceleague.adobe.com/en/docs/experience-platform/access-control/abac/permissions-ui/permissions#manage-api-credentials-for-role) to the *role* that coincides with the *product profile* you included for the AJO API.
+<br/><img src="ajorole.png">
 
 ## Authorization header
 
@@ -68,3 +64,4 @@ Depending on the API, different permissions need to be configured:
 * **Capping API** needs the "Manage Journeys Events, Data Sources and Action" permission to the targeted sandbox (Capping is configured at sandbox level).
 * **Throttling API** needs the "Manage Journeys Events, Data Sources and Action" permission to the production sandbox (Throttling can only be configured on the production sandbox)
 * **Journey API** needs the "Journey Manage" and "Journey View" permissions to the targeted sandbox.
+<br/><br/>
