@@ -7,9 +7,7 @@ description: A collection of high-level references for all endpoints provided by
 
 Adobe Journey Optimizer API access is set up through the steps below. Each of these steps is detailed in the [Adobe Developer documentation](https://developer.adobe.com/developer-console/docs/guides/services/).
 
-<InlineAlert variant="warning">
-
-**JWT Deprecation Notice**
+## JWT Deprecation Notice
 
 The JWT method to generate access tokens has been deprecated. All new integrations must be created using the [OAuth Server-to-Server authentication method](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#select-oauth-server-to-server). Adobe also recommends that you migrate your existing integrations to the OAuth method. Read the following important documentation:
 
@@ -18,8 +16,6 @@ The JWT method to generate access tokens has been deprecated. All new integratio
 * [Advantages of using the OAuth Server-to-Server credentials method](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/#why-oauth-server-to-server-credentials)
 
 To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
-
-</InlineAlert>
 
 ## Prerequisites
 
