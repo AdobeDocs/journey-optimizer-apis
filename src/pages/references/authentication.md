@@ -27,9 +27,9 @@ Create a new integration to Adobe Journey Optimizer Service in [Adobe Developer 
 
 1. [Create a new project](https://developer.adobe.com/developer-console/docs/guides/projects/projects-empty).
 2. [Add the AJO API](https://developer.adobe.com/developer-console/docs/guides/services/services-add-api-oauth-s2s).
-<br/><img src="ajoconsole.png">
+<br/><img src="ajoconsole.png"/>
 3. [Add AEP Permissions](https://experienceleague.adobe.com/en/docs/experience-platform/access-control/abac/permissions-ui/permissions#manage-api-credentials-for-role) to the *role* that coincides with the *product profile* you included for the AJO API.
-<br/><img src="ajorole.png">
+<br/><img src="ajorole.png"/>
 
 ## Authorization header
 
