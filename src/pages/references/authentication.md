@@ -7,9 +7,11 @@ description: A collection of high-level references for all endpoints provided by
 
 Adobe Journey Optimizer API access is set up through the steps below. Each of these steps is detailed in the [Adobe Developer documentation](https://developer.adobe.com/developer-console/docs/guides/services/).
 
-<InlineAlert variant="warning" slots="header, text1, text2, text3, text4" />
+<InlineAlert variant="warning" slots="header, text1">
 
-## JWT Deprecation Notice
+<header>JWT Deprecation Notice</header>
+
+<text1>
 
 The JWT method to generate access tokens has been deprecated. All new integrations must be created using the [OAuth Server-to-Server authentication method](https://experienceleague.adobe.com/docs/experience-platform/landing/platform-apis/api-authentication.html#select-oauth-server-to-server). Adobe also recommends that you migrate your existing integrations to the OAuth method. Read the following important documentation:
 
@@ -17,11 +19,13 @@ The JWT method to generate access tokens has been deprecated. All new integratio
 * [Implementation guide for new and old applications with OAuth](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/)
 * [Advantages of using the OAuth Server-to-Server credentials method](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/migration/#why-oauth-server-to-server-credentials)
 
-## Prerequisites
+To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
 
->[!NOTE]
->
->To manage certificates in Adobe Developer, make sure you have ***System administrator*** rights on the organization or a [developer account](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the Admin Console.
+</text1>
+
+</InlineAlert>
+
+## Prerequisites
 
 Create a new integration to Adobe Journey Optimizer Service in [Adobe Developer Console](https://developer.adobe.com/console) and configure it. Your credentials will then be generated (API Key, Client secret...).
 
