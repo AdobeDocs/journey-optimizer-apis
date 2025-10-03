@@ -18,6 +18,10 @@ servers:
 
 paths:
   /ajo/journey:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
     get:
       summary: Get a list of journeys
       description: Returns a list of journeys based on the provided filters.
@@ -84,9 +88,13 @@ paths:
           description: Internal server error
 
   /ajo/journey/{id}:
+    parameters:
+      - $ref: '#/components/parameters/APIKeyParam'
+      - $ref: '#/components/parameters/ImsOrgIdParam'
+      - $ref: '#/components/parameters/SandboxNameParam'
     get:
       summary: Get journey by ID
-      description: Returns a journey by its ID with optional includes for additional data.
+      description: Returns a journey by its ID with optional includes for additional data
       operationId: getJourneyById
       tags:
         - Journeys
@@ -100,14 +108,10 @@ paths:
         - name: include
           in: query
           required: false
-          description: List of additional data to include.
+          description: Comma-separated list of additional data to include in the response  (e.g., "campaigns", "surfaces", "rulesets"). Enriches the journey model with related information. Will cause additional overhead and API calls.
           schema:
             type: string
-            enum:
-              - campaigns
-              - surfaces
-              - rulesets
-          example: campaigns,surfaces
+          example: campaigns,rulesets
       responses:
         '200':
           description: Successful response
@@ -125,6 +129,31 @@ paths:
           description: Internal server error
 
 components:
+  parameters:
+    APIKeyParam:
+      name: x-api-key
+      description: The API key belonging to the calling client. Use the client id from Developer Console.
+      required: true
+      in: header
+      schema:
+        type: string
+        example: 829495afa589475ab56850a702359cf9
+    ImsOrgIdParam:
+      name: x-gw-ims-org-id
+      description: The IMS org id for which the action is being taken.
+      required: true
+      in: header
+      schema:
+        type: string
+        example: 0A7F574EBB4C6E1423973F52@AdobeOrg
+    SandboxNameParam:
+      name: x-sandbox-name
+      description: Provides the platform sandbox name.
+      required: true
+      in: header
+      schema:
+        type: string
+        example: prod
   schemas:
     PublicJourneyList:
       type: object
@@ -1071,7 +1100,7 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
+      description: The authentication token to access the service. Get from Developer Console
 
 security:
   - BearerAuth: []
