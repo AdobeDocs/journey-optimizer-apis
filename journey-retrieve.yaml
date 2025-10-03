@@ -2,7 +2,8 @@
 openapi: 3.0.3
 info:
   title: Retrieve Journeys using APIs
-  description: This API allows you to retrieve Journeys and their associated campaigns.<br/><a href="Journey_public API_postman_collection.json">Journey Public API Postman collection</a>
+  description: This API allows you to retrieve Journeys and their associated campaigns.<br/><a href="/journey-optimizer-apis/Journey_public_API_postman_collection.json">Journey Public API Postman collection</a>
+
   version: 1.0.0
   contact:
     name: Adobe Journey Optimizer Team
