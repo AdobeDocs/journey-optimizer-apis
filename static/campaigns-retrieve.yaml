@@ -1,7 +1,6 @@
 openapi: 3.0.1
 info:
   title: Retrieve & filter Action Campaigns
-  description: AJO Campaigns API
   version: v1.77
 externalDocs:
   description: AJO Campaigns API Tech Spec
@@ -18,40 +17,12 @@ security:
 tags:
   - name: Metadata Resource
     description: Metadata collection
-  - name: Content Service Template Proxy
-    externalDocs:
-      description: Content Service Templates swagger
-      url: https://git.corp.adobe.com/pages/cjm/api-specification/?urls.primaryName=%20%20%E2%94%94%20Content%20Service
   - name: Workflow Resource
     description: Workflow collection
-  - name: Decision Resource
-    description: Decision management resource
-  - name: Version Resource
-    description: Version management resource
   - name: Campaign Resource
     description: Campaign management resource
-  - name: Campaign Tracker Resource
-    description: Campaign tracker resource
-  - name: Approval Resource
-    description: Campaign approvals management resource
-  - name: Inline Campaign Resource
-    description: Inline Campaign management resource
-  - name: Inline Message Service Proxy
-    externalDocs:
-      description: Inline message service swagger
-      url: https://git.corp.adobe.com/pages/cjm/api-specification/?urls.primaryName=%20%20%E2%94%94%20Content%20Service%20-%20Inline%20Messages
-  - name: Multilingual Content Proxy
-    externalDocs:
-      description: Orchestration APIs for Multilingual Content swagger
-      url: https://git.corp.adobe.com/pages/cjm/api-specification/?urls.primaryName=%20%20%E2%94%94%20Content%20Translation%20Orchestrator#/inline-message/post_multilingual_inline_messages_manual_translation_ops
-  - name: Bulk Campaign Resource
-    description: Campaign bulk management resource
-  - name: Bulk Validate Resource
-    description: bulk validate management resource
   - name: Health Resource
     description: Health validation endpoints
-  - name: Multilingual Resource
-    description: Multilingual management resource
   - name: Experiment Resource
     description: Experiment management resource
 paths:
