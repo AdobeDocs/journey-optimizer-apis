@@ -7,4 +7,4 @@ keywords:
 layout: none
 ---
 
-<RedoclyAPIBlock src="/journey-optimizer-apis/orchestrated-campaign-dataset"/>
+<RedoclyAPIBlock src="/journey-optimizer-apis/orchestrated-campaign-dataset.yaml"/>
