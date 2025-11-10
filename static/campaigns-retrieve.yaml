@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Retrieve & filter Action Campaigns",
     "description" : "Retrieve & filter Action Campaigns",
-    "version" : "v1.79-SNAPSHOT"
+    "version" : "v1.79"
   },
   "servers" : [ {
     "url" : "https://platform-int.adobe.io/journey/campaigns",
