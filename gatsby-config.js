@@ -63,6 +63,10 @@ module.exports = {
         {
           title: 'Enable datasets for Orchestrated campaigns',
           path: '/references/orchestrated-campaign-dataset.md'
+        },
+        {
+          title: 'Decisioning',
+          path: '/references/decisioning.md'
         }
       ]
       },

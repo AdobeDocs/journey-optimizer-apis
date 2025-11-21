@@ -1,0 +1,582 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/v1/hub/decisions": {
+      "post": {
+        "tags": [
+          "decisions-handler"
+        ],
+        "operationId": "decisions",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-gw-ims-org-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-sandbox-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-sandbox-name",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-request-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionsRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisioningResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/hub/decisionItems": {
+      "post": {
+        "tags": [
+          "decisions-handler"
+        ],
+        "operationId": "decisionItems",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-gw-ims-org-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-sandbox-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-sandbox-name",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-request-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DecisionItemsRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DecisionItemsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdditionalItem": {
+        "type": "object",
+        "properties": {
+          "manualItemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fallbackItemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Body": {
+        "type": "object",
+        "properties": {
+          "xdm": {
+            "$ref": "#/components/schemas/Xdm"
+          },
+          "extra": {
+            "$ref": "#/components/schemas/Extra"
+          }
+        }
+      },
+      "Context": {
+        "type": "object",
+        "properties": {
+          "decisionEventId": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "placementId": {
+            "type": "string"
+          },
+          "commitId": {
+            "type": "string"
+          }
+        }
+      },
+      "DecisionPolicy": {
+        "type": "object",
+        "properties": {
+          "decisionPolicyId": {
+            "type": "string"
+          },
+          "itemCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selectionStrategies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SelectionStrategyGroup"
+            }
+          },
+          "context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "additionalItem": {
+            "$ref": "#/components/schemas/AdditionalItem"
+          }
+        }
+      },
+      "DecisionsRequestBody": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Body"
+          }
+        }
+      },
+      "Environment": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Extra": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "$ref": "#/components/schemas/Query"
+          }
+        }
+      },
+      "IdentityItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "primary": {
+            "type": "boolean"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "$ref": "#/components/schemas/Environment"
+          }
+        }
+      },
+      "Query": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisionPolicy"
+            }
+          }
+        }
+      },
+      "SelectionStrategyGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "strategyIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Xdm": {
+        "type": "object",
+        "required": [
+          "profile",
+          "identityMap",
+          "xid"
+        ],
+        "properties": {
+          "profile": {
+            "type": "object",
+            "items": {
+              "$ref": "#/components/schemas/Profile"
+            }
+          },
+          "identityMap": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IdentityItem"
+              }
+            }
+          },
+          "xid": {
+            "type": "string"
+          },
+          "experienceEvent": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "schemaId": {
+            "type": "string"
+          }
+        }
+      },
+      "AdditionalItems": {
+        "type": "object",
+        "properties": {
+          "manualItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisioningResponseItem"
+            }
+          },
+          "fallbackItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisioningResponseItem"
+            }
+          }
+        }
+      },
+      "DecisionPolicyPayload": {
+        "type": "object",
+        "required": [
+          "decisionPolicyId"
+        ],
+        "properties": {
+          "decisionPolicyId": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Payload"
+            }
+          },
+          "additionalItem": {
+            "$ref": "#/components/schemas/AdditionalItems"
+          }
+        }
+      },
+      "DecisioningResponse": {
+        "type": "object",
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/DecisioningResponseHeader"
+          },
+          "body": {
+            "$ref": "#/components/schemas/DecisioningResponseBody"
+          }
+        }
+      },
+      "DecisioningResponseBody": {
+        "type": "object",
+        "properties": {
+          "handle": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisioningResponseHandle"
+            }
+          }
+        }
+      },
+      "DecisioningResponseHandle": {
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "type": "string"
+          },
+          "handleType": {
+            "type": "string"
+          },
+          "payloads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisionPolicyPayload"
+            }
+          }
+        }
+      },
+      "DecisioningResponseHeader": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DecisioningResponseItem": {
+        "type": "object",
+        "properties": {
+          "itemDetail": {
+            "$ref": "#/components/schemas/ItemDetail"
+          },
+          "data": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "ItemDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "etag": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "format": "double"
+          },
+          "itemSelection": {
+            "$ref": "#/components/schemas/ItemSelection"
+          }
+        }
+      },
+      "ItemSelection": {
+        "type": "object",
+        "properties": {
+          "selectionDetail": {
+            "$ref": "#/components/schemas/SelectionDetail"
+          },
+          "rankingDetail": {
+            "$ref": "#/components/schemas/RankingDetail"
+          }
+        }
+      },
+      "Payload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "strategyIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisioningResponseItem"
+            }
+          }
+        }
+      },
+      "RankingDetail": {
+        "type": "object",
+        "properties": {
+          "strategyID": {
+            "type": "string"
+          },
+          "algorithmID": {
+            "type": "string"
+          },
+          "treatmentID": {
+            "type": "string"
+          },
+          "step": {
+            "type": "string",
+            "enum": [
+              "formula",
+              "aiModel",
+              "priority"
+            ]
+          },
+          "trafficType": {
+            "type": "string"
+          }
+        }
+      },
+      "SelectionDetail": {
+        "type": "object",
+        "properties": {
+          "strategyID": {
+            "type": "string"
+          },
+          "strategyName": {
+            "type": "string"
+          },
+          "selectionType": {
+            "type": "string",
+            "enum": [
+              "selectionStrategy",
+              "fallback",
+              "manual"
+            ]
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "DecisionItemsRequest": {
+        "required": [
+          "commitId",
+          "decisionPolicyId",
+          "itemIds"
+        ],
+        "type": "object",
+        "properties": {
+          "decisionPolicyId": {
+            "type": "string"
+          },
+          "commitId": {
+            "type": "string"
+          },
+          "itemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DecisionItemsResponse": {
+        "type": "object",
+        "properties": {
+          "decisionPolicyId": {
+            "type": "string"
+          },
+          "commitId": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonNode"
+            }
+          }
+        }
+      }
+    }
+  }
+}
