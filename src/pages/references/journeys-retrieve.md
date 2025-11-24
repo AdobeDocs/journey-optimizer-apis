@@ -1,6 +1,6 @@
 ---
-title: Retrieve journeys using APIs
-description: Manage and retrieve journeys using APIs
+title: Retrieve Journeys using APIs
+description: Retrieve Journeys using APIs
 keywords: 
   - Journey Optimizer
   - API Documentation
