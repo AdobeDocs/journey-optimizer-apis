@@ -71,6 +71,10 @@ module.exports = {
         {
           title: 'Decisioning',
           path: '/references/decisioning.md'
+        },
+        {
+          title: 'Decision management',
+          path: '/references/decision-management.md'
         }
       ]
       },
