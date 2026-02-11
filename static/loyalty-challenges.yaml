@@ -1,103 +1,898 @@
 ---
-openapi: 3.0.0
-
+openapi: 3.0.1
 info:
-  title: Loyalty Challenges
-  description: |
-    APIs for the **Loyalty Challenges** feature (private beta). Use this service to manage and query loyalty challenge state.
-
-    <br/><br/>**Availability:** This API is available in private beta. Contact Adobe for access.
+  title: AJO Customer Loyalty Challenge State API
+  description: API for managing AJO Customer Loyalty Challenge State.   APIs for the **Loyalty Challenges** feature (private beta). Use this service to manage and query loyalty challenge state.<br/><br/>**Availability:** This API is available in private beta. Contact Adobe for access.
     <br/><br/>**Related documentation:** See [Loyalty challenges](https://experienceleague.adobe.com/docs/journey-optimizer/using/loyalty-challenges/get-started.html) in Journey Optimizer documentation.
     <br/><br/>**Required headers:** All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key. For more information, see the [authentication tutorial](https://developer.adobe.com/journey-optimizer-apis/references/authentication/).
-  version: "1.0.0"
-  license:
-    name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
-
-security:
-  - BearerAuth: []
-
+  contact:
+    url: http://adobe.com
+  version: 1.1.0
 servers:
-  - url: https://platform-stage.adobe.io/ajo
-    description: Stage Environment
-  - url: https://platform.adobe.io/ajo
-    description: Production Environment
-
+- url: http://localhost:8080
+  description: Local
+- url: https://platform-stage-va7.adobe.io/ajo/
+  description: Stage
+- url: https://platform-va7.adobe.io/ajo/
+  description: Prod
+tags:
+- name: Challenge-State
+  description: Profile interaction with a Challenge affecting its state
 paths:
-  # Replace the paths below with the full specification from the internal API spec.
-  # Source: Loyalty Challenge State Service (private beta)
-  /loyalty/challenge-state:
-    parameters:
-      - $ref: '#/components/parameters/x-api-key'
-      - $ref: '#/components/parameters/x-request-id'
-      - $ref: '#/components/parameters/x-gw-ims-org-id'
-      - $ref: '#/components/parameters/x-sandbox-name'
-    get:
-      summary: Get loyalty challenge state (placeholder)
+  "/loyalty/challenges/{profileId}/withdraw/{challengeId}":
+    post:
       tags:
-        - Loyalty Challenges
-      operationId: getLoyaltyChallengeState
-      description: Placeholder. Replace this file with the full OpenAPI spec from the Loyalty Challenge State Service.
+      - Challenge-State
+      summary: Withdraw up for a Challenge
+      operationId: withdraw
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: profileId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: challengeId
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
-          description: OK
+          description: Success
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
-                type: object
+                "$ref": "#/components/schemas/ProblemDetail"
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/errorResponse'
-
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/signup/{challengeId}":
+    post:
+      tags:
+      - Challenge-State
+      summary: Sign up for a Challenge
+      operationId: signup
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: challengeId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: x-test
+        in: header
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Signup"
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Could not find Challenge Id
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Profile has already joined the challenge
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/events":
+    post:
+      tags:
+      - Challenge-State
+      summary: Receive a Task Event
+      operationId: events
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonNode"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/{profileId}":
+    get:
+      tags:
+      - Challenge-State
+      summary: Retrieve all active Challenges for a profileId
+      operationId: activeChallengesByProfile
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: profileId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: The state of the challenge (active, complete)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChallengeList"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/state":
+    get:
+      tags:
+      - Challenge-State
+      summary: Retrieve Challenges for a profileId
+      operationId: activeChallengeStateByProfile
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: v
+        in: query
+        description: Version of the response
+        required: false
+        schema:
+          type: string
+          default: '2'
+      - name: pid
+        in: query
+        description: Profile Id of the Loyalty guest
+        required: true
+        schema:
+          type: string
+      - name: cid
+        in: query
+        description: Challenge Id if a specific challenge is requested; otherwise,
+          all 'active' will be returned
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChallengeList"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/org":
+    get:
+      tags:
+      - Challenge-State
+      summary: Retrieve all of the active Challenges
+      operationId: activeChallenges
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChallengeList"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/od":
+    get:
+      tags:
+      - Challenge-State
+      summary: Retrieve all active Challenges for a profileId (OD)
+      operationId: activeChallengesByProfileOD
+      parameters:
+      - name: x-request-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-gw-ims-org-id
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-sandbox-id
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: x-sandbox-name
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: v
+        in: query
+        description: Version of the response
+        required: false
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Profile Id of the Loyalty guest
+        required: true
+        schema:
+          type: string
+      - name: idNS
+        in: query
+        description: Namespace for the Profile Id
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChallengeList"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/health":
+    get:
+      tags:
+      - Challenge-State
+      summary: Health check
+      operationId: healthCheck
+      parameters:
+      - name: x-api-key
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Health"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/actuator/liveness":
+    get:
+      tags:
+      - challenge-controller
+      operationId: getLiveness
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+  "/actuator/health":
+    get:
+      tags:
+      - challenge-controller
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '409':
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProblemDetail"
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      description: The authentication token to access the service.
-
-  parameters:
-    x-api-key:
-      name: x-api-key
-      description: The API key belonging to the calling client.
-      required: true
-      in: header
-      schema:
-        type: string
-    x-request-id:
-      name: x-request-id
-      description: A unique id for the request (optional).
-      required: false
-      in: header
-      schema:
-        type: string
-    x-gw-ims-org-id:
-      name: x-gw-ims-org-id
-      description: The IMS org id for which the action is being taken.
-      required: true
-      in: header
-      schema:
-        type: string
-    x-sandbox-name:
-      name: x-sandbox-name
-      description: The platform Sandbox name.
-      required: true
-      in: header
-      schema:
-        type: string
-
   schemas:
-    errorResponse:
+    ProblemDetail:
       type: object
       properties:
         type:
           type: string
+          format: uri
         title:
-          type: string
-        detail:
           type: string
         status:
           type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    JsonNode:
+      type: object
+    Signup:
+      type: object
+      properties:
+        profileId:
+          type: string
+        namespace:
+          type: string
+        taskPicked:
+          type: string
+        data:
+          "$ref": "#/components/schemas/JsonNode"
+        tasks:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/JsonNode"
+    Challenge:
+      type: object
+      properties:
+        challenge_id:
+          type: string
+        external_Id:
+          type: string
+        profileId:
+          type: string
+        name:
+          type: string
+        desc:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        completionDate:
+          type: string
+          format: date-time
+        signupDate:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Task"
+        tasksToComplete:
+          type: integer
+          format: int32
+        dependsOn:
+          "$ref": "#/components/schemas/DependsOn"
+        state:
+          type: string
+    ChallengeList:
+      type: object
+      properties:
+        challengeList:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Challenge"
+    DependsOn:
+      type: object
+      properties:
+        state:
+          type: string
+        challengeId:
+          type: string
+    Task:
+      type: object
+      properties:
+        taskState:
+          type: string
+        taskName:
+          type: string
+        desc:
+          type: string
+    Health:
+      type: object
+      properties:
+        status:
+          type: boolean
