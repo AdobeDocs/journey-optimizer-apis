@@ -11,7 +11,7 @@ For each of these examples to run, you first have to create your API triggered c
 
 A detailed description of the API is available [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
 
-<br/><br/>
+\<br/\>\<br/\>
 
 <summary>Example 1 : This example is to show how you can send an SMS Message to an existing profile in Adobe Experience Platform having phoneNumber defined.</summary>
 <p>
