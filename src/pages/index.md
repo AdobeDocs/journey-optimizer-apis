@@ -41,8 +41,6 @@ Follow this tutorial to gather the required authentication credentials for all J
 
 ### API References
 
-<DiscoverBlock slots="link, text"/>
-
 [Suppression API](references/suppression.md)
 
 [Trigger campaigns using APIs](references/messaging.md)
