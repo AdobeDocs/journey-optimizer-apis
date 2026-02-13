@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "80acb840-79fc-485a-9387-547c2ece21c5",
+		"name": "Journey Public API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "5439403"
+	},
+	"item": [
+		{
+			"name": "Journey Public APIs",
+			"item": [
+				{
+					"name": "Get User Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"if (jsonData.access_token) {",
+									"    pm.environment.set(\"ACCESS_TOKEN\", \"Bearer \" + jsonData.access_token);",
+									"    console.log(\"Access token saved to environment.\");",
+									"} else {",
+									"    console.warn(\"access_token not found in response.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{API_KEY}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{CLIENT_SECRET}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "{{SCOPES}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "https://{{IMS}}/ims/token/v3"
+					},
+					"response": []
+				},
+				{
+					"name": "ListJourneys",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "x-gw-ims-org-id",
+								"value": "{{IMS_ORG}}",
+								"type": "text"
+							},
+							{
+								"key": "x-sandbox-name",
+								"value": "prod",
+								"type": "text"
+							}
+						],
+						"url": "https://{{PLATFORM_URL}}/ajo/journey"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Journey",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{ACCESS_TOKEN}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "x-gw-ims-org-id",
+								"value": "{{IMS_ORG}}",
+								"type": "text"
+							},
+							{
+								"key": "x-sandbox-name",
+								"value": "prod",
+								"type": "text"
+							}
+						],
+						"url": "https://{{PLATFORM_URL}}/ajo/journey/{{journeyVersionId}}"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
