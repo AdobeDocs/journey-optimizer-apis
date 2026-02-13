@@ -37,8 +37,6 @@ Adobe Journey Optimizer is built natively on the Adobe Experience Platform and c
 
 Follow this tutorial to gather the required authentication credentials for all Journey Optimizer APIs.
 
-<DiscoverBlock slots="heading, link, text"/>
-
 ### API References
 
 [Suppression API](references/suppression.md)
