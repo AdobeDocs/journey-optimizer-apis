@@ -11,10 +11,9 @@ For each of these examples to run, you first have to create your API triggered c
 
 A detailed description of the API is available [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
 
-<br/><br/>
+\<br/\>\<br/\>
 
-<summary>Example 1 : This example is to show how you can send an SMS Message to an existing profile in Adobe Experience Platform having phoneNumber defined.</summary>
-<p>
+Example 1 : This example is to show how you can send an SMS Message to an existing profile in Adobe Experience Platform having phoneNumber defined.
 
 ```json
 {
@@ -30,10 +29,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>
 
-<summary>Example 2 : This example is to show how you can send an SMS message with contextual attributes to multiple existing profiles and overriding the phoneNumber using channelData.</summary>
-<p>
+Example 2 : This example is to show how you can send an SMS message with contextual attributes to multiple existing profiles and overriding the phoneNumber using channelData.
 
 ```json
 {
@@ -74,11 +71,9 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>
 
-<summary>Example 3 : This example is to show how you can send a Push Message to an existing profile.</summary>
+Example 3 : This example is to show how you can send a Push Message to an existing profile.
 
-<p>
 
 ```json
 {
@@ -102,10 +97,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>
 
-<summary>Example 4: This example is to show how to send an Email message to an existing profile with contextual attributes (defined during campaign authoring) and personalization attributes. </summary>
-<p>
+Example 4: This example is to show how to send an Email message to an existing profile with contextual attributes (defined during campaign authoring) and personalization attributes.
 
 ```json
 {
@@ -145,10 +138,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>
 
-<summary>Example 5: This example is to show how to send an Email message to an existing profile with contextual and personalization attributes and overriding email-Id using channelData. </summary>
-<p>
+Example 5: This example is to show how to send an Email message to an existing profile with contextual and personalization attributes and overriding email-Id using channelData.
 
 ```json
 {
@@ -192,10 +183,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
 
 ```
 
-</p>
 
-<summary>Example 6: This example is to show how to send an Email message to an existing profile present in custom merge schema.</summary>
-<p>
+Example 6: This example is to show how to send an Email message to an existing profile present in custom merge schema.
 
 ```json
 {
@@ -216,10 +205,8 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>
 
-<summary>Example 7: This example is to execute API triggered marketing campaigns to a given audience using API with contextual attributes. We need to pass the campaign ID in our Audience API and, if contextual atributes are part of the message, then they will be passed in the payload like below.</summary>
-<p>
+Example 7: This example is to execute API triggered marketing campaigns to a given audience using API with contextual attributes. We need to pass the campaign ID in our Audience API and, if contextual atributes are part of the message, then they will be passed in the payload like below.
 
 ```json
 {
@@ -234,4 +221,3 @@ A detailed description of the API is available [here](https://developer.adobe.co
 }
 ```
 
-</p>

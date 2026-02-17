@@ -23,9 +23,9 @@ Create a new integration to Adobe Journey Optimizer Service in [Adobe Developer 
 
 1. [Create a new project](https://developer.adobe.com/developer-console/docs/guides/projects/projects-empty).
 2. [Add the AJO API](https://developer.adobe.com/developer-console/docs/guides/services/services-add-api-oauth-s2s).
-<br/><img src="ajoconsole.png"/>
+\<br/\>![AJO console](ajoconsole.png)
 3. [Add AEP Permissions](https://experienceleague.adobe.com/en/docs/experience-platform/access-control/abac/permissions-ui/permissions#manage-api-credentials-for-role) to the *role* that coincides with the *product profile* you included for the AJO API.
-<br/><img src="ajorole.png"/>
+\<br/\>![AJO role](ajorole.png)
 
 ## Authorization header
 
@@ -60,4 +60,4 @@ Depending on the API, different permissions need to be configured:
 * **Capping API** needs the "Manage Journeys Events, Data Sources and Action" permission to the targeted sandbox (Capping is configured at sandbox level).
 * **Throttling API** needs the "Manage Journeys Events, Data Sources and Action" permission to the production sandbox (Throttling can only be configured on the production sandbox)
 * **Journey API** needs the "Journey Manage" and "Journey View" permissions to the targeted sandbox.
-<br/><br/>
+\<br/\>\<br/\>

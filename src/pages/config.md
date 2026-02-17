@@ -1,0 +1,17 @@
+- pathPrefix:
+    - /journey-optimizer-apis/
+
+- pages:
+    - [Adobe Journey Optimizer APIs](/index.md)
+    - API References
+        - [Authentication](/references/authentication.md)
+        - [Suppression API](/references/suppression.md)
+        - [Trigger campaigns](/references/messaging.md)
+        - [Retrieve Journeys](/references/journeys-retrieve.md)
+        - [Retrieve & filter Action campaigns](/references/campaigns-retrieve.md)
+        - [Journeys throttling configurations](/references/journeys-throttling.md)
+        - [Content fragments & templates](/references/content.md)
+        - [Simulations API](/references/simulations.md)
+        - [Enable datasets for Orchestrated campaigns](/references/orchestrated-campaign-dataset.md)
+    - Code samples
+        - [Trigger campaigns using APIs](references/messaging-samples.md)
