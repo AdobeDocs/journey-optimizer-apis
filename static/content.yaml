@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates">Journey Optimizer documentation</a>.
   version: 0.0.1
-  title: Content templates & fragments API
+  title: Content API.
 
 security:
   - imsUserToken: []
@@ -197,7 +197,7 @@ paths:
       description: >-
         Patch Content Template with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
         <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
-        Supported paths are ["/name", "/description" ]
+        Supported paths are ["/name", "/description", "/parentFolderId" ]
       tags:
         - Content template API
       parameters:
@@ -394,7 +394,7 @@ paths:
       summary: Patch Content Fragment By Id.
       description: >-
         Patch fragment with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
-        Path supported: "/name", "/description"
+        Path supported: "/name", "/description", "/parentFolderId"
       tags:
         - Content fragment API
       parameters:
@@ -686,6 +686,8 @@ components:
           $ref: '#/components/schemas/template-source'
         subType:
           $ref: '#/components/schemas/template-sub-type-enum'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     content-template-metadata:
       title: Content Template metadata.
@@ -709,6 +711,8 @@ components:
           $ref: '#/components/schemas/olac-labels'
         source:
           $ref: '#/components/schemas/template-source'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     content-template-listing-response:
       title: Content Template
@@ -755,6 +759,8 @@ components:
           $ref: '#/components/schemas/template-source'
         subType:
           $ref: '#/components/schemas/template-sub-type-enum'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     olac-labels:
       title: OLAC Label Details
@@ -781,6 +787,13 @@ components:
       title: Description
       description: Description
       example: "Cyber Monday Sale - Header Banner!!"
+
+    parent-folder-id:
+      type: string
+      title: Folder Id
+      description: Id of the folder in which the content is present.
+      example: 'a49dbe03-34e6-4231-aba0-0c255a9f08a1'
+      nullable: true
 
     template-type:
       type: string
@@ -1627,6 +1640,8 @@ components:
           $ref: '#/components/schemas/fragment-type'
         source:
           $ref: '#/components/schemas/fragment-source'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     fragment-status:
       type: string
@@ -1809,6 +1824,8 @@ components:
           $ref: '#/components/schemas/olac-labels'
         source:
           $ref: '#/components/schemas/fragment-source'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     content-fragment-metadata:
       title: Content Fragment metadata.
@@ -1834,6 +1851,8 @@ components:
           $ref: '#/components/schemas/olac-labels'
         source:
           $ref: '#/components/schemas/fragment-source'
+        parentFolderId:
+          $ref: '#/components/schemas/parent-folder-id'
 
     content-fragment-listing-response:
       title: Content Fragment
