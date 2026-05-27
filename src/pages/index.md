@@ -14,11 +14,11 @@ Journey Optimizer exposes REST endpoints that let you programmatically perform k
 #### Resources
 
 * [Journey Optimizer product description](https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer.html)
-* [Understand the suppression list](https://experienceleague.adobe.com/docs/journey-optimizer/using/reporting/deliverability/suppression-list.html)
-* [Journeys integration with exterrnal system](https://experienceleague.adobe.com/docs/journey-optimizer/using/configuration/configure-journeys/external-systems/external-systems.html#capping)
+* [Understand the suppression list](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/monitor-reputation/manage-suppression-list)
+* [Journeys integration with external system](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/external-systems/external-systems)
 * [Work with content templates](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates)
 * [Work with content fragments](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/fragments/fragments)
-* [Enable datasets for Orchestrated campaigns](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/manual-schema#enable)
+* [Enable datasets for Orchestrated campaigns](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/manual-schema)
 
 ## Overview
 

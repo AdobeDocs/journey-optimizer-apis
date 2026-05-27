@@ -9,7 +9,7 @@ Below code snippets use sample Journey Optimizer triggered campaigns.
 
 For each of these examples to run, you first have to create your triggered campaigns in the user interface and get ready with your Bearer token and API key. Note that these examples are written in curl but we support the language of your choice.
 
-The full OpenAPI reference for this endpoint is [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging/)
+The full OpenAPI reference for this endpoint is [here](https://developer.adobe.com/journey-optimizer-apis/references/messaging)
 
 \<br/\>\<br/\>
 

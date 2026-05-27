@@ -149,7 +149,7 @@ paths:
       description: |
         Currently, this API supports enabling Orchestrated Campaign extension for only one dataset at a time.  
         - This is an asynchronous API that performs multiple tasks in the background.  
-        - To check the latest status, use the provided `jobId` and call [Get Dataset Extension Enablement Job Status](https://developer.adobe.com/journey-optimizer-apis/references/orchestrated-campaign-dataset/#operation/getDatasetExtensionEnablementJobStatus) API.
+        - To check the latest status, use the provided `jobId` and call [Get Dataset Extension Enablement Job Status](https://developer.adobe.com/journey-optimizer-apis/references/orchestrated-campaign-dataset#operation/getDatasetExtensionEnablementJobStatus) API.
         - Alternatively, to check the status of the extension on dataset, fetch the dataset details with `datasetId` using [Datasets APIs](https://developer.adobe.com/experience-platform-apis/references/catalog/#operation/retrieveDataset) to check the extension status.
         - The response will contain the `jobId` of the enablement request.
       security:
