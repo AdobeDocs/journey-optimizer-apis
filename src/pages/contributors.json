@@ -1,0 +1,121 @@
+{
+  "total": 14,
+  "offset": 0,
+  "limit": 14,
+  "data": [
+    {
+      "page": "/",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/160891990?v=4",
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4"
+      ],
+      "lastUpdated": "5/27/2026"
+    },
+    {
+      "page": "/config",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "4/1/2026"
+    },
+    {
+      "page": "/references/authentication",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/1202739?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/campaigns-retrieve",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/content",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/journeys-retrieve",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "3/31/2026"
+    },
+    {
+      "page": "/references/journeys-throttling",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/loyalty-challenges",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/messaging",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/messaging-samples",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/160891990?v=4",
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "5/27/2026"
+    },
+    {
+      "page": "/references/oc-trigger",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4"
+      ],
+      "lastUpdated": "3/31/2026"
+    },
+    {
+      "page": "/references/orchestrated-campaign-dataset",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/simulations",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    },
+    {
+      "page": "/references/suppression",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/55485777?v=4",
+        "https://avatars.githubusercontent.com/u/57922?v=4",
+        "https://avatars.githubusercontent.com/u/56609464?v=4"
+      ],
+      "lastUpdated": "3/30/2026"
+    }
+  ],
+  ":type": "sheet"
+}
