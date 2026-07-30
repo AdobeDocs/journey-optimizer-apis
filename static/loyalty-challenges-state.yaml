@@ -2,7 +2,7 @@
 openapi: 3.0.1
 info:
   title: AJO Customer Loyalty Challenge State API
-  description: APIs for managing AJO Customer Loyalty Challenge State (private beta).
+  description: APIs for managing AJO Customer Loyalty Challenge State.
     <br/><br/>**Related documentation:** See [Loyalty challenges](https://experienceleague.adobe.com/docs/journey-optimizer/using/loyalty-challenges/get-started.html) in Journey Optimizer documentation.
     <br/><br/>**Required headers:** All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key. For more information, see the [authentication tutorial](https://developer.adobe.com/journey-optimizer-apis/references/authentication).
   contact:

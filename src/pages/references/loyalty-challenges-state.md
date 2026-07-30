@@ -1,5 +1,5 @@
 ---
-title: Loyalty challenge state (private beta)
+title: Loyalty challenge state
 description: Query and update loyalty challenge participation state for profiles.
 keywords:
   - Journey Optimizer
