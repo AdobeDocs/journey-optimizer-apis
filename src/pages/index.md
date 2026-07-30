@@ -56,6 +56,12 @@ Adobe Journey Optimizer is built natively on the Adobe Experience Platform and c
 
 [Trigger Orchestrated campaigns](references/oc-trigger.md)
 
+### Loyalty Challenges
+
+[Manage loyalty challenge metadata](references/loyalty-challenges.md)
+
+[Query and update loyalty challenge state](references/loyalty-challenges-state.md)
+
 ### Code samples
 
 [Execute API-triggered campaigns (code samples)](references/messaging-samples.md)
