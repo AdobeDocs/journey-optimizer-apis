@@ -14,5 +14,7 @@
         - [Trigger Orchestrated campaigns](/references/oc-trigger.md)
         - [Content templates & fragments](/references/content.md)
         - [Suppression & allow lists](/references/suppression.md)
+        - [Loyalty challenge metadata](/references/loyalty-challenges.md)
+        - [Loyalty challenge state](/references/loyalty-challenges-state.md)
     - Code samples
         - [API-triggered campaigns (code samples)](/references/messaging-samples.md)

@@ -1,0 +1,1689 @@
+---
+openapi: 3.0.1
+info:
+  title: AJO Customer Loyalty Challenge State API
+  description: APIs for managing AJO Customer Loyalty Challenge State.
+    <br/><br/>**Related documentation:** See [Loyalty challenges](https://experienceleague.adobe.com/docs/journey-optimizer/using/loyalty-challenges/get-started.html) in Journey Optimizer documentation.
+    <br/><br/>**Required headers:** All calls require the headers Authorization, x-gw-ims-org-id, and x-api-key. For more information, see the [authentication tutorial](https://developer.adobe.com/journey-optimizer-apis/references/authentication).
+  contact:
+    url: http://adobe.com
+  version: 1.1.0
+servers:
+  - url: http://localhost:8080
+    description: Local
+  - url: https://platform-stage-va7.adobe.io/ajo/
+    description: Stage
+  - url: https://platform-va7.adobe.io/ajo/
+    description: Prod
+tags:
+  - name: Challenge-State
+    description: Profile interaction with a Challenge affecting its state
+paths:
+  "/loyalty/challenges/{profileId}/withdraw":
+    post:
+      tags:
+        - challenge-controller
+      operationId: bulkWithdraw
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkWithdraw"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BulkWithdrawResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  "/loyalty/challenges/{profileId}/withdraw/{challengeId}":
+    post:
+      tags:
+        - Challenge-State
+      summary: Withdraw up for a Challenge
+      operationId: withdraw
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  /loyalty/challenges/state:
+    get:
+      tags:
+        - Challenge-State
+      summary: Retrieve Challenges for a profileId
+      operationId: activeChallengeStateByProfile
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: test
+          in: query
+          description: True if running the challenge as a test
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: v
+          in: query
+          description: Version of the response
+          required: false
+          schema:
+            type: string
+            default: 2
+        - name: pid
+          in: query
+          description: Profile Id of the Loyalty guest
+          required: true
+          schema:
+            type: string
+        - name: cid
+          in: query
+          description: Challenge Id if a specific challenge is requested; otherwise, all 'active' will be returned
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeList"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+    post:
+      tags:
+        - challenge-controller
+      operationId: activeChallengeStateByProfileWithPayload
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: test
+          in: query
+          description: True if running the challenge as a test
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: v
+          in: query
+          description: Version of the response
+          required: false
+          schema:
+            type: string
+            default: 2
+        - name: pid
+          in: query
+          description: Profile Id of the Loyalty guest
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JsonNode"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  /loyalty/challenges/signup:
+    post:
+      tags:
+        - challenge-controller
+      operationId: bulkSignup
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkSignup"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BulkSignupResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  "/loyalty/challenges/signup/{challengeId}":
+    post:
+      tags:
+        - Challenge-State
+      summary: Sign up for a Challenge
+      operationId: signup
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Signup"
+        required: true
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Could not find Challenge Id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Profile has already joined the challenge
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Challenge personalization not found for profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+  /loyalty/challenges/events:
+    post:
+      tags:
+        - Challenge-State
+      summary: Receive a Loyalty Event
+      operationId: events
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: test
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: cid
+          in: query
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JsonNode"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Profile has already joined the challenge
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Challenge personalization not found for profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+  "/loyalty/challenges/{profileId}":
+    get:
+      tags:
+        - Challenge-State
+      summary: Retrieve all active Challenges for a profileId
+      operationId: activeChallengesByProfile
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: The state of the challenge (active, complete)
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeList"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  /loyalty/challenges/org:
+    get:
+      tags:
+        - Challenge-State
+      summary: Retrieve all of the active Challenges
+      operationId: activeChallenges
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeList"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  /loyalty/challenges/health:
+    get:
+      tags:
+        - Challenge-State
+      summary: Health check
+      operationId: healthCheck
+      parameters:
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+  /loyalty/challenges/challenge:
+    get:
+      tags:
+        - Challenge-State
+      summary: Retrieve Challenges for a profileId
+      operationId: challengeDetail
+      parameters:
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: test
+          in: query
+          description: True if running the challenge as a test
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: v
+          in: query
+          description: Version of the response
+          required: false
+          schema:
+            type: string
+            default: 99
+        - name: pid
+          in: query
+          description: Profile Id of the Loyalty guest
+          required: true
+          schema:
+            type: string
+        - name: cid
+          in: query
+          description: Challenge Id if a specific challenge is requested; otherwise, all 'active' will be returned
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeList"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "409":
+          description: Resource conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "422":
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomProblemDetail"
+components:
+  schemas:
+    CustomProblemDetail:
+      type: object
+      properties:
+        error_code:
+          type: string
+        message:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        instance:
+          type: string
+          format: uri
+        method:
+          type: string
+        time:
+          type: string
+        requestId:
+          type: string
+    BulkWithdraw:
+      type: object
+      properties:
+        idList:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    BulkSignupResult:
+      type: object
+      properties:
+        challengeId:
+          type: string
+        status:
+          type: integer
+          format: int32
+        title:
+          type: string
+        error_code:
+          type: string
+        message:
+          type: string
+    BulkWithdrawResponse:
+      type: object
+      properties:
+        withdrawResponse:
+          type: array
+          items:
+            $ref: "#/components/schemas/BulkSignupResult"
+    JsonNode:
+      type: object
+    BulkSignup:
+      type: object
+      properties:
+        profileId:
+          type: string
+        idList:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    BulkSignupResponse:
+      type: object
+      properties:
+        signupResponse:
+          type: array
+          items:
+            $ref: "#/components/schemas/BulkSignupResult"
+    Signup:
+      type: object
+      properties:
+        profileId:
+          type: string
+        taskPicked:
+          type: string
+        data:
+          $ref: "#/components/schemas/JsonNode"
+        test:
+          type: boolean
+        challenge:
+          $ref: "#/components/schemas/JsonNode"
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    Accumulators:
+      type: object
+      properties:
+        qty:
+          type: number
+          format: float
+        spend:
+          type: number
+          format: float
+        days:
+          type: integer
+          format: int32
+        item_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppliedItem"
+    AppliedItem:
+      type: object
+      properties:
+        item:
+          $ref: "#/components/schemas/Item"
+        get_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        timestampApplied:
+          type: string
+          format: date-time
+        utcOffset:
+          type: object
+          properties:
+            totalSeconds:
+              type: integer
+              format: int32
+            id:
+              type: string
+            rules:
+              type: object
+              properties:
+                fixedOffset:
+                  type: boolean
+                transitions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      instant:
+                        type: string
+                        format: date-time
+                      overlap:
+                        type: boolean
+                      duration:
+                        type: object
+                        properties:
+                          seconds:
+                            type: integer
+                            format: int64
+                          zero:
+                            type: boolean
+                          nano:
+                            type: integer
+                            format: int32
+                          negative:
+                            type: boolean
+                          positive:
+                            type: boolean
+                          units:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                durationEstimated:
+                                  type: boolean
+                                timeBased:
+                                  type: boolean
+                                dateBased:
+                                  type: boolean
+                      gap:
+                        type: boolean
+                      dateTimeAfter:
+                        type: string
+                        format: date-time
+                      dateTimeBefore:
+                        type: string
+                        format: date-time
+                transitionRules:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      month:
+                        type: string
+                        enum:
+                          - JANUARY
+                          - FEBRUARY
+                          - MARCH
+                          - APRIL
+                          - MAY
+                          - JUNE
+                          - JULY
+                          - AUGUST
+                          - SEPTEMBER
+                          - OCTOBER
+                          - NOVEMBER
+                          - DECEMBER
+                      timeDefinition:
+                        type: string
+                        enum:
+                          - UTC
+                          - WALL
+                          - STANDARD
+                      dayOfWeek:
+                        type: string
+                        enum:
+                          - MONDAY
+                          - TUESDAY
+                          - WEDNESDAY
+                          - THURSDAY
+                          - FRIDAY
+                          - SATURDAY
+                          - SUNDAY
+                      dayOfMonthIndicator:
+                        type: integer
+                        format: int32
+                      localTime:
+                        $ref: "#/components/schemas/LocalTime"
+                      midnightEndOfDay:
+                        type: boolean
+        locationId:
+          type: string
+        transactionId:
+          type: string
+    Challenge:
+      type: object
+      properties:
+        challenge_id:
+          type: string
+        profileId:
+          type: string
+        name:
+          type: string
+        desc:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        completionDate:
+          type: string
+          format: date-time
+        signupDate:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        tasksToComplete:
+          type: integer
+          format: int32
+        dependsOn:
+          $ref: "#/components/schemas/DependsOn"
+        state:
+          type: string
+        optedIn:
+          type: boolean
+        singleTrans:
+          type: boolean
+        dayPart:
+          $ref: "#/components/schemas/Daypart"
+        pickYourTask:
+          type: boolean
+        reward:
+          $ref: "#/components/schemas/Reward"
+        milestones:
+          $ref: "#/components/schemas/Milestone"
+        accumRewards:
+          type: number
+        accumSpend:
+          type: number
+        kvpCustom:
+          type: object
+          additionalProperties:
+            type: string
+        schedule:
+          $ref: "#/components/schemas/Schedule"
+        challengeCompletions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChallengeCompletion"
+        personalized:
+          type: boolean
+    ChallengeList:
+      type: object
+      properties:
+        challengeList:
+          type: array
+          items:
+            $ref: "#/components/schemas/Challenge"
+    Daypart:
+      type: object
+      properties:
+        startMinute:
+          type: integer
+          format: int32
+        endMinute:
+          type: integer
+          format: int32
+    DependsOn:
+      type: object
+      properties:
+        state:
+          type: string
+        challengeId:
+          type: string
+    IncludeExclude:
+      type: object
+      properties:
+        valuesSet:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    Item:
+      type: object
+      properties:
+        item_set:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        item_name:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        unit_price:
+          type: number
+          format: float
+        sub_total:
+          type: number
+          format: float
+    LocalTime:
+      type: object
+      properties:
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+        second:
+          type: integer
+          format: int32
+        nano:
+          type: integer
+          format: int32
+    Milestone:
+      type: object
+      properties:
+        contiguous:
+          type: boolean
+        interval:
+          type: string
+          enum:
+            - none
+            - task
+            - daily
+            - weekly
+            - monthly
+            - annually
+        completions:
+          type: array
+          items:
+            $ref: "#/components/schemas/MilestoneProperties"
+        periodThreshold:
+          type: integer
+          format: int32
+    MilestoneProperties:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+            - incomplete
+            - complete
+            - retry
+            - sent
+            - failed
+        count:
+          type: integer
+          format: int32
+        rewardValue:
+          type: string
+        reward:
+          $ref: "#/components/schemas/Reward"
+    PersonalizedTaskAttributes:
+      type: object
+      properties:
+        desc:
+          type: boolean
+        name:
+          type: boolean
+        include_csv:
+          type: boolean
+        exclude_csv:
+          type: boolean
+        qtyMin:
+          type: boolean
+        spendMin:
+          type: boolean
+        multiDayDays:
+          type: boolean
+        streak:
+          type: boolean
+        maxRepeat:
+          type: boolean
+        duration:
+          type: boolean
+        reward:
+          type: boolean
+    Reward:
+      type: object
+      properties:
+        endpoint:
+          type: string
+        definition:
+          type: string
+        rewardValue:
+          type: string
+        rewardDefinition:
+          $ref: "#/components/schemas/RewardDefinition"
+        source:
+          type: string
+    RewardDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+        desc:
+          type: string
+        denomination:
+          type: string
+        enabled:
+          type: boolean
+        rewardJsonata:
+          type: string
+    Schedule:
+      type: object
+      properties:
+        maxRepeat:
+          type: integer
+          format: int32
+        repeatCount:
+          type: integer
+          format: int32
+        currentStreak:
+          type: integer
+          format: int32
+        currentVisits:
+          type: integer
+          format: int32
+        windowHours:
+          type: integer
+          format: int32
+        maxRepeatPerWindow:
+          type: integer
+          format: int32
+        repeatWindowHours:
+          type: integer
+          format: int32
+        lastCompletedAt:
+          type: string
+          format: date-time
+        lockWindowStart:
+          type: string
+          format: date-time
+        lockWindowCount:
+          type: integer
+          format: int32
+    Task:
+      type: object
+      properties:
+        taskState:
+          type: string
+        taskId:
+          type: string
+        taskName:
+          type: string
+        desc:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        variables:
+          $ref: "#/components/schemas/Variables"
+        accumulators:
+          $ref: "#/components/schemas/Accumulators"
+        schedule:
+          $ref: "#/components/schemas/Schedule"
+        taskCompletions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskCompletion"
+        dependsOnTaskName:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        reward:
+          $ref: "#/components/schemas/Reward"
+        accumSpend:
+          type: number
+        personalizedTaskAttributes:
+          $ref: "#/components/schemas/PersonalizedTaskAttributes"
+    TaskCompletion:
+      type: object
+      properties:
+        completionDate:
+          type: string
+          format: date-time
+        utcOffset:
+          type: object
+          properties:
+            totalSeconds:
+              type: integer
+              format: int32
+            id:
+              type: string
+            rules:
+              type: object
+              properties:
+                fixedOffset:
+                  type: boolean
+                transitions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      instant:
+                        type: string
+                        format: date-time
+                      overlap:
+                        type: boolean
+                      duration:
+                        type: object
+                        properties:
+                          seconds:
+                            type: integer
+                            format: int64
+                          zero:
+                            type: boolean
+                          nano:
+                            type: integer
+                            format: int32
+                          negative:
+                            type: boolean
+                          positive:
+                            type: boolean
+                          units:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                durationEstimated:
+                                  type: boolean
+                                timeBased:
+                                  type: boolean
+                                dateBased:
+                                  type: boolean
+                      gap:
+                        type: boolean
+                      dateTimeAfter:
+                        type: string
+                        format: date-time
+                      dateTimeBefore:
+                        type: string
+                        format: date-time
+                transitionRules:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      month:
+                        type: string
+                        enum:
+                          - JANUARY
+                          - FEBRUARY
+                          - MARCH
+                          - APRIL
+                          - MAY
+                          - JUNE
+                          - JULY
+                          - AUGUST
+                          - SEPTEMBER
+                          - OCTOBER
+                          - NOVEMBER
+                          - DECEMBER
+                      timeDefinition:
+                        type: string
+                        enum:
+                          - UTC
+                          - WALL
+                          - STANDARD
+                      dayOfWeek:
+                        type: string
+                        enum:
+                          - MONDAY
+                          - TUESDAY
+                          - WEDNESDAY
+                          - THURSDAY
+                          - FRIDAY
+                          - SATURDAY
+                          - SUNDAY
+                      dayOfMonthIndicator:
+                        type: integer
+                        format: int32
+                      localTime:
+                        $ref: "#/components/schemas/LocalTime"
+                      midnightEndOfDay:
+                        type: boolean
+        accumulators:
+          $ref: "#/components/schemas/Accumulators"
+    Variables:
+      type: object
+      properties:
+        include:
+          $ref: "#/components/schemas/IncludeExclude"
+        exclude:
+          $ref: "#/components/schemas/IncludeExclude"
+        goal:
+          type: number
+          format: float
+        type:
+          type: string
+        singleTrans:
+          type: boolean
+        spendMin:
+          type: number
+          format: float
+        qtyMin:
+          type: number
+          format: float
+        maxTrans:
+          type: integer
+          format: int32
+    ChallengeCompletion:
+      type: object
+      properties:
+        challengeComplete:
+          type: string
+          format: date-time
+    Health:
+      type: object
+      properties:
+        status:
+          type: boolean
