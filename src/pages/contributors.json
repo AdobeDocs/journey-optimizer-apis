@@ -1,7 +1,7 @@
 {
-  "total": 14,
+  "total": 15,
   "offset": 0,
-  "limit": 14,
+  "limit": 15,
   "data": [
     {
       "page": "/",
@@ -11,14 +11,15 @@
         "https://avatars.githubusercontent.com/u/56609464?v=4",
         "https://avatars.githubusercontent.com/u/57922?v=4"
       ],
-      "lastUpdated": "5/27/2026"
+      "lastUpdated": "7/30/2026"
     },
     {
       "page": "/config",
       "avatars": [
+        "https://avatars.githubusercontent.com/u/160891990?v=4",
         "https://avatars.githubusercontent.com/u/55485777?v=4"
       ],
-      "lastUpdated": "4/1/2026"
+      "lastUpdated": "7/30/2026"
     },
     {
       "page": "/references/authentication",
@@ -62,9 +63,17 @@
     {
       "page": "/references/loyalty-challenges",
       "avatars": [
+        "https://avatars.githubusercontent.com/u/160891990?v=4",
         "https://avatars.githubusercontent.com/u/55485777?v=4"
       ],
-      "lastUpdated": "3/30/2026"
+      "lastUpdated": "7/30/2026"
+    },
+    {
+      "page": "/references/loyalty-challenges-state",
+      "avatars": [
+        "https://avatars.githubusercontent.com/u/160891990?v=4"
+      ],
+      "lastUpdated": "7/30/2026"
     },
     {
       "page": "/references/messaging",
