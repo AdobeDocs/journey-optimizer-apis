@@ -505,6 +505,8 @@ components:
           $ref: "#/components/schemas/profile"
         context:
           $ref: "#/components/schemas/context"
+        executionMetadata:
+          $ref: "#/components/schemas/executionMetadata"
 
     ExternalRecipient:
       type: object
@@ -532,6 +534,39 @@ components:
           $ref: "#/components/schemas/profile"
         context:
           $ref: "#/components/schemas/context"
+        executionMetadata:
+          $ref: "#/components/schemas/executionMetadata"
+
+    executionMetadata:
+      type: object
+      description: >-
+        Optional custom key/value data attached to the execution. **Available for Live Activities only.**
+
+
+        Use it to store your own business context — such as an order ID, loyalty tier,
+        or region code — alongside the execution. Journey Optimizer records this data with the
+        execution so you can retrieve it later from your AJO feedback dataset and match
+        delivery results to your own business records. `executionMetadata` is supported for API-triggered Transactional campaigns.
+
+
+        **Constraints:**
+
+        - Both keys and values must be strings. If any key or value is not a string, the request is
+          rejected with a `400 Bad Request` error. Convert any non-string value to a string before sending it.
+
+        - Values are recorded exactly as sent. Personalization expressions are not supported — any
+          `{{...}}` expression is treated as literal text rather than resolved, so always send final,
+          literal values.
+
+        - A maximum of 50 key/value pairs is allowed, with a combined size limit of 2 KB across all keys
+          and values. Metadata that exceeds this limit is discarded, but the Live Activity is still delivered.
+      additionalProperties:
+        type: string
+      example:
+        orderId: "A-123"
+        tier: "gold"
+        restaurant: "PizzaPlace"
+        region: "EU"
 
     recipientChannelData:
       type: object
