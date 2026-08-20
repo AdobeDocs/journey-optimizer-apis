@@ -59,6 +59,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorResponse'
+        '503':
+          description: Personalized attachment resolution is temporarily unavailable (error code 160028). Retry the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
 
   /im/executions/audience:
     parameters:
@@ -247,6 +253,12 @@ paths:
                 $ref: '#/components/schemas/errorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '503':
+          description: Personalized attachment resolution is temporarily unavailable (error code 160028). Retry the request.
           content:
             application/json:
               schema:
@@ -505,6 +517,8 @@ components:
           $ref: "#/components/schemas/profile"
         context:
           $ref: "#/components/schemas/context"
+        attachments:
+          $ref: "#/components/schemas/personalizedAttachments"
         executionMetadata:
           $ref: "#/components/schemas/executionMetadata"
 
@@ -534,6 +548,8 @@ components:
           $ref: "#/components/schemas/profile"
         context:
           $ref: "#/components/schemas/context"
+        attachments:
+          $ref: "#/components/schemas/personalizedAttachments"
         executionMetadata:
           $ref: "#/components/schemas/executionMetadata"
 
@@ -567,6 +583,53 @@ components:
         tier: "gold"
         restaurant: "PizzaPlace"
         region: "EU"
+
+    personalizedAttachments:
+      type: array
+      description: "Personalized PDF attachments for this email recipient. A rendered email can contain at most five attachments. Combined attachment size is limited to 5 MB by default, or 10 MB if your organization has the applicable attachment size add-on. These limits include any static attachments authored in the campaign. Attachment validation occurs before the request is accepted; one invalid attachment rejects the entire request."
+      minItems: 1
+      maxItems: 5
+      items:
+        $ref: "#/components/schemas/personalizedAttachment"
+
+    personalizedAttachment:
+      type: object
+      description: "A PDF attachment stored in the Adobe Experience Platform Data Landing Zone associated with the request sandbox."
+      required:
+        - name
+        - contentType
+        - source
+      properties:
+        name:
+          type: string
+          description: "The filename displayed by the email client. It must end in .pdf and cannot contain path separators, parent-directory references, or control characters."
+          example: "invoice.pdf"
+        contentType:
+          type: string
+          description: "The attachment MIME type. Only PDF attachments are supported."
+          enum:
+            - application/pdf
+          example: "application/pdf"
+        source:
+          $ref: "#/components/schemas/dlzAttachmentSource"
+
+    dlzAttachmentSource:
+      type: object
+      description: "Identifies an existing object in the Adobe Experience Platform Data Landing Zone."
+      required:
+        - type
+        - path
+      properties:
+        type:
+          type: string
+          description: "The attachment source type."
+          enum:
+            - dlzPath
+          example: "dlzPath"
+        path:
+          type: string
+          description: "The non-empty Data Landing Zone object path. Do not include credentials, backslashes, empty path segments, or current/parent-directory segments."
+          example: "personalized-attachments/campaign-12345/customer-123/invoice.pdf"
 
     recipientChannelData:
       type: object
