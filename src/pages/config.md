@@ -11,6 +11,7 @@
         - [API-triggered campaigns](/references/messaging.md)
         - [Campaign previews & proofs](/references/simulations.md)
         - [Orchestrated campaign datasets](/references/orchestrated-campaign-dataset.md)
+        - [Orchestrated campaigns APIs](/references/orchestrated-campaigns.md)
         - [Trigger Orchestrated campaigns](/references/oc-trigger.md)
         - [Content templates & fragments](/references/content.md)
         - [Suppression & allow lists](/references/suppression.md)

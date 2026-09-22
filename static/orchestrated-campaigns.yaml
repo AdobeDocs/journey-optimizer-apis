@@ -1,0 +1,1351 @@
+openapi: 3.0.1
+info:
+  title: Orchestrated campaigns APIs
+  version: v1
+  description: >
+    <p>
+    Use these APIs to retrieve Orchestrated campaigns, monitor their executions, or trigger signal-triggered ones.
+    </p>
+
+    <h3>Retrieve Orchestrated campaigns</h3>
+
+    <p>
+    You can get a list of Orchestrated campaigns based on the provided filters, or get the same data for a given Orchestrated campaign from its id. Refer to the detailed information and examples.
+    </p>
+
+    <p>
+    Required permission: <strong><code>View Orchestrated Campaign</code></strong>
+    </p>
+
+
+    <h3>Get execution logs</h3>
+
+    <p>
+    You can get the execution logs of a given Orchestrated campaign from its id. Refer to the detailed information and examples.
+    </p>
+
+    <p>
+    Required permission: <strong><code>View Orchestrated Campaign</code></strong>
+    </p>
+
+
+    <h3>Trigger an Orchestrated campaign</h3>
+    
+    <p>You can trigger Orchestrated campaigns that are defined with <i>Triggered by a signal</i> scheduler option.
+    </p>
+
+    <p>
+    Required permission: <strong><code>Publish Orchestrated Campaign</code></strong>
+    </p>
+
+    <h4>Related documentation:</h4>
+
+
+    To learn more about trigger Orchestration campaigns flows, refer to the product documentation [here](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/orchestrated-advanced/trigger-orchestrated-campaign).
+    
+    <h3>API path and required headers</h3>
+    <ul>
+      <li>Journey Optimizer Gateway URL: <b>https://platform.adobe.io</b>
+      <li>Base path for the Orchestrated campaigns APIs: <b>/ajo/campaign-orchestration</b>
+      <li>Complete path: <b>https://platform.adobe.io/ajo/campaign-orchestration/orchestratedCampaigns</b>
+    </ul>
+    
+    <p>Refer to the detailed information provided within the following
+    operations regarding the required headers.</p>
+
+    <h3>Guardrails</h3>
+    <p>
+    All APIs are capped at <b>100 calls / 10 sec</b>.
+    <br>
+    An additional guardrail enforces a <b>1-hour</b> minimum interval between triggers in production; it is not applied in test mode.
+    </p>
+    <p>
+    An error code <code>429</code> (Too many requests) is returned in such cases.
+    </p>
+
+servers:
+  - url: https://platform.adobe.io/ajo/campaign-orchestration
+    description: Base path URL
+paths:
+  /orchestratedCampaigns:
+    get:
+      tags:
+        - Orchestrated campaigns
+      summary: List orchestrated campaigns
+      description: >
+        <p>Returns a paginated collection of orchestrated campaigns in the
+        current sandbox. The result set can be
+
+        narrowed with filters, ordered with sort fields, and traversed page by
+        page through the query parameters below.</p>
+
+
+        <p>Required permission: <strong><code>View Orchestrated
+        Campaign</code></strong>.</p>
+
+
+        <h2>Query parameters</h2>
+
+
+        <table>
+          <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>property</code></td><td>Filter expression(s). Repeatable and/or comma-combined.</td></tr>
+            <tr><td><code>orderby</code></td><td>Sort field(s).</td></tr>
+            <tr><td><code>page</code></td><td>0-based page index (default <code>0</code>).</td></tr>
+            <tr><td><code>limit</code></td><td>Page size, number of items per page (default <code>30</code>).</td></tr>
+          </tbody>
+        </table>
+
+
+        <h3><code>property</code> filter expressions</h3>
+
+
+        <p>A filter is written as
+        <code>property=&lt;field&gt;&lt;operator&gt;&lt;value&gt;</code>.</p>
+
+
+        <table>
+          <thead><tr><th>Operator</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>==</code></td><td>equals</td></tr>
+            <tr><td><code>!=</code></td><td>not equals</td></tr>
+            <tr><td><code>&gt;</code></td><td>greater than</td></tr>
+            <tr><td><code>&gt;=</code></td><td>greater than or equal</td></tr>
+            <tr><td><code>&lt;</code></td><td>less than</td></tr>
+            <tr><td><code>&lt;=</code></td><td>less than or equal</td></tr>
+            <tr><td><code>~</code></td><td>matches (regex)</td></tr>
+          </tbody>
+        </table>
+
+
+        <p><strong>Combining conditions</strong></p>
+
+        <ul>
+          <li><strong>AND</strong> — separate conditions with a comma <code>,</code> (e.g. <code>property=lifecycleStatus==LIVE,executionType==API_TRIGGERED</code>).</li>
+          <li><strong>OR</strong> — use a pipe <code>|</code> across values or field names (e.g. <code>property=lifecycleStatus==DRAFT|LIVE</code>).</li>
+        </ul>
+
+
+        <h3><code>orderby</code></h3>
+
+
+        <ul>
+          <li>Prefix a field with <code>+</code> (ascending, the default) or <code>-</code> (descending). Comma-separate multiple fields.</li>
+          <li><code>orderby=+name</code> — by name, ascending.</li>
+          <li><code>orderby=-metadata.created.at</code> — by creation date, descending (newest first).</li>
+        </ul>
+
+
+        <h3>Pagination</h3>
+
+
+        <ul>
+          <li><code>page</code> is 0-based (default <code>0</code>); <code>limit</code> sets the page size (default <code>30</code>).</li>
+          <li>Responses include navigation links (<code>_links.next</code>) to fetch the next page.</li>
+        </ul>
+
+
+        <details><summary><strong><big>Examples</big></strong></summary>
+
+
+        <p>Only the query string is shown; combine it with the list
+        endpoint.</p>
+
+
+        <h3>Filter by exact name (<code>==</code>)</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=name==test_campaign</code></pre>
+
+
+        <h3>Filter by name substring (regex, <code>~</code>)</h3>
+
+        <pre><code>GET /orchestratedCampaigns?property=name~promo</code></pre>
+
+
+        <h3>Filter by lifecycleStatus DRAFT OR LIVE (<code>|</code> = OR across
+        values)</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=lifecycleStatus==DRAFT|LIVE</code></pre>
+
+
+        <h3>Two conditions AND-ed (<code>,</code> = AND): LIVE and
+        API_TRIGGERED</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=lifecycleStatus==LIVE,executionType==API_TRIGGERED</code></pre>
+
+
+        <h3>Sort by name ascending</h3>
+
+        <pre><code>GET /orchestratedCampaigns?orderby=+name</code></pre>
+
+
+        <h3>Sort by creation date descending (newest first)</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?orderby=-metadata.created.at</code></pre>
+
+
+        <h3>Filter + sort + pagination combined (first page, 5 per page)</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=0&amp;limit=5</code></pre>
+
+        <p>Fetch a following page with the same filter and page size (use
+        <code>_links.next</code> from the previous response):</p>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=1&amp;limit=5</code></pre>
+
+
+        <h3>Filter by execution status — failed campaigns</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=executionStatus==FAILED</code></pre>
+
+
+        <h3>Campaigns that failed since a given time (dotted date field,
+        <code>&gt;</code>)</h3>
+
+        <pre><code>GET
+        /orchestratedCampaigns?property=lastFailure.at&gt;2026-07-06T10:18:00.000Z</code></pre>
+
+        </details>
+      operationId: listOrchestratedCampaigns
+      parameters:
+        - name: orderby
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: property
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 30
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-api-version
+          in: header
+          schema:
+            type: string
+            enum:
+              - '1'
+      responses:
+        '200':
+          description: >
+            <h3>Response fields description:</h3>
+
+
+            <p>Matching campaigns are returned under <code>children</code>, with
+            paging metadata under <code>_page</code>
+
+            and navigation links under <code>_links</code>.</p>
+
+
+            <table>
+              <thead><tr><th>Field</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>_page.limit</code></td><td>Echo of the requested limit.</td></tr>
+                <tr><td><code>_page.page</code></td><td>Echo of the requested page.</td></tr>
+                <tr><td><code>_page.count</code></td><td>Number of entries in <code>children</code> for this page.</td></tr>
+                <tr><td><code>_page.totalCount</code></td><td>Total matching campaigns across all pages.</td></tr>
+                <tr><td><code>_page.orderby</code></td><td>The resolved sort actually applied.</td></tr>
+                <tr><td><code>_links.page</code></td><td>Templated link describing the supported query parameters.</td></tr>
+                <tr><td><code>_links.next</code></td><td>Link to the next page (present when a full page is returned).</td></tr>
+              </tbody>
+            </table>
+
+            <p>For a full example of a single campaign object, see the
+            <strong>Get an orchestrated campaign by id</strong> endpoint.</p>
+          content:
+            application/json:
+              examples:
+                lifecycleStatus DRAFT or LIVE:
+                  description: lifecycleStatus DRAFT or LIVE
+                  value:
+                    _page:
+                      limit: 30
+                      page: 0
+                      count: 2
+                      totalCount: 2
+                      orderby: '-metadata.created.at'
+                    _links:
+                      page:
+                        href: >-
+                          /ajo/campaign-orchestration/orchestratedCampaigns?{?orderby,limit,page,property}
+                        templated: true
+                    children:
+                      - id: cc4c1935-099b-4488-bd36-e6b5e745841a
+                        metadata:
+                          created:
+                            userName: Jane Doe
+                            userId: user123
+                            at: '2026-05-29T07:04:19.653Z'
+                        name: test_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                          labels: null
+                        lifecycleStatus: DRAFT
+                      - id: c909c051-3a7d-4645-a6be-a3c5bab312f7
+                        metadata:
+                          created:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:51:57.846Z'
+                          modified:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:17.434Z'
+                          published:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:24.370Z'
+                          publishing:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:20.675Z'
+                        name: launched_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                          labels: null
+                        lifecycleStatus: LIVE
+                        executionStatus: SUCCESS
+                        channelExecutionStatus: SUCCESS
+                        latestExecution:
+                          timestamp: '2026-05-28T09:53:27.979Z'
+                          firstExecution: true
+                          lastExecution: true
+                          ajoCampaignsStatuses: {}
+                          started: true
+                        executionType: API_TRIGGERED
+                        lastPublicationInfo:
+                          errorLevel: SUCCESS
+                          results: []
+                        lastPublicationJobId: 8501326d-13ec-4b62-961d-e6a9d444e35a
+                LIVE and API_TRIGGERED:
+                  description: LIVE and API_TRIGGERED
+                  value:
+                    _page:
+                      limit: 30
+                      page: 0
+                      count: 2
+                      totalCount: 2
+                      orderby: '-metadata.created.at'
+                    _links:
+                      page:
+                        href: >-
+                          /ajo/campaign-orchestration/orchestratedCampaigns?{?orderby,limit,page,property}
+                        templated: true
+                    children:
+                      - id: c909c051-3a7d-4645-a6be-a3c5bab312f7
+                        metadata:
+                          created:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:51:57.846Z'
+                          modified:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:17.434Z'
+                          published:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:24.370Z'
+                          publishing:
+                            userName: John Smith
+                            userId: user456
+                            at: '2026-05-28T09:53:20.675Z'
+                        name: launched_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                          labels: null
+                        lifecycleStatus: LIVE
+                        executionStatus: SUCCESS
+                        channelExecutionStatus: SUCCESS
+                        latestExecution:
+                          timestamp: '2026-05-28T09:53:27.979Z'
+                          firstExecution: true
+                          lastExecution: true
+                          ajoCampaignsStatuses: {}
+                          started: true
+                        executionType: API_TRIGGERED
+                        lastPublicationInfo:
+                          errorLevel: SUCCESS
+                          results: []
+                        lastPublicationJobId: 8501326d-13ec-4b62-961d-e6a9d444e35a
+                      - id: d7795b6b-bf46-44e7-b3de-a00e09029363
+                        metadata:
+                          created:
+                            userName: Jane Doe
+                            userId: user123
+                            at: '2026-05-06T07:05:08.565Z'
+                          modified:
+                            userName: Jane Doe
+                            userId: user123
+                            at: '2026-05-06T07:06:20.741Z'
+                          published:
+                            userName: Jane Doe
+                            userId: user123
+                            at: '2026-05-06T07:06:32.823Z'
+                          publishing:
+                            userName: Jane Doe
+                            userId: user123
+                            at: '2026-05-06T07:06:28.319Z'
+                        name: sms_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                        lifecycleStatus: LIVE
+                        channels:
+                          - sms
+                        executionType: API_TRIGGERED
+                        lastPublicationInfo:
+                          errorLevel: SUCCESS
+                          results: []
+                        lastPublicationJobId: 979b0f89-e535-4930-ac63-5bfa427dfee3
+                Execution status FAILED:
+                  description: Execution status FAILED
+                  value:
+                    _page:
+                      limit: 30
+                      page: 0
+                      count: 2
+                      totalCount: 2
+                      orderby: '-metadata.created.at'
+                    _links:
+                      page:
+                        href: >-
+                          /ajo/campaign-orchestration/orchestratedCampaigns?{?orderby,limit,page,property}
+                        templated: true
+                    children:
+                      - id: dd4e50c8-da91-48af-8002-e21f9b363457
+                        metadata:
+                          created:
+                            userName: Sam Lee
+                            userId: user321
+                            at: '2026-06-19T02:01:09.731Z'
+                          modified:
+                            userName: Sam Lee
+                            userId: user321
+                            at: '2026-06-19T04:29:40.138Z'
+                        name: file_import_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                          labels: []
+                        lifecycleStatus: DRAFT
+                        description: ''
+                        executionStatus: FAILED
+                        channelExecutionStatus: SUCCESS
+                        latestExecution:
+                          timestamp: '2026-06-19T04:27:57.758Z'
+                          lastExecution: true
+                          executionErrors:
+                            - type: 5004-400
+                              title: Workflow execution failed
+                              report:
+                                additionalContext:
+                                  activityId: fileImport3
+                                  errorLevel: ERROR
+                            - type: 5004-400
+                              title: Workflow execution failed
+                              report:
+                                additionalContext:
+                                  activityId: fileImport3
+                                  errorLevel: ERROR
+                          ajoCampaignsStatuses: {}
+                          started: true
+                          testSessionId: e9fd4e9f-6832-48b7-b870-7b5bcc242bc4
+                        lastFailure:
+                          at: '2026-06-19T04:27:57.758Z'
+                          executionId: b2f4c8d1-0a1b-4c2d-9e3f-1a2b3c4d5e6f
+                        inTest: true
+                        lastTestSessionStart: '2026-06-19T02:02:42.774Z'
+                      - id: 046e78c3-00d1-4ee2-893e-59c62462606b
+                        metadata:
+                          created:
+                            userName: Maria Garcia
+                            userId: user654
+                            at: '2026-07-03T10:16:37.393Z'
+                          modified:
+                            userName: Maria Garcia
+                            userId: user654
+                            at: '2026-07-03T10:17:33.176Z'
+                          published:
+                            userName: Maria Garcia
+                            userId: user654
+                            at: '2026-07-03T10:17:46.900Z'
+                          publishing:
+                            userName: Maria Garcia
+                            userId: user654
+                            at: '2026-07-03T10:17:41.272Z'
+                        name: email_proof_campaign
+                        sandboxName: prod
+                        sandboxId: sandbox-001
+                        orgId: org-001@AdobeOrg
+                        unifiedMetadata:
+                          tagIds: []
+                          labels: null
+                        lifecycleStatus: LIVE
+                        description: ''
+                        channels:
+                          - email
+                        executionStatus: FAILED
+                        channelExecutionStatus: SUCCESS
+                        latestExecution:
+                          timestamp: '2026-07-03T10:17:49.667Z'
+                          firstExecution: true
+                          lastExecution: true
+                          executionErrors:
+                            - type: 5004-400
+                              title: Workflow execution failed
+                              report:
+                                additionalContext:
+                                  activityId: ajoEmailCampaign1
+                                  errorLevel: ERROR
+                            - type: 5004-400
+                              title: Workflow execution failed
+                              report:
+                                additionalContext:
+                                  activityId: ajoEmailCampaign1
+                                  errorLevel: ERROR
+                          ajoCampaignsStatuses: {}
+                          started: true
+                        lastFailure:
+                          at: '2026-07-03T10:17:49.667Z'
+                          executionId: a1b2c3d4-5e6f-4a1b-8c2d-3e4f5a6b7c8d
+                        executionType: API_TRIGGERED
+                        lastPublicationInfo:
+                          errorLevel: SUCCESS
+                          results: []
+                        lastPublicationJobId: 3aa00282-d7d1-420e-a936-45dff7fabfa6
+        '400':
+          description: Bad request - 'page' or 'limit' is not a valid integer
+          content:
+            application/json:
+              example:
+                type: https://ns.adobe.com/aep/errors/CJMOC-1221-400
+                title: Parameter 'limit' of type 'int' has bad value '10]'
+                message: Parameter 'limit' of type 'int' has bad value '10]'
+                status: 400
+                report:
+                  tenantInfo:
+                    requestId: b06ca5e2bfc343bd
+                    traceId: invalid
+                    spanId: invalid
+                  additionalContext:
+                    parameter: limit
+                    type: int
+                    value: 10]
+                at: '2026-09-07T15:55:59.002Z'
+  /orchestratedCampaigns/{id}:
+    get:
+      tags:
+        - Orchestrated campaigns
+      summary: Get an orchestrated campaign by id
+      description: >
+        <p>Returns a single orchestrated campaign by its id, in the current
+        sandbox.</p>
+
+
+        <p>Required permission: <strong><code>View Orchestrated
+        Campaign</code></strong>.</p>
+
+
+        <h2>Path parameter</h2>
+
+
+        <table>
+          <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>Orchestrated campaign id. Returns <code>404</code> when no campaign with this id exists in the sandbox.</td></tr>
+          </tbody>
+        </table>
+
+        </details>
+      operationId: getOrchestratedCampaign
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-api-version
+          in: header
+          schema:
+            type: string
+            enum:
+              - '1'
+      responses:
+        '200':
+          description: >-
+            <h3>Response fields description:</h3>
+
+
+            <p>The orchestrated campaign is returned as a single JSON
+            object.</p>
+
+
+            <table>
+              <thead><tr><th>Field</th><th>Description</th></tr></thead>
+              <tbody>
+            <tr><td><code>lifecycleStatus</code></td><td>One of
+            <code>DRAFT</code>, <code>PUBLISHING</code>,
+            <code>UNPUBLISHING</code>, <code>SCHEDULED</code>,
+            <code>LIVE</code>, <code>STOPPED</code>, <code>COMPLETED</code>,
+            <code>ARCHIVED</code>.</td></tr>
+
+            <tr><td><code>executionType</code></td><td>One of
+            <code>API_TRIGGERED</code>, <code>SCHEDULED</code>.</td></tr>
+
+            <tr><td><code>executionStatus</code> /
+            <code>channelExecutionStatus</code></td><td><code>SUCCESS</code> or
+            <code>FAILED</code>.</td></tr>
+
+            <tr><td><code>channels</code></td><td>Channel identifiers of the
+            campaign activities: <code>email</code>, <code>sms</code>,
+            <code>push</code> <code>directMail</code>.</td></tr>
+
+            <tr><td><code>latestExecution.executionStatus</code></td><td>Latest
+            execution status: <code>SUCCESS</code> or
+            <code>ERROR</code>.</td></tr>
+
+            <tr><td><code>latestExecution.executionErrors[]</code></td><td>Error
+            reports for the latest execution (present on failure); each carries
+            a <code>type</code> code and a <code>report</code>.</td></tr>
+
+            <tr><td><code>lastFailure.executionId</code></td><td>Execution id of
+            the last failure.</td></tr>
+
+            <tr><td><code>metadata.&lt;phase&gt;</code></td><td>Audit stamps
+            keyed by lifecycle phase — one of <code>created</code>,
+            <code>modified</code>, <code>published</code>,
+            <code>publishing</code>, <code>unpublishing</code>,
+            <code>archived</code>, <code>completed</code>,
+            <code>backedtodraft</code>, <code>stopped</code>. Each holds
+            <code>userName</code>, <code>userId</code>, and <code>at</code>
+            (ISO-8601).</td></tr>
+
+            <tr><td><code>unifiedMetadata.labels</code></td><td>Human-readable
+            label values attached to the campaign metadata.</td></tr>
+
+            <tr><td><code>unifiedMetadata.tagIds</code></td><td>Tag ID
+            references carried in the API payload, pointing to the underlying
+            tags.</td></tr>
+
+            <tr><td>Boolean fields: <code>recurring</code>,
+            <code>triggeredBySignal</code>, <code>inTest</code>,
+            <code>isPendingConfirmation</code>,
+            <code>latestExecution.started</code>,
+            <code>latestExecution.stopped</code>,
+            <code>latestExecution.completed</code></td><td><code>true</code> /
+            <code>false</code> (omitted when false).</td></tr>
+
+            <tr><td>Date/time fields: <code>metadata.&lt;phase&gt;.at</code>,
+            <code>lastFailure.at</code>, <code>latestExecution.timestamp</code>,
+            <code>lastTestSessionStart</code>,
+            <code>lastTriggeredAt</code></td><td>ISO-8601 in UTC with
+            millisecond precision, e.g.
+            <code>2026-01-14T11:56:02.047Z</code>.</td></tr>
+
+            <tr><td><code>mergePolicyId</code> /
+            <code>lastPublicationJobId</code></td><td>Related resource
+            ids.</td></tr>
+
+            <tr><td><code>lastPublicationInfo</code></td><td>Details of the last
+            publication (operation results object).</td></tr>
+              </tbody>
+            </table>
+
+            <p>Fields that are empty, null, or false are generally omitted from
+            the response. Exception: <code>unifiedMetadata.labels</code> and
+            <code>unifiedMetadata.tagIds</code> may be present as
+            <code>null</code>.</p>
+          content:
+            application/json:
+              example:
+                id: ef2f4237-9079-4458-8166-50b8f6fe109c
+                name: Example name
+                sandboxName: prod
+                sandboxId: sandbox-001
+                orgId: org-001@AdobeOrg
+                unifiedMetadata:
+                  tagIds:
+                    - tag1
+                  labels:
+                    - label1
+                lifecycleStatus: LIVE
+                metadata:
+                  created:
+                    userId: userId@Adobe
+                    userName: Jane Doe
+                    at: '2026-01-14T11:56:02.047Z'
+                description: Example description
+                channels:
+                  - email
+                executionStatus: SUCCESS
+                channelExecutionStatus: SUCCESS
+                latestExecution:
+                  timestamp: '2026-02-01T00:00:00.000Z'
+                  executionStatus: SUCCESS
+                  completed: true
+                  started: true
+                executionType: SCHEDULED
+                recurring: true
+        '404':
+          description: Orchestrated campaign not found
+          content:
+            application/json:
+              example:
+                type: https://ns.adobe.com/aep/errors/CJMOC-1200-404
+                title: >-
+                  Element of type orchestratedCampaign with id
+                  cc4c1935-099b-4488-bd36-e6b5e745841a not found
+                message: >-
+                  Element of type orchestratedCampaign with id
+                  cc4c1935-099b-4488-bd36-e6b5e745841a not found
+                status: 404
+                report:
+                  tenantInfo:
+                    requestId: b06ca5e2bfc343bd
+                    traceId: invalid
+                    spanId: invalid
+                  additionalContext:
+                    type: orchestratedCampaign
+                    id: cc4c1935-099b-4488-bd36-e6b5e745841a
+                at: '2026-08-24T13:32:05.670Z'
+  /orchestratedCampaigns/{id}/executionLogs:
+    get:
+      tags:
+        - Orchestrated campaigns
+      summary: Get execution logs for an orchestrated campaign
+      description: >
+
+        <p>Retrieve the execution logs of an orchestrated campaign. Execution
+        logs capture what happened while the campaign ran (activities executed,
+        logged messages, errors, warnings, SQL logs, etc.) and can be filtered
+        by <code>activity</code>, <code>message</code>, <code>level</code>, and
+        <code>timestamp</code>, paginated, and sorted.</p>
+
+
+        <p>Required permission: <strong><code>View Orchestrated
+        Campaign</code></strong>.</p>
+
+
+        <h2>Filter expressions</h2>
+
+
+        <p>Each <code>property</code> value is a single string
+        <code>"&lt;field&gt;&lt;operator&gt;&lt;value&gt;"</code>. Multiple
+        <code>property</code> parameters can be combined in one request and are
+        ANDed together. The operator is detected by scanning the string for the
+        first match in this fixed order:</p>
+
+
+        <pre><code>==  !=  &gt;=  &lt;=  &gt;  &lt;  !~  ~</code></pre>
+
+
+        <blockquote>
+          <p>Because detection is a substring scan in this order, a <strong>value</strong> that itself contains one of these operator tokens (e.g. a message containing <code>==</code> or <code>~</code>) will be split at the wrong place and typically yields a <code>400 invalid field</code> error. Keep filter values free of operator characters.</p>
+        </blockquote>
+
+
+        <p><strong>Filterable fields</strong> (case-insensitive):
+        <code>message</code>, <code>activity</code>, <code>timestamp</code>,
+        <code>level</code>. An unknown field name returns <code>400</code> -
+        <code>Element of type property has invalid field
+        '&lt;name&gt;'</code>.</p>
+
+
+        <p>Matching is <strong>case-insensitive</strong>; values are escaped
+        before use.</p>
+
+
+        <table>
+          <thead>
+            <tr><th>Operator</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>~</code></td><td>contains</td></tr>
+            <tr><td><code>!~</code></td><td>does not contain</td></tr>
+            <tr><td><code>==</code></td><td>equals</td></tr>
+            <tr><td><code>!=</code></td><td>not equals</td></tr>
+          </tbody>
+        </table>
+
+
+        <p>An empty <code>activity</code> value is ignored (no condition
+        applied).</p>
+
+
+        <h4><code>level</code></h4>
+
+
+        <ul>
+          <li>The <strong>operator is not significant</strong> for <code>level</code>; only the value after it matters (the samples use <code>==</code>).</li>
+          <li>Value is one of <code>error</code>, <code>warning</code>, <code>info</code>, <code>status</code>, <code>verbose</code>, <code>sqllog</code> (case-insensitive)</li>
+          <li>Multiple levels can be OR-combined with the pipe <code>|</code>, e.g. <code>level==info|error</code>.</li>
+          <li>An unrecognized level token returns <code>400</code> (bad value for parameter <code>level</code>).</li>
+        </ul>
+
+
+        <h4><code>timestamp</code></h4>
+
+
+        <ul>
+          <li>Values must be <strong>ISO-8601 with an explicit offset/zone</strong> (parsed as <code>OffsetDateTime</code>), e.g. <code>2026-07-07T14:30:00Z</code> or <code>2026-07-07T14:30:00+05:30</code>. A bare date like <code>2026-07-07</code> returns <code>400</code>.</li>
+          <li>Supported operators: <code>==</code>, <code>&gt;=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&lt;</code>.</li>
+          <li><code>&gt;</code> / <code>&gt;=</code> define the <strong>lower bound</strong> (from date); <code>&lt;</code> / <code>&lt;=</code> define the <strong>upper bound</strong> (to date).</li>
+          <li><strong><code>==</code> is exclusive:</strong> combining a <code>timestamp==</code> with any other <code>timestamp</code> property (or another <code>timestamp==</code>) is rejected (<code>Use single timestamp when using == operator</code>).</li>
+          <li><strong>Last one wins:</strong> if multiple lower-bound properties are supplied (mix of <code>&gt;</code>/<code>&gt;=</code>), only the last is used; likewise for the upper bound (<code>&lt;</code>/<code>&lt;=</code>).</li>
+          <li><strong>Range validation:</strong> if the resulting upper bound is before the lower bound, the request returns <code>400</code> with value suffix <code>.Validate timestamp range.</code>.</li>
+        </ul>
+
+
+        <h2>Sorting expressions <code>orderby</code></h2>
+
+
+        <ul>
+          <li>Comma-separated list of fields among: <code>timestamp</code>, <code>level</code>, <code>activity</code>, <code>message</code>.</li>
+          <li>Each field may be prefixed with <code>+</code> (ascending, the default) or <code>-</code> (descending), e.g. <code>orderby=-timestamp,+level</code>.</li>
+          <li>Unknown fields are silently ignored.</li>
+          <li>When omitted (or nothing valid remains), sorting defaults to <code>timestamp</code> ascending. The applied sort is echoed back in <code>_page.orderby</code>.</li>
+        </ul>
+
+
+        <h2>Request examples</h2>
+
+        <details><summary><strong><big>Click to expand</big></strong></summary>
+
+
+        <p>All examples reuse the headers from the Authentication section; only
+        the request line is shown.</p>
+
+
+        <h3>All filters combined</h3>
+
+
+        <p>Activity contains <code>email</code>, message contains
+        <code>test</code>, one of the listed levels, within a timestamp
+        range:</p>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=activity~email&amp;property=message~test&amp;property=level==info|error|warning|status|verbose|sqllog&amp;property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
+
+
+        <h3>Filter by level only</h3>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=level==error</code></pre>
+
+
+        <h3>Filter by message only</h3>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=message~test</code></pre>
+
+
+        <h3>Filter by activity only</h3>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=activity~test</code></pre>
+
+
+        <h3>Timestamp range</h3>
+
+
+        <pre><code>GET
+        /apis/orchestratedCampaigns/{id}/executionLogs?property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
+
+
+        <h3>Exact timestamp (must be the only timestamp property)</h3>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=timestamp==2026-08-12T10:28:54Z</code></pre>
+
+
+        <h3>Paginated and sorted</h3>
+
+
+        <p>Errors or warnings within a range, most recent first, second page of
+        100:</p>
+
+
+        <pre><code>GET
+        /orchestratedCampaigns/{id}/executionLogs?property=level==error|warning&amp;property=timestamp&gt;=2026-08-11T00:00:00Z&amp;property=timestamp&lt;=2026-08-12T00:00:00Z&amp;orderby=-timestamp&amp;page=1&amp;limit=100</code></pre>
+
+        </details>
+      operationId: getExecutionLogs
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: Orchestrated Campaign id. 404 if not found.
+          required: true
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Must be >= 0. Offset into results is page * limit. 400 if invalid.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          description: Must be between 1 and 200 inclusive. 400 if invalid.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 30
+        - name: property
+          in: query
+          description: Filter expressions; repeatable, ANDed together.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: orderby
+          in: query
+          description: >-
+            Comma-separated sort fields. See below. Defaults to timestamp
+            ascending.
+          required: false
+          schema:
+            type: string
+        - name: x-api-version
+          in: header
+          schema:
+            type: string
+            enum:
+              - '1'
+      responses:
+        '200':
+          description: |
+            <h3>Response fields description:</h3>
+
+            <table>
+              <thead>
+                <tr><th>Field</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>_page.page</code></td><td>Echo of the requested page.</td></tr>
+                <tr><td><code>_page.limit</code></td><td>Echo of the requested limit.</td></tr>
+                <tr><td><code>_page.count</code></td><td>Number of entries in <code>children</code> for this page.</td></tr>
+                <tr><td><code>_page.orderby</code></td><td>The resolved sort actually applied (normalized with <code>+</code>/<code>-</code>).</td></tr>
+                <tr><td><code>children[].timestamp</code></td><td>Log entry time.</td></tr>
+                <tr><td><code>children[].level</code></td><td>Log level name (<code>error</code>, <code>warning</code>, <code>info</code>, <code>status</code>, <code>verbose</code>, <code>sqllog</code>).</td></tr>
+                <tr><td><code>children[].activity</code></td><td>Activity name (may be empty).</td></tr>
+                <tr><td><code>children[].message</code></td><td>Log message.</td></tr>
+              </tbody>
+            </table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionLogs'
+              example:
+                _page:
+                  page: 0
+                  limit: 30
+                  count: 1
+                  orderby: +timestamp
+                children:
+                  - timestamp: '2026-03-26T15:19:03.301Z'
+                    level: info
+                    activity: ''
+                    message: Execution finished
+        '400':
+          description: |
+            <table>
+              <thead>
+                <tr><th>Status</th><th>When</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>400</code></td><td><code>limit</code> outside <code>1..200</code> or <code>page &lt; 0</code>.</td></tr>
+                <tr><td><code>400</code></td><td>Unknown <code>property</code> field name (<code>Element of type property has invalid field '&lt;name&gt;'</code>).</td></tr>
+                <tr><td><code>400</code></td><td>Unparseable/invalid <code>timestamp</code> or unknown <code>level</code> value. Response message examples: <code>Parameter 'timestamp' of type 'property' has bad value '2026-07-07'</code> or <code>Parameter 'level' of type 'property' has bad value 'bogus'</code> )</td></tr>
+                <tr><td><code>400</code></td><td>Conflicting <code>timestamp</code> combination (<code>==</code> mixed with a range, or an inverted range - <code>Validate timestamp range.</code>). Response message example: <code>Parameter 'timestamp' of type 'property' has bad value '2026-01-01T00:00:00Z.Validate timestamp range.'</code>.</td></tr>
+                <tr><td><code>400</code></td><td>Also returned when execution logs retrieval fails (e.g. the logs call fails or returns malformed data): <code>Execution logs retrieval failed for orchestrated campaign {id}</code>.</td></tr>
+              </tbody>
+            </table>
+          content:
+            application/json:
+              example:
+                type: https://ns.adobe.com/aep/errors/CJMOC-1222-400
+                title: Element of type property has invalid field 'name'
+                message: Element of type property has invalid field 'name'
+                status: 400
+                report:
+                  tenantInfo:
+                    requestId: yqgXdKaHTv3LkQYg1zoNVCG1JdPH6m6D
+                    traceId: cd01b1dddcb080f1a3b072342d9913db
+                    spanId: 181e4c6a431472f6
+                  additionalContext:
+                    field: ''
+                    type: property
+                at: '2026-09-01T15:31:13.395Z'
+        '404':
+          description: Orchestrated Campaign not found
+          content:
+            application/json:
+              example:
+                type: https://ns.adobe.com/aep/errors/CJMOC-1200-404
+                title: >-
+                  Element of type orchestratedCampaign with id
+                  a45946da-06c3-4e13-a305-8b1474e4277d not found
+                message: >-
+                  Element of type orchestratedCampaign with id
+                  a45946da-06c3-4e13-a305-8b1474e4277d not found
+                status: 404
+                report:
+                  tenantInfo:
+                    requestId: yqgXdKaHTv3LkQYg1zoNVCG1JdPH6m6D
+                    traceId: invalid
+                    spanId: invalid
+                  additionalContext:
+                    type: orchestratedCampaign
+                    id: a45946da-06c3-4e13-a305-8brrrre4277d
+                at: '2026-09-17T13:14:50.126Z'
+  /orchestratedCampaigns/{id}/trigger:
+    post:
+      tags:
+      - Orchestrated campaigns
+      summary: Trigger an orchestrated campaign
+      description: >-
+        Triggers an Orchestrated campaign that is defined with ***Triggered by a signal*** scheduler option. The Orchestrated campaign must be in **LIVE** status, or
+        in **DRAFT** status with an active test session.
+        
+
+        A capping guardrail enforces a **1-hour** minimum interval between triggers in production; it is not applied in test mode.
+
+
+        Optional parameters can be passed in the request body.
+      operationId: triggerOrchestratedCampaign
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: The access token provided after authorization in the format "Bearer {ACCESS_TOKEN}"
+          schema:
+            type: string
+        - name: x-api-key
+          in: header
+          required: true
+          description:  The API key belonging to the calling client
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The Orchestrated campaign id
+          schema:
+            type: string
+        - name: x-gw-ims-org-id
+          in: header
+          required: true
+          description: The IMS org id for which the call is being taken
+          schema:
+            type: string
+        - name: x-sandbox-name
+          in: header
+          required: true
+          description: The platform sandbox name for which the call is being taken
+          schema:
+            type: string
+        - name: x-request-id
+          in: header
+          description: A unique id generated by Adobe.io. This parameter will be auto-generated, do not include it in your payload.
+          schema:
+            type: string
+        - name: x-api-version
+          in: header
+          required: true
+          description: API version to consider
+          schema:
+            type: string
+            enum:
+              - '1'
+      requestBody:
+        description:
+          Optional payload. Use `variables` to supply workflow parameters (key-value pairs).
+          
+
+          If you pass a parameter that has not been defined in the scheduler, the API call still succeeds and the parameter is propagated.
+        content:
+          application/json:
+            examples:
+              With variables:
+                description: Two parameters passed to the trigger signal
+                value:
+                  variables:
+                    param1: value1
+                    param2: value2
+              Empty body:
+                description: No pameters passed to the trigger signal
+                value: {}
+      responses:
+        '200':
+          description: Orchestrated campaign triggered successfully
+          content:
+            application/json:
+              examples:
+                Success response:
+                  value:
+                    status: success
+                    orchestratedCampaignId: b902ba3d-8d8c-4a51-b393-8779dfe49653
+                    message: Orchestrated campaign triggered successfully
+        '400':
+          description: >-
+            Bad request - Orchestrated campaign is not LIVE (and not DRAFT with active test session) or not configured as signal-triggered
+          content:
+            application/json:
+              examples:
+                Not LIVE (example):
+                  value:
+                    type: https://ns.adobe.com/aep/errors/CJMOC-6100-400
+                    title: >-
+                      Orchestrated campaign must be in LIVE status or DRAFT
+                      status with active test session to trigger. Current
+                      status: STOPPED
+                    message: >-
+                      Orchestrated campaign must be in LIVE status or DRAFT
+                      status with active test session to trigger. Current
+                      status: STOPPED
+                    status: 400
+                    report:
+                      tenantInfo:
+                        requestId: d1de5583-5ac2-40de-a77e-16751e9b6843
+                        traceId: b177d17cecf111efd8f72dcadf40b294
+                        spanId: c877c28c3085b4b4
+                      additionalContext:
+                        status: STOPPED
+                    at: '2026-02-23T13:50:16.163Z'
+        '403':
+          description: Authorization error - RBAC or OLAC permissions check failure
+          content:
+            application/json:
+              examples:
+                RBAC permission issue:
+                  value:
+                    type: https://ns.adobe.com/aep/errors/CJMOC-1001-403
+                    title: Authorization error
+                    message: Authorization error
+                    status: 403
+                    report:
+                      tenantInfo:
+                        requestId: c6ByyjnUShIPMW64fKquJYZ1o4CWbxn9
+                        traceId: invalid
+                        spanId: invalid
+                      additionalContext: {}
+                    at: '2026-03-31T15:19:37.764Z'
+                OLAC check issue:
+                  value:
+                    type: https://ns.adobe.com/aep/errors/CJMOC-1215-403
+                    title: OLAC check failed for operation trigger on resource 8189ea13-5e02-412d-8615-d0ccb17662b9
+                    message: OLAC check failed for operation trigger on resource 8189ea13-5e02-412d-8615-d0ccb17662b9
+                    status: 403
+                    report:
+                      tenantInfo:
+                        requestId: sgbVgohHahzxCFQtQspxXSQgsYoSRgI8
+                        traceId: invalid
+                        spanId: invalid
+                      additionalContext:
+                        operation: trigger
+                        id: 8189ea13-5e02-412d-8615-d0ccb17662b9
+                    at: '2026-03-31T15:36:18.099Z'
+        '404':
+          description: Orchestrated campaign not found
+          content:
+            application/json:
+              examples:
+                Orchestrated campaign not found:
+                  value:
+                    type: https://ns.adobe.com/aep/errors/CJMOC-1200-404
+                    title: >-
+                      Element of type OrchestratedCampaign with id
+                      91ea0a68-a86a-451e-b333-9f75c41dadb3 not found
+                    message: >-
+                      Element of type OrchestratedCampaign with id
+                      91ea0a68-a86a-451e-b333-9f75c41dadb3 not found
+                    status: 404
+                    report:
+                      tenantInfo:
+                        requestId: e19e935f-6f12-4d6e-ad1e-2d91081d36a0
+                        traceId: 02f3835700a3b5e8fefbf27209b4e79e
+                        spanId: db66ae3adb2645f7
+                      additionalContext:
+                        type: OrchestratedCampaign
+                        id: 91ea0a68-a86a-451e-b333-9f75c41dadb3
+                    at: '2026-02-27T15:17:30.184Z'
+                API version not specified or incorrect:
+                  description: missing x-api-version header parameter or incorrect value provided
+                  value:
+                    type: about:blank
+                    title: Not found
+                    status: 404
+                    detail: No static resource apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger.
+                    instance: /apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger
+        '429':
+          description: >-
+            Too many requests — Orchestrated campaign was triggered again before the minimum interval
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying
+              style: simple
+              schema:
+                type: integer
+                format: int64
+          content:
+            application/json:
+              examples:
+                Capping guardrail:
+                  value:
+                    type: https://ns.adobe.com/aep/errors/CJMOC-6104-429
+                    title: >-
+                      Orchestrated campaign was triggered too recently. Retry
+                      after 1534 seconds
+                    message: >-
+                      Orchestrated campaign was triggered too recently. Retry
+                      after 1534 seconds
+                    status: 429
+                    report:
+                      tenantInfo:
+                        requestId: f29e1044-7ad3-51ef-cb2f-3ea192e47b91
+                        traceId: c288e28fdf22200ge8g83edbc51c305
+                        spanId: d988d39bec376c68
+                      additionalContext:
+                        retryAfter: '1534'
+                    at: '2026-02-23T13:50:16.163Z'
+components:
+  schemas:
+    ExecutionLog:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        level:
+          type: string
+        activity:
+          type: string
+        message:
+          type: string
+    ExecutionLogs:
+      type: object
+      properties:
+        _page:
+          $ref: '#/components/schemas/PageDetails'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExecutionLog'
+    PageDetails:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int32
+        orderby:
+          type: string
