@@ -4,65 +4,271 @@ info:
   version: v1
   description: >
     <p>
-    Use these APIs to retrieve Orchestrated campaigns, monitor their executions, or trigger signal-triggered ones.
+
+    Use these APIs to retrieve Orchestrated campaigns, monitor their executions,
+    or trigger signal-triggered ones.
+
     </p>
+
 
     <h3>Retrieve Orchestrated campaigns</h3>
 
+
     <p>
-    You can get a list of Orchestrated campaigns based on the provided filters, or get the same data for a given Orchestrated campaign from its id. Refer to the detailed information and examples.
+
+    You can get a list of Orchestrated campaigns based on the provided filters,
+    or get a single Orchestrated campaign from its id.
+
+    Refer to the detailed operations description and the following request
+    examples.
+
     </p>
 
     <p>
-    Required permission: <strong><code>View Orchestrated Campaign</code></strong>
+
+    Required permission: <strong><code>View Orchestrated
+    Campaign</code></strong>
+
     </p>
+
+
+    <details><summary>Request examples (click to expand)</summary>
+
+    <p>Only the operation and query string are shown.</p>
+
+
+    <h4>Filter by exact name (<code>==</code>)</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=name==test_campaign</code></pre>
+
+
+    <h4>Filter by name substring (regex, <code>~</code>)</h4>
+
+    <pre><code>GET /orchestratedCampaigns?property=name~promo</code></pre>
+
+
+    <h4>Filter by 'lifecycleStatus' (<code>|</code> means OR across values):
+    DRAFT or LIVE campaigns</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=lifecycleStatus==DRAFT|LIVE</code></pre>
+
+
+    <h4>Filter with two conditions AND-ed (<code>,</code> means AND): LIVE and
+    API_TRIGGERED campaigns</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=lifecycleStatus==LIVE,executionType==API_TRIGGERED</code></pre>
+
+
+    <h4>Sort by name ascending</h4>
+
+    <pre><code>GET /orchestratedCampaigns?orderby=+name</code></pre>
+
+
+    <h4>Sort by creation date descending (newest first)</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?orderby=-metadata.created.at</code></pre>
+
+
+    <h4>Filter + sort + pagination combined (first page, 5 per page)</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=0&amp;limit=5</code></pre>
+
+    <p>Fetch a following page with the same filter and page size (use
+    <code>_links.next</code> from the previous response):</p>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=1&amp;limit=5</code></pre>
+
+
+    <h4>Filter by execution status: failed campaigns</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=executionStatus==FAILED</code></pre>
+
+
+    <h4>Campaigns that failed since a given time (dotted date-time field,
+    <code>&gt;</code>)</h4>
+
+    <pre><code>GET
+    /orchestratedCampaigns?property=lastFailure.at&gt;2026-07-06T10:18:00.000Z</code></pre>
+
+    </details>
 
 
     <h3>Get execution logs</h3>
 
+
     <p>
-    You can get the execution logs of a given Orchestrated campaign from its id. Refer to the detailed information and examples.
+
+    You can get the execution logs of a given Orchestrated campaign from its id.
+
+    Execution logs capture what happened while the campaign ran (activities
+    executed, logged messages, errors, warnings, SQL logs, etc.).
+
+    Refer to the detailed operation description and the following request
+    examples.
+
     </p>
 
     <p>
-    Required permission: <strong><code>View Orchestrated Campaign</code></strong>
+
+    Required permission: <strong><code>View Orchestrated
+    Campaign</code></strong>
+
     </p>
+
+
+    <details><summary>Request examples (click to expand)</summary>
+
+    <p>Only the operation and query string are shown.</p>
+
+
+    <h4>All filters combined</h4>
+
+
+    <p>Activity contains <code>email</code>, message contains <code>test</code>,
+    one of the listed levels, within a timestamp range:</p>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=activity~email&amp;property=message~test&amp;property=level==info|error|warning|status|verbose|sqllog&amp;property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
+
+
+    <h4>Filter by level only</h4>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=level==error</code></pre>
+
+
+    <h4>Filter by message only</h4>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=message~test</code></pre>
+
+
+    <h4>Filter by activity only</h4>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=activity~test</code></pre>
+
+
+    <h4>Timestamp range</h4>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
+
+
+    <h4>Exact timestamp (must be the only timestamp property)</h4>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=timestamp==2026-08-12T10:28:54Z</code></pre>
+
+
+    <h4>Paginated and sorted</h4>
+
+
+    <p>Errors or warnings within a range, most recent first, second page of
+    100:</p>
+
+
+    <pre><code>GET
+    /orchestratedCampaigns/{id}/executionLogs?property=level==error|warning&amp;property=timestamp&gt;=2026-08-11T00:00:00Z&amp;property=timestamp&lt;=2026-08-12T00:00:00Z&amp;orderby=-timestamp&amp;page=1&amp;limit=100</code></pre>
+
+    </details>
+
 
 
     <h3>Trigger an Orchestrated campaign</h3>
-    
-    <p>You can trigger Orchestrated campaigns that are defined with <i>Triggered by a signal</i> scheduler option.
-    </p>
+
 
     <p>
-    Required permission: <strong><code>Publish Orchestrated Campaign</code></strong>
+
+    You can trigger Orchestrated campaigns that are defined with <i>Triggered by
+    a signal</i> scheduler option.
+
     </p>
+
+
+    <p>
+
+    Required permission: <strong><code>Publish Orchestrated
+    Campaign</code></strong>
+
+    </p>
+
 
     <h4>Related documentation:</h4>
 
 
-    To learn more about trigger Orchestration campaigns flows, refer to the product documentation [here](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/orchestrated-advanced/trigger-orchestrated-campaign).
-    
+
+    To learn more about trigger Orchestration campaigns flows, refer to the
+    product documentation
+    [here](https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/orchestrated-advanced/trigger-orchestrated-campaign).
+
+
     <h3>API path and required headers</h3>
+
     <ul>
       <li>Journey Optimizer Gateway URL: <b>https://platform.adobe.io</b>
       <li>Base path for the Orchestrated campaigns APIs: <b>/ajo/campaign-orchestration</b>
-      <li>Complete path: <b>https://platform.adobe.io/ajo/campaign-orchestration/orchestratedCampaigns</b>
+      <li>Complete URL: <b>https://platform.adobe.io/ajo/campaign-orchestration/orchestratedCampaigns</b>
     </ul>
-    
-    <p>Refer to the detailed information provided within the following
-    operations regarding the required headers.</p>
+
+
+    <p>
+
+    Refer to the detailed operations description regarding the required headers.
+
+    </p>
+
 
     <h3>Guardrails</h3>
+
     <p>
+
     All APIs are capped at <b>100 calls / 10 sec</b>.
+
     <br>
-    An additional guardrail enforces a <b>1-hour</b> minimum interval between triggers in production; it is not applied in test mode.
-    </p>
-    <p>
-    An error code <code>429</code> (Too many requests) is returned in such cases.
+
+    An additional guardrail enforces a <b>1-hour</b> minimum interval between
+    triggers in production; it is not applied in test mode.
+
     </p>
 
+    <p>
+
+    An http error code <code>429</code> (Too many requests) is returned in such
+    cases.
+
+    </p>
+
+
+    <h3>Additional controls</h3>
+
+    <p>
+
+    All APIs are controlled against RBAC permissions and OLAC checks.
+
+    <br>
+
+    <p>
+
+    An http error code <code>403</code> (Forbidden) is returned in case of
+    insufficient permissions or OLAC check failures.
+
+    Refer to the response examples of trigger operation.
+
+    </p>
 servers:
   - url: https://platform.adobe.io/ajo/campaign-orchestration
     description: Base path URL
@@ -81,7 +287,7 @@ paths:
 
 
         <p>Required permission: <strong><code>View Orchestrated
-        Campaign</code></strong>.</p>
+        Campaign</code></strong></p>
 
 
         <h2>Query parameters</h2>
@@ -144,76 +350,6 @@ paths:
           <li><code>page</code> is 0-based (default <code>0</code>); <code>limit</code> sets the page size (default <code>30</code>).</li>
           <li>Responses include navigation links (<code>_links.next</code>) to fetch the next page.</li>
         </ul>
-
-
-        <details><summary><strong><big>Examples</big></strong></summary>
-
-
-        <p>Only the query string is shown; combine it with the list
-        endpoint.</p>
-
-
-        <h3>Filter by exact name (<code>==</code>)</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=name==test_campaign</code></pre>
-
-
-        <h3>Filter by name substring (regex, <code>~</code>)</h3>
-
-        <pre><code>GET /orchestratedCampaigns?property=name~promo</code></pre>
-
-
-        <h3>Filter by lifecycleStatus DRAFT OR LIVE (<code>|</code> = OR across
-        values)</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=lifecycleStatus==DRAFT|LIVE</code></pre>
-
-
-        <h3>Two conditions AND-ed (<code>,</code> = AND): LIVE and
-        API_TRIGGERED</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=lifecycleStatus==LIVE,executionType==API_TRIGGERED</code></pre>
-
-
-        <h3>Sort by name ascending</h3>
-
-        <pre><code>GET /orchestratedCampaigns?orderby=+name</code></pre>
-
-
-        <h3>Sort by creation date descending (newest first)</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?orderby=-metadata.created.at</code></pre>
-
-
-        <h3>Filter + sort + pagination combined (first page, 5 per page)</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=0&amp;limit=5</code></pre>
-
-        <p>Fetch a following page with the same filter and page size (use
-        <code>_links.next</code> from the previous response):</p>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=lifecycleStatus==DRAFT&amp;orderby=-metadata.created.at&amp;page=1&amp;limit=5</code></pre>
-
-
-        <h3>Filter by execution status — failed campaigns</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=executionStatus==FAILED</code></pre>
-
-
-        <h3>Campaigns that failed since a given time (dotted date field,
-        <code>&gt;</code>)</h3>
-
-        <pre><code>GET
-        /orchestratedCampaigns?property=lastFailure.at&gt;2026-07-06T10:18:00.000Z</code></pre>
-
-        </details>
       operationId: listOrchestratedCampaigns
       parameters:
         - name: orderby
@@ -262,6 +398,8 @@ paths:
             type: string
         - name: x-api-version
           in: header
+          description: API version. Must be set to 1
+          required: true
           schema:
             type: string
             enum:
@@ -597,7 +735,7 @@ paths:
         sandbox.</p>
 
 
-        <p>Required permission: <strong><code>View Orchestrated
+        <p>Required permission : <strong><code>View Orchestrated
         Campaign</code></strong>.</p>
 
 
@@ -641,6 +779,8 @@ paths:
             type: string
         - name: x-api-version
           in: header
+          description: API version. Must be set to 1
+          required: true
           schema:
             type: string
             enum:
@@ -807,16 +947,7 @@ paths:
         <p>Each <code>property</code> value is a single string
         <code>"&lt;field&gt;&lt;operator&gt;&lt;value&gt;"</code>. Multiple
         <code>property</code> parameters can be combined in one request and are
-        ANDed together. The operator is detected by scanning the string for the
-        first match in this fixed order:</p>
-
-
-        <pre><code>==  !=  &gt;=  &lt;=  &gt;  &lt;  !~  ~</code></pre>
-
-
-        <blockquote>
-          <p>Because detection is a substring scan in this order, a <strong>value</strong> that itself contains one of these operator tokens (e.g. a message containing <code>==</code> or <code>~</code>) will be split at the wrong place and typically yields a <code>400 invalid field</code> error. Keep filter values free of operator characters.</p>
-        </blockquote>
+        ANDed together.
 
 
         <p><strong>Filterable fields</strong> (case-insensitive):
@@ -851,10 +982,10 @@ paths:
 
 
         <ul>
-          <li>The <strong>operator is not significant</strong> for <code>level</code>; only the value after it matters (the samples use <code>==</code>).</li>
           <li>Value is one of <code>error</code>, <code>warning</code>, <code>info</code>, <code>status</code>, <code>verbose</code>, <code>sqllog</code> (case-insensitive)</li>
-          <li>Multiple levels can be OR-combined with the pipe <code>|</code>, e.g. <code>level==info|error</code>.</li>
-          <li>An unrecognized level token returns <code>400</code> (bad value for parameter <code>level</code>).</li>
+          <li>Supported operators: <code>==</code>, <code>!=</code></li>
+          <li>Multiple levels can be OR-combined with the pipe <code>|</code>, e.g. <code>level==info|error</code></li>
+          <li>An unrecognized level token returns <code>400</code> (bad value for parameter <code>level</code>)</li>
         </ul>
 
 
@@ -862,12 +993,12 @@ paths:
 
 
         <ul>
-          <li>Values must be <strong>ISO-8601 with an explicit offset/zone</strong> (parsed as <code>OffsetDateTime</code>), e.g. <code>2026-07-07T14:30:00Z</code> or <code>2026-07-07T14:30:00+05:30</code>. A bare date like <code>2026-07-07</code> returns <code>400</code>.</li>
-          <li>Supported operators: <code>==</code>, <code>&gt;=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&lt;</code>.</li>
-          <li><code>&gt;</code> / <code>&gt;=</code> define the <strong>lower bound</strong> (from date); <code>&lt;</code> / <code>&lt;=</code> define the <strong>upper bound</strong> (to date).</li>
-          <li><strong><code>==</code> is exclusive:</strong> combining a <code>timestamp==</code> with any other <code>timestamp</code> property (or another <code>timestamp==</code>) is rejected (<code>Use single timestamp when using == operator</code>).</li>
-          <li><strong>Last one wins:</strong> if multiple lower-bound properties are supplied (mix of <code>&gt;</code>/<code>&gt;=</code>), only the last is used; likewise for the upper bound (<code>&lt;</code>/<code>&lt;=</code>).</li>
-          <li><strong>Range validation:</strong> if the resulting upper bound is before the lower bound, the request returns <code>400</code> with value suffix <code>.Validate timestamp range.</code>.</li>
+          <li>Values must be <strong>ISO-8601 with an explicit offset/zone</strong> (parsed as <code>OffsetDateTime</code>), e.g. <code>2026-07-07T14:30:00Z</code> or <code>2026-07-07T14:30:00+05:30</code>. A bare date like <code>2026-07-07</code> returns <code>400</code></li>
+          <li>Supported operators: <code>==</code>, <code>&gt;=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&lt;</code></li>
+          <li><code>&gt;</code> / <code>&gt;=</code> define the <strong>lower bound</strong> (from date); <code>&lt;</code> / <code>&lt;=</code> define the <strong>upper bound</strong> (to date)</li>
+          <li><strong><code>==</code> is exclusive:</strong> combining a <code>timestamp==</code> with any other <code>timestamp</code> property (or another <code>timestamp==</code>) is rejected (<code>Use single timestamp when using == operator</code>)</li>
+          <li><strong>Last one wins:</strong> if multiple lower-bound properties are supplied (mix of <code>&gt;</code>/<code>&gt;=</code>), only the last is used; likewise for the upper bound (<code>&lt;</code>/<code>&lt;=</code>)</li>
+          <li><strong>Range validation:</strong> if the resulting upper bound is before the lower bound, the request returns <code>400</code> with value suffix <code>.Validate timestamp range.</code></li>
         </ul>
 
 
@@ -880,75 +1011,6 @@ paths:
           <li>Unknown fields are silently ignored.</li>
           <li>When omitted (or nothing valid remains), sorting defaults to <code>timestamp</code> ascending. The applied sort is echoed back in <code>_page.orderby</code>.</li>
         </ul>
-
-
-        <h2>Request examples</h2>
-
-        <details><summary><strong><big>Click to expand</big></strong></summary>
-
-
-        <p>All examples reuse the headers from the Authentication section; only
-        the request line is shown.</p>
-
-
-        <h3>All filters combined</h3>
-
-
-        <p>Activity contains <code>email</code>, message contains
-        <code>test</code>, one of the listed levels, within a timestamp
-        range:</p>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=activity~email&amp;property=message~test&amp;property=level==info|error|warning|status|verbose|sqllog&amp;property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
-
-
-        <h3>Filter by level only</h3>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=level==error</code></pre>
-
-
-        <h3>Filter by message only</h3>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=message~test</code></pre>
-
-
-        <h3>Filter by activity only</h3>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=activity~test</code></pre>
-
-
-        <h3>Timestamp range</h3>
-
-
-        <pre><code>GET
-        /apis/orchestratedCampaigns/{id}/executionLogs?property=timestamp&gt;2026-08-11T10:28:54Z&amp;property=timestamp&lt;=2026-08-12T10:28:54Z</code></pre>
-
-
-        <h3>Exact timestamp (must be the only timestamp property)</h3>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=timestamp==2026-08-12T10:28:54Z</code></pre>
-
-
-        <h3>Paginated and sorted</h3>
-
-
-        <p>Errors or warnings within a range, most recent first, second page of
-        100:</p>
-
-
-        <pre><code>GET
-        /orchestratedCampaigns/{id}/executionLogs?property=level==error|warning&amp;property=timestamp&gt;=2026-08-11T00:00:00Z&amp;property=timestamp&lt;=2026-08-12T00:00:00Z&amp;orderby=-timestamp&amp;page=1&amp;limit=100</code></pre>
-
-        </details>
       operationId: getExecutionLogs
       parameters:
         - name: Authorization
@@ -963,7 +1025,7 @@ paths:
             type: string
         - name: id
           in: path
-          description: Orchestrated Campaign id. 404 if not found.
+          description: Orchestrated campaign id. 404 if not found.
           required: true
           schema:
             type: string
@@ -1011,6 +1073,8 @@ paths:
             type: string
         - name: x-api-version
           in: header
+          description: API version. Must be set to 1
+          required: true
           schema:
             type: string
             enum:
@@ -1081,7 +1145,7 @@ paths:
                     type: property
                 at: '2026-09-01T15:31:13.395Z'
         '404':
-          description: Orchestrated Campaign not found
+          description: Orchestrated campaign not found
           content:
             application/json:
               example:
@@ -1102,73 +1166,97 @@ paths:
                     type: orchestratedCampaign
                     id: a45946da-06c3-4e13-a305-8brrrre4277d
                 at: '2026-09-17T13:14:50.126Z'
-  /orchestratedCampaigns/{id}/trigger:
+  /apis/orchestratedCampaigns/{id}/trigger:
     post:
       tags:
-      - Orchestrated campaigns
-      summary: Trigger an orchestrated campaign
-      description: >-
-        Triggers an Orchestrated campaign that is defined with ***Triggered by a signal*** scheduler option. The Orchestrated campaign must be in **LIVE** status, or
-        in **DRAFT** status with an active test session.
-        
+        - Orchestrated campaigns
+      summary: Trigger an Orchestrated campaign
+      description: >
 
-        A capping guardrail enforces a **1-hour** minimum interval between triggers in production; it is not applied in test mode.
+        <p>Triggers an Orchestrated campaign that is defined with the
+        <strong><em>Triggered by a signal</em></strong>
+
+        scheduler option. The Orchestrated campaign must be in
+        <strong>LIVE</strong> status, or in
+
+        <strong>DRAFT</strong> status with an active test session.</p>
 
 
-        Optional parameters can be passed in the request body.
+        <p>Required permission: <strong><code>Publish Orchestrated
+        Campaign</code></strong></p>
+
+
+        <p>A capping guardrail enforces a <strong>1-hour</strong> minimum
+        interval between triggers in production;
+
+        it is not applied in test mode.</p>
+
+
+        <p>Optional parameters can be passed in the request body.</p>
       operationId: triggerOrchestratedCampaign
       parameters:
         - name: Authorization
           in: header
+          description: >-
+            The access token provided after authorization in the format "Bearer
+            {ACCESS_TOKEN}"
           required: true
-          description: The access token provided after authorization in the format "Bearer {ACCESS_TOKEN}"
           schema:
             type: string
         - name: x-api-key
           in: header
+          description: The API key belonging to the calling client
           required: true
-          description:  The API key belonging to the calling client
           schema:
             type: string
         - name: id
           in: path
-          required: true
           description: The Orchestrated campaign id
+          required: true
           schema:
             type: string
         - name: x-gw-ims-org-id
           in: header
-          required: true
           description: The IMS org id for which the call is being taken
+          required: true
           schema:
             type: string
         - name: x-sandbox-name
           in: header
-          required: true
           description: The platform sandbox name for which the call is being taken
+          required: true
           schema:
             type: string
         - name: x-request-id
           in: header
-          description: A unique id generated by Adobe.io. This parameter will be auto-generated, do not include it in your payload.
+          description: >-
+            A unique id generated by Adobe.io. This parameter will be
+            auto-generated, do not include it in your payload.
+          required: true
           schema:
             type: string
         - name: x-api-version
           in: header
+          description: API version. Must be set to 1
           required: true
-          description: API version to consider
           schema:
             type: string
             enum:
               - '1'
       requestBody:
-        description:
-          Optional payload. Use `variables` to supply workflow parameters (key-value pairs).
-          
+        description: >
+          <p>Optional payload. Use <code>variables</code> to supply execution
+          parameters (key-value pairs).</p>
 
-          If you pass a parameter that has not been defined in the scheduler, the API call still succeeds and the parameter is propagated.
+
+          <p>If you pass a parameter that has not been defined in the scheduler,
+          the API call still succeeds and the
+
+          parameter is propagated.</p>
         content:
           application/json:
+            schema:
+              type: string
             examples:
               With variables:
                 description: Two parameters passed to the trigger signal
@@ -1177,7 +1265,7 @@ paths:
                     param1: value1
                     param2: value2
               Empty body:
-                description: No pameters passed to the trigger signal
+                description: No parameters passed to the trigger signal
                 value: {}
       responses:
         '200':
@@ -1186,17 +1274,20 @@ paths:
             application/json:
               examples:
                 Success response:
+                  description: Success response
                   value:
                     status: success
                     orchestratedCampaignId: b902ba3d-8d8c-4a51-b393-8779dfe49653
                     message: Orchestrated campaign triggered successfully
         '400':
           description: >-
-            Bad request - Orchestrated campaign is not LIVE (and not DRAFT with active test session) or not configured as signal-triggered
+            Bad request - Orchestrated campaign is not LIVE (and not DRAFT with
+            active test session) or not configured as signal-triggered
           content:
             application/json:
               examples:
                 Not LIVE (example):
+                  description: Not LIVE (example)
                   value:
                     type: https://ns.adobe.com/aep/errors/CJMOC-6100-400
                     title: >-
@@ -1222,6 +1313,7 @@ paths:
             application/json:
               examples:
                 RBAC permission issue:
+                  description: RBAC permission issue
                   value:
                     type: https://ns.adobe.com/aep/errors/CJMOC-1001-403
                     title: Authorization error
@@ -1235,10 +1327,15 @@ paths:
                       additionalContext: {}
                     at: '2026-03-31T15:19:37.764Z'
                 OLAC check issue:
+                  description: OLAC check issue
                   value:
                     type: https://ns.adobe.com/aep/errors/CJMOC-1215-403
-                    title: OLAC check failed for operation trigger on resource 8189ea13-5e02-412d-8615-d0ccb17662b9
-                    message: OLAC check failed for operation trigger on resource 8189ea13-5e02-412d-8615-d0ccb17662b9
+                    title: >-
+                      OLAC check failed for operation trigger on resource
+                      8189ea13-5e02-412d-8615-d0ccb17662b9
+                    message: >-
+                      OLAC check failed for operation trigger on resource
+                      8189ea13-5e02-412d-8615-d0ccb17662b9
                     status: 403
                     report:
                       tenantInfo:
@@ -1255,6 +1352,7 @@ paths:
             application/json:
               examples:
                 Orchestrated campaign not found:
+                  description: Orchestrated campaign not found
                   value:
                     type: https://ns.adobe.com/aep/errors/CJMOC-1200-404
                     title: >-
@@ -1274,16 +1372,22 @@ paths:
                         id: 91ea0a68-a86a-451e-b333-9f75c41dadb3
                     at: '2026-02-27T15:17:30.184Z'
                 API version not specified or incorrect:
-                  description: missing x-api-version header parameter or incorrect value provided
+                  description: >-
+                    missing x-api-version header parameter or incorrect value
+                    provided
                   value:
                     type: about:blank
                     title: Not found
                     status: 404
-                    detail: No static resource apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger.
-                    instance: /apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger
+                    detail: >-
+                      No static resource
+                      apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger.
+                    instance: >-
+                      /apis/orchestratedCampaigns/664b280d-0c80-48c5-af81-dfa06127e45a/trigger
         '429':
           description: >-
-            Too many requests — Orchestrated campaign was triggered again before the minimum interval
+            Too many requests — Orchestrated campaign was triggered again before
+            the minimum interval
           headers:
             Retry-After:
               description: Number of seconds to wait before retrying
@@ -1294,7 +1398,8 @@ paths:
           content:
             application/json:
               examples:
-                Capping guardrail:
+                Cappping guardrail:
+                  description: Cappping guardrail
                   value:
                     type: https://ns.adobe.com/aep/errors/CJMOC-6104-429
                     title: >-
