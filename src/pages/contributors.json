@@ -1,7 +1,7 @@
 {
-  "total": 16,
+  "total": 15,
   "offset": 0,
-  "limit": 16,
+  "limit": 15,
   "data": [
     {
       "page": "/",
@@ -11,7 +11,7 @@
         "https://avatars.githubusercontent.com/u/55485777?v=4",
         "https://avatars.githubusercontent.com/u/57922?v=4"
       ],
-      "lastUpdated": "9/22/2026"
+      "lastUpdated": "9/28/2026"
     },
     {
       "page": "/config",
@@ -20,7 +20,7 @@
         "https://avatars.githubusercontent.com/u/160891990?v=4",
         "https://avatars.githubusercontent.com/u/55485777?v=4"
       ],
-      "lastUpdated": "9/22/2026"
+      "lastUpdated": "9/28/2026"
     },
     {
       "page": "/references/authentication",
@@ -92,13 +92,6 @@
         "https://avatars.githubusercontent.com/u/55485777?v=4"
       ],
       "lastUpdated": "5/27/2026"
-    },
-    {
-      "page": "/references/oc-trigger",
-      "avatars": [
-        "https://avatars.githubusercontent.com/u/55485777?v=4"
-      ],
-      "lastUpdated": "3/31/2026"
     },
     {
       "page": "/references/orchestrated-campaign-dataset",
