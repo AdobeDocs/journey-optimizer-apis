@@ -49,9 +49,9 @@ paths:
         - **methods** : the methods called on this endpoint, as defined in the actions\
         \ or data sources.\n\n- Within **services** JSON object, one of the two following\
         \ values is expected :\n\n  * *\"action\"* if the capping will be applied\
-        \ on the endpoint when executing a Custom Action\n  * *\"dataSource\"* if\
+        \ on the endpoint when executing a Custom Action. Use this value for custom actions.\n  * *\"dataSource\"* if\
         \ the capping will be applied on the endpoint when fetching data from a Data\
-        \ Source\n\n- (optional) **maxHttpConnections**: max count of simultaneous\
+        \ Source. This value remains supported for legacy data sources.\n\n- (optional) **maxHttpConnections**: max count of simultaneous\
         \ connections to the endpoint (max value is 400). If not provided, there will be no limitation\
         \ of the number of connections to the endpoint.\n\n- Within **rating** JSON\
         \ object :\n  * **maxCallsCount**: max count of calls to be performed in the\
@@ -117,34 +117,15 @@ paths:
                   type: string
                   description: The unique identifier of the IMS organization
                 services:
-                  required:
-                  - action|dataSource
                   type: object
+                  anyOf:
+                  - required: [action]
+                  - required: [dataSource]
                   properties:
-                    action|dataSource:
-                      required:
-                      - rating
-                      type: object
-                      properties:
-                        maxHttpConnections:
-                          type: integer
-                          description: Max count of simultaneous connections to the
-                            endpoint
-                        rating:
-                          required:
-                          - maxCallsCount
-                          - periodInMs
-                          type: object
-                          properties:
-                            maxCallsCount:
-                              type: integer
-                              description: Max count of calls to be performed in the
-                                given period (min value is 1)
-                            periodInMs:
-                              type: integer
-                              description: Duration in milliseconds (value greater
-                                than 0)
-                      description: \'action' or 'dataSource'
+                    action:
+                      $ref: '#/components/schemas/CappingServiceRequest'
+                    dataSource:
+                      $ref: '#/components/schemas/CappingServiceRequest'
                 url:
                   type: string
                   description: The URL of the endpoint
@@ -153,7 +134,7 @@ paths:
                 methods:
                 - GET
                 services:
-                  dataSource:
+                  action:
                     maxHttpConnections: 50
                     rating:
                       maxCallsCount: 500
@@ -191,18 +172,10 @@ paths:
                       services:
                         type: object
                         properties:
-                          action|dataSource:
-                            type: object
-                            properties:
-                              maxHttpConnections:
-                                type: integer
-                              rating:
-                                type: object
-                                properties:
-                                  maxCallsCount:
-                                    type: integer
-                                  periodInMs:
-                                    type: integer
+                          action:
+                            $ref: '#/components/schemas/CappingServiceResponse'
+                          dataSource:
+                            $ref: '#/components/schemas/CappingServiceResponse'
                       url:
                         type: string
                       metadata:
@@ -272,7 +245,7 @@ paths:
                   methods:
                   - GET
                   services:
-                    dataSource:
+                    action:
                       maxHttpConnections: 50
                       rating:
                         maxCallsCount: 500
@@ -384,18 +357,10 @@ paths:
                       services:
                         type: object
                         properties:
-                          action|dataSource:
-                            type: object
-                            properties:
-                              maxHttpConnections:
-                                type: integer
-                              rating:
-                                type: object
-                                properties:
-                                  maxCallsCount:
-                                    type: integer
-                                  periodInMs:
-                                    type: integer
+                          action:
+                            $ref: '#/components/schemas/CappingServiceResponse'
+                          dataSource:
+                            $ref: '#/components/schemas/CappingServiceResponse'
                       metadata:
                         type: object
                         properties:
@@ -458,18 +423,10 @@ paths:
                           services:
                             type: object
                             properties:
-                              action|dataSource:
-                                type: object
-                                properties:
-                                  maxHttpConnections:
-                                    type: integer
-                                  rating:
-                                    type: object
-                                    properties:
-                                      maxCallsCount:
-                                        type: integer
-                                      periodInMs:
-                                        type: integer
+                              action:
+                                $ref: '#/components/schemas/CappingServiceResponse'
+                              dataSource:
+                                $ref: '#/components/schemas/CappingServiceResponse'
                           orgId:
                             type: string
                           tenantId:
@@ -570,39 +527,20 @@ paths:
                   description: The methods called on this endpoint, as defined in
                     the actions or data sources
                   items:
-                    type: object
+                    type: string
                 orgId:
                   type: string
                   description: The unique identifier of the IMS organization
                 services:
-                  required:
-                  - action|dataSource
                   type: object
+                  anyOf:
+                  - required: [action]
+                  - required: [dataSource]
                   properties:
-                    action|dataSource:
-                      required:
-                      - rating
-                      type: object
-                      properties:
-                        maxHttpConnections:
-                          type: integer
-                          description: Max count of simultaneous connections to the
-                            endpoint
-                        rating:
-                          required:
-                          - maxCallsCount
-                          - periodInMs
-                          type: object
-                          properties:
-                            maxCallsCount:
-                              type: integer
-                              description: Max count of calls to be performed in the
-                                given period (min value is 1)
-                            periodInMs:
-                              type: integer
-                              description: Duration in milliseconds (value greater
-                                than 0)
-                      description: \'action' or 'dataSource'
+                    action:
+                      $ref: '#/components/schemas/CappingServiceRequest'
+                    dataSource:
+                      $ref: '#/components/schemas/CappingServiceRequest'
                 url:
                   type: string
                   description: The URL of the endpoint
@@ -611,7 +549,7 @@ paths:
                 methods:
                 - GET
                 services:
-                  dataSource:
+                  action:
                     maxHttpConnections: 20000
                     rating:
                       maxCallsCount: 5000
@@ -649,18 +587,10 @@ paths:
                       services:
                         type: object
                         properties:
-                          action|dataSource:
-                            type: object
-                            properties:
-                              maxHttpConnections:
-                                type: integer
-                              rating:
-                                type: object
-                                properties:
-                                  maxCallsCount:
-                                    type: integer
-                                  periodInMs:
-                                    type: integer
+                          action:
+                            $ref: '#/components/schemas/CappingServiceResponse'
+                          dataSource:
+                            $ref: '#/components/schemas/CappingServiceResponse'
                       url:
                         type: string
                       uid:
@@ -935,7 +865,7 @@ paths:
                     warning: 'capping config: max HTTP connections not defined: no
                       limitation by default'
                     scope:
-                      endpointConfigService: dataSource
+                      endpointConfigService: action
                       endpointConfigUrl: https://api.example*.org:8*0/data/2.5/weather
         404:
           description: 'Not Found: unknown given Unique ID.'
@@ -1135,18 +1065,10 @@ paths:
                         services:
                           type: object
                           properties:
-                            action|dataSource:
-                              type: object
-                              properties:
-                                maxHttpConnections:
-                                  type: integer
-                                rating:
-                                  type: object
-                                  properties:
-                                    maxCallsCount:
-                                      type: integer
-                                    periodInMs:
-                                      type: integer
+                            action:
+                              $ref: '#/components/schemas/CappingServiceResponse'
+                            dataSource:
+                              $ref: '#/components/schemas/CappingServiceResponse'
                         orgId:
                           type: string
                         url:
@@ -1190,18 +1112,10 @@ paths:
                             services:
                               type: object
                               properties:
-                                action|dataSource:
-                                  type: object
-                                  properties:
-                                    maxHttpConnections:
-                                      type: integer
-                                    rating:
-                                      type: object
-                                      properties:
-                                        maxCallsCount:
-                                          type: integer
-                                        periodInMs:
-                                          type: integer
+                                action:
+                                  $ref: '#/components/schemas/CappingServiceResponse'
+                                dataSource:
+                                  $ref: '#/components/schemas/CappingServiceResponse'
                             orgId:
                               type: string
                             tenantId:
@@ -1277,7 +1191,7 @@ paths:
                   sandboxId: 37fc5780-e3de-11e9-a3bb-d7c554480df4
                   _id: fbc64b73-c66b-4e30-b3b1-b9d313bd7c4a
                   services:
-                    dataSource:
+                    action:
                       rating:
                         maxCallsCount: 3000
                         periodInMs: 1000
@@ -1293,7 +1207,7 @@ paths:
                     sandboxId: 37fc5780-e3de-11e9-a3bb-d7c554480df4
                     uid: fbc64b73-c66b-4e30-b3b1-b9d313bd7c4a
                     services:
-                      dataSource:
+                      action:
                         rating:
                           maxCallsCount: 3000
                           periodInMs: 1000
@@ -1708,4 +1622,37 @@ paths:
           description: 'No Content: the operation was successful or the given configuration
             was not deployed.'
           content: {}
-components: {}
+components:
+  schemas:
+    CappingServiceRequest:
+      required:
+      - rating
+      type: object
+      properties:
+        maxHttpConnections:
+          type: integer
+          description: Max count of simultaneous connections to the endpoint
+        rating:
+          required:
+          - maxCallsCount
+          - periodInMs
+          type: object
+          properties:
+            maxCallsCount:
+              type: integer
+              description: Max count of calls to be performed in the given period (min value is 1)
+            periodInMs:
+              type: integer
+              description: Duration in milliseconds (value greater than 0)
+    CappingServiceResponse:
+      type: object
+      properties:
+        maxHttpConnections:
+          type: integer
+        rating:
+          type: object
+          properties:
+            maxCallsCount:
+              type: integer
+            periodInMs:
+              type: integer
