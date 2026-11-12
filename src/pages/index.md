@@ -7,7 +7,7 @@ description: High-level references for Journey Optimizer REST endpoints and how 
 
 # Adobe Journey Optimizer developer reference
 
-Journey Optimizer exposes REST endpoints that let you programmatically perform key operations in your applications.
+Journey Optimizer exposes REST endpoints that let you programmatically perform key operations in your applications. 
 
 <Resources slots="heading, links"/>
 
