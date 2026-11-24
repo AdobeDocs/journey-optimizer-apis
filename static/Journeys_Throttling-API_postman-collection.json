@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "4941a6c1-95b8-4bc9-b27a-2f2854254561",
+		"name": "Journeys Throttling API - Adobe Developer Console - Public documentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List the throttling configurations",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{ACCESS_TOKEN}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{API_KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"value": "{{IMS_ORG}}",
+						"type": "text"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/list/throttlingConfigs",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"list",
+						"throttlingConfigs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a throttling configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a throttling configuration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"throttling-config-external\",\n  \"description\": \"example of throttling config for an external endpoint\",\n  \"urlPattern\": \"https://api.example.org/data/2.5/*\",\n  \"methods\": [\"POST\", \"PUT\"],\n  \"maxThroughput\": 4000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a throttling configuration",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"throttling-config-external -- optional\",\n  \"description\": \"example of throttling config for an external endpoint -- optional\",\n  \"urlPattern\": \"https://api.example.org/data/2.5/*\",\n  \"methods\": [\"POST\"],\n  \"maxThroughput\": 5000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if a throttling configuration can be deployed",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}/canDeploy",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}",
+						"canDeploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a throttling configuration",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a throttling configuration - With forceDelete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}?forceDelete=true",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}"
+					],
+					"query": [
+						{
+							"key": "forceDelete",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deploy a throttling configuration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}/deploy",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Undeploy a throttling configuration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{ACCESS_TOKEN}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{API_KEY}}"
+					},
+					{
+						"key": "x-gw-ims-org-id",
+						"type": "text",
+						"value": "{{IMS_ORG}}"
+					},
+					{
+						"key": "x-sandbox-name",
+						"value": "{{SANDBOX_NAME}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JO_HOST}}/{{BASE_PATH}}/throttlingConfigs/{uid}/undeploy",
+					"host": [
+						"{{JO_HOST}}"
+					],
+					"path": [
+						"{{BASE_PATH}}",
+						"throttlingConfigs",
+						"{uid}",
+						"undeploy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
