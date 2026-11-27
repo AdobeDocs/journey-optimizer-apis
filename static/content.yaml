@@ -23,7 +23,8 @@ paths:
       summary: Create New Content Template.
       description: >-
         This API could be used for creating a new content template<br>
-        <b>subType</b> field is only supported for content template with code channel
+        <b>subType</b> field is only supported for content template with code channel<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content template API
       requestBody:
@@ -106,13 +107,6 @@ paths:
         required: true
         schema:
           type: string
-      - name: Accept
-        in: header
-        required: true
-        schema:
-          type: string
-          enum:
-            - 'application/vnd.adobe.ajo.template.v1+json'
       - $ref: '#/components/parameters/APIKeyParam'
       - $ref: '#/components/parameters/ImsOrgIdParam'
       - $ref: '#/components/parameters/SandboxNameParam'
@@ -123,6 +117,14 @@ paths:
       description: Fetch Content template detail with given id.
       tags:
         - Content template API
+      parameters:
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'application/vnd.adobe.ajo.template.v1+json'
       responses:
         200:
           description: Successful operation
@@ -147,7 +149,8 @@ paths:
       summary: Update Content Template By Id.
       description: >-
         API to update Content Template By Id.<br>
-        <b>subType</b> field is only supported for content template with code channel
+        <b>subType</b> field is only supported for content template with code channel<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content template API
       parameters:
@@ -197,7 +200,8 @@ paths:
       description: >-
         Patch Content Template with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
         <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
-        Supported paths are ["/name", "/description", "/parentFolderId" ]
+        Supported paths are ["/name", "/description", "/parentFolderId" ]<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content template API
       parameters:
@@ -240,6 +244,7 @@ paths:
       summary: Create New Content Fragment.
       description: >-
         This API could be used for creating a new content fragment<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content fragment API
       requestBody:
@@ -322,13 +327,6 @@ paths:
         required: true
         schema:
           type: string
-      - name: Accept
-        in: header
-        required: true
-        schema:
-          type: string
-          enum:
-            - 'application/vnd.adobe.ajo.fragment.v1.0+json'
       - $ref: '#/components/parameters/APIKeyParam'
       - $ref: '#/components/parameters/ImsOrgIdParam'
       - $ref: '#/components/parameters/SandboxNameParam'
@@ -340,6 +338,14 @@ paths:
       description: Fetch Content Fragment detail by Id.
       tags:
         - Content fragment API
+      parameters:
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            enum:
+              - 'application/vnd.adobe.ajo.fragment.v1.0+json'
       responses:
         200:
           description: Successful operation
@@ -363,7 +369,8 @@ paths:
       operationId: putFragment
       summary: Update Content Fragment By Id.
       description: >-
-        API to update Content Fragment By Id.
+        API to update Content Fragment By Id.<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content fragment API
       parameters:
@@ -394,7 +401,8 @@ paths:
       summary: Patch Content Fragment By Id.
       description: >-
         Patch fragment with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
-        Path supported: "/name", "/description", "/parentFolderId"
+        Path supported: "/name", "/description", "/parentFolderId"<br>
+        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content fragment API
       parameters:
