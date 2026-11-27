@@ -1,6 +1,9 @@
 openapi: 3.0.0
 info:
-  description: Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
+  description: |-
+    Using this REST API, you can create and manage content templates and fragments, which are entities that allow you to easily reuse custom content across Journey Optimizer campaigns and journeys. To learn more about content templates and fragments, refer to <a href="https://experienceleague.adobe.com/docs/journey-optimizer/using/email/content-templates.html">Journey Optimizer documentation</a>.
+
+    > **Caution:** Do not send an `Accept` header when you create or update content templates and fragments. Only the `Content-Type` header is required.
   version: 0.0.1
   title: Content API.
 
@@ -23,8 +26,7 @@ paths:
       summary: Create New Content Template.
       description: >-
         This API could be used for creating a new content template<br>
-        <b>subType</b> field is only supported for content template with code channel<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
+        <b>subType</b> field is only supported for content template with code channel
       tags:
         - Content template API
       requestBody:
@@ -149,8 +151,7 @@ paths:
       summary: Update Content Template By Id.
       description: >-
         API to update Content Template By Id.<br>
-        <b>subType</b> field is only supported for content template with code channel<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
+        <b>subType</b> field is only supported for content template with code channel
       tags:
         - Content template API
       parameters:
@@ -200,8 +201,7 @@ paths:
       description: >-
         Patch Content Template with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
         <a href="https://jsonpatch.com/">JSON Patch guidelines</a>
-        Supported paths are ["/name", "/description", "/parentFolderId" ]<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
+        Supported paths are ["/name", "/description", "/parentFolderId" ]
       tags:
         - Content template API
       parameters:
@@ -244,7 +244,6 @@ paths:
       summary: Create New Content Fragment.
       description: >-
         This API could be used for creating a new content fragment<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
       tags:
         - Content fragment API
       requestBody:
@@ -369,8 +368,7 @@ paths:
       operationId: putFragment
       summary: Update Content Fragment By Id.
       description: >-
-        API to update Content Fragment By Id.<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
+        API to update Content Fragment By Id.
       tags:
         - Content fragment API
       parameters:
@@ -401,8 +399,7 @@ paths:
       summary: Patch Content Fragment By Id.
       description: >-
         Patch fragment with given id. Expects Patch request in JSON-patch format (RFC 6902)<br>
-        Path supported: "/name", "/description", "/parentFolderId"<br>
-        Do not send an `Accept` header with this request. Only the `Content-Type` header is required.
+        Path supported: "/name", "/description", "/parentFolderId"
       tags:
         - Content fragment API
       parameters:
